@@ -99,7 +99,7 @@ export const controlsCycle = (controlsCycleFunction: ControlsCycleFunction, form
  * const isControlsValid = controlsCycle(form, (control, controlName, form, formIndex, controlIndex, setForm) => return controlName === 'username' ? true : false, setForm) // => true
  * const isControlsValid = controlsCycle(form, (control, controlName, form, formIndex, controlIndex, setForm) => return controlName === 'password' : false, setForm) // => false
  */
-export const formCycle = (form: FormProps<FormControls>, controlsCycleFunction: ControlsCycleFunction, setForm?: SetFormProps):boolean => {
+export const formCycle = (form: FormProps, controlsCycleFunction: ControlsCycleFunction, setForm?: SetFormProps):boolean => {
         const controls = form.controls
 
 
