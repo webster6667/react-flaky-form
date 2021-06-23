@@ -4,6 +4,38 @@ let inputTypes: 'phone' | 'number' | 'text' | 'password' | 'radio' | 'checkbox' 
 let placeholderVisibleValues: 'always' | 'hover' | 'focus' | 'write'
 export let inputEvents: 'change' | 'mouseover' | 'mouseleave' | 'focus' | 'blur' | null
 
+/**
+ * Функция обработчик для каждого отдельного контрола
+ */
+export type ControlsCycleHandler = (
+    control: ControlProps,
+    controlName: string,
+    form: FormProps,
+    formIndex?: number | null,
+    controlIndex?: number | null,
+    setForm?: SetFormProps
+) => boolean
+
+/**
+ * Функция запускающая обработчик для контролов переданного объекта
+ */
+export type ControlsCycle = (
+    controlsCycleFunction: ControlsCycleHandler,
+    formControls: FormControls,
+    form: FormProps,
+    formIndex: number | null,
+    setForm: SetFormProps
+) => boolean
+
+/**
+ * Функция запускающая обработчик для каждого контрола каждой формы
+ */
+export type FormCycle = (
+    form: FormProps,
+    controlsCycleFunction: ControlsCycleHandler,
+    setForm?: SetFormProps
+) => boolean
+
 interface ClickControlOptionsProps {
     label?: string,
     value?: string | number,

@@ -1,28 +1,19 @@
 import {
-    FormControls,
     SingleControl,
-    ControlProps,
     ControlsProps,
-    FormProps, SetFormProps
+    FormProps,
+    SetFormProps,
+    ControlsCycle,
+    FormCycle,
+    ControlsCycleHandler
 } from "../types";
 
-/**
- * Функция обработчик для каждого отдельного контрола
- */
-type ControlsCycleFunction = (
-    control: ControlProps,
-    controlName: string,
-    form: FormProps,
-    formIndex?: number | null,
-    controlIndex?: number | null,
-    setForm?: SetFormProps
-) => boolean
 
 /**
  * @description
  * Функция проходящая циклом по всем контролам, применяя к ним переданную функцию
  *
- * @param {ControlsCycleFunction} controlsCycleFunction - Функция проходящая в цикле по всем контролам.
+ * @param {ControlsCycleHandler} controlsCycleHandler - Функция проходящая в цикле по всем контролам.
  * Внутри функция можно получить доступ к каждому контролу
  * И изменить там что либо, или использовать как валидатор возвращая булевое значение
  * @param {ControlsProps | ControlsProps[]} formControls - Список контролов по которым пройдется функция
@@ -36,7 +27,7 @@ type ControlsCycleFunction = (
  * const isAllControlsValid = controlsCycle((control, controlName, form, formIndex, controlIndex, setForm) => return formIndex ? true : false, controls, form, formIndex, setForm) // => true
  * const isAllControlsValid = controlsCycle((control, controlName, form, formIndex, controlIndex, setForm) => return formIndex ? true : false, controls, form, null, setForm) // => false
  */
-export const controlsCycle = (controlsCycleFunction: ControlsCycleFunction, formControls: FormControls, form: FormProps, formIndex: number | null = null, setForm: SetFormProps = null):boolean => {
+export const controlsCycle: ControlsCycle = (controlsCycleHandler, formControls, form, formIndex = null, setForm = null) => {
 
     let isAllControlsReturnTrue: boolean = true
 
@@ -52,7 +43,7 @@ export const controlsCycle = (controlsCycleFunction: ControlsCycleFunction, form
         if (Array.isArray(control)) {
 
             control.forEach((controlItem, controlIndex) => {
-                const isControlReturnTrue = controlsCycleFunction(controlItem, controlName, form, formIndex, controlIndex, setForm)
+                const isControlReturnTrue = controlsCycleHandler(controlItem, controlName, form, formIndex, controlIndex, setForm)
 
                 if (isControlReturnTrue !== true) isAllControlsReturnTrue = false
             })
@@ -61,7 +52,7 @@ export const controlsCycle = (controlsCycleFunction: ControlsCycleFunction, form
          * Одиночный контрол
          */
         } else {
-            const isControlReturnTrue = controlsCycleFunction(control, controlName, form, formIndex, null, setForm)
+            const isControlReturnTrue = controlsCycleHandler(control, controlName, form, formIndex, null, setForm)
 
 
             if (isControlReturnTrue !== true) isAllControlsReturnTrue = false
@@ -78,7 +69,7 @@ export const controlsCycle = (controlsCycleFunction: ControlsCycleFunction, form
  * Работает как для мульти формы, так и для одиночной
  *
  * @param {FormProps} form - Главная форма содержащая все контролы
- * @param {ControlsCycleFunction} controlsCycleFunction - Функция проходящая в цикле по всем контролам.
+ * @param {ControlsCycleHandler} controlsCycleHandler - Функция проходящая в цикле по всем контролам.
  * Внутри функция можно получить доступ к каждому контролу
  * И изменить там что либо, или использовать как валидатор возвращая булевое значение
  * @param {SetFormProps} setForm - функция изменяющая главный объект формы
@@ -99,9 +90,8 @@ export const controlsCycle = (controlsCycleFunction: ControlsCycleFunction, form
  * const isControlsValid = controlsCycle(form, (control, controlName, form, formIndex, controlIndex, setForm) => return controlName === 'username' ? true : false, setForm) // => true
  * const isControlsValid = controlsCycle(form, (control, controlName, form, formIndex, controlIndex, setForm) => return controlName === 'password' : false, setForm) // => false
  */
-export const formCycle = (form: FormProps, controlsCycleFunction: ControlsCycleFunction, setForm?: SetFormProps):boolean => {
+export const formCycle: FormCycle = (form, controlsCycleHandler, setForm) => {
         const controls = form.controls
-
 
         let isAllFormReturnTrue: boolean = true
 
@@ -111,7 +101,7 @@ export const formCycle = (form: FormProps, controlsCycleFunction: ControlsCycleF
         if (Array.isArray(controls)) {
 
             controls.forEach((controls: ControlsProps, formIndex) => {
-                const isSingleFormValid = controlsCycle(controlsCycleFunction, controls, form, formIndex, setForm)
+                const isSingleFormValid = controlsCycle(controlsCycleHandler, controls, form, formIndex, setForm)
 
                 if (isSingleFormValid === false) isAllFormReturnTrue = false
             })
@@ -120,7 +110,7 @@ export const formCycle = (form: FormProps, controlsCycleFunction: ControlsCycleF
          * Обработка обычной формы
          */
         } else {
-            const isSingleFormValid = controlsCycle(controlsCycleFunction, controls, form, null, setForm)
+            const isSingleFormValid = controlsCycle(controlsCycleHandler, controls, form, null, setForm)
 
             if (isSingleFormValid === false) isAllFormReturnTrue = false
         }

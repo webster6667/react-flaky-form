@@ -1,49 +1,319 @@
 import {useImmer} from 'use-immer';
 
-import {controlsCycle} from './../../src/utils/controls-cycle'
+import {controlsCycle, formCycle} from './../../src/utils/controls-cycle'
 import { renderHook, act } from '@testing-library/react-hooks'
-import {ControlProps, FormControls, FormParamsProps, FormProps, SetFormProps} from "src/types";
+import {ControlsCycleHandler, FormControls, FormParamsProps, FormProps} from "src/types";
 import {DEFAULT_FORM_SETTINGS, FORM_NAME} from "./../../src/const";
 
 
 describe('controls-cycle', () => {
+    const formParams: FormParamsProps = {
+            loaded: false,
+            triedSubmit: false,
+            isSubmitBtnLocked: false,
+            errorList: [],
+            commonError: ''
+          },
+          customFormConfig = {}
 
-    test('should increment counter', () => {
-        const formParams: FormParamsProps = {
-                loaded: false,
-                triedSubmit: false,
-                isSubmitBtnLocked: false,
-                errorList: [],
-                commonError: ''
-            },
-            controls: FormControls = {
+
+    test('control cycle run handler for all controls (single/multi)', () => {
+
+        const controls: FormControls = {
                 username: {
                     type: 'text'
+                },
+                profession: [
+                    {
+                        type: 'text',
+                    }
+                ]
+              },
+              { result } = renderHook(() => useImmer<FormProps<typeof controls>>({
+                          controls,
+                          formParams,
+                          formSettings: {
+                              ...DEFAULT_FORM_SETTINGS,
+                              formName: FORM_NAME,
+                              ...customFormConfig
+                          },
+                          controlsExample: {}
+              }))
+
+        let [flukyForm, setForm] = result.current,
+            handledControlList = {},
+            controlHandler: ControlsCycleHandler = (control, controlName, form, formIndex, controlIndex, setForm) => {
+            
+                if (controlIndex !== null) {
+                    handledControlList[controlName]
+                        ? handledControlList[controlName].push(control)
+                        : handledControlList[controlName] = [control]
+                } else {
+                    handledControlList = {...handledControlList, [controlName]: control}
                 }
-            },
-            customFormConfig = {},
-            { result } = renderHook(() => useImmer<FormProps<typeof controls>>({
-                        controls,
-                        formParams,
-                        formSettings: {
-                            ...DEFAULT_FORM_SETTINGS,
-                            formName: FORM_NAME,
-                            ...customFormConfig
-                        },
-                        controlsExample: {}
-            }))
 
-        const [flukyForm, setForm] = result.current
+              return true
+            }
 
-        const controlHandler = (control: ControlProps, controlName: string, form: FormProps, formIndex: number | null = null, controlIndex: number | null = null, setForm: SetFormProps):boolean => {
-            return controlName === 'username'
-        }
 
-        expect(controlsCycle(controlHandler, controls, flukyForm, null, setForm)).toBeTruthy()
+        controlsCycle(controlHandler, controls, flukyForm, null, setForm)
 
+        expect(handledControlList).toEqual(controls)
     })
 
 
+    test('if handler return false in single control, controlsCycle return false', () => {
+
+        const controls: FormControls = {
+                username: {
+                    type: 'text'
+                },
+                profession: [
+                    {
+                        type: 'text',
+                        value: 'HR'
+                    },
+                    {
+                        type: 'text',
+                        value: 'Admin'
+                    }
+                ]
+            },
+            { result } = renderHook(() => useImmer<FormProps<typeof controls>>({
+                controls,
+                formParams,
+                formSettings: {
+                    ...DEFAULT_FORM_SETTINGS,
+                    formName: FORM_NAME,
+                    ...customFormConfig
+                },
+                controlsExample: {}
+            }))
+
+        let [flukyForm, setForm] = result.current,
+            controlHandler: ControlsCycleHandler = (control, controlName, form, formIndex, controlIndex, setForm) => {
+                return control.value !== 'Admin'
+            },
+            cycleResult = controlsCycle(controlHandler, controls, flukyForm, null, setForm)
+
+        expect(cycleResult).toBeFalsy()
+    })
+
+    test('if handler return true in all control, controlsCycle return true', () => {
+
+        const controls: FormControls = {
+                username: {
+                    type: 'text'
+                },
+                profession: [
+                    {
+                        type: 'text',
+                        value: 'HR'
+                    },
+                    {
+                        type: 'text',
+                        value: 'Admin'
+                    }
+                ]
+            },
+            { result } = renderHook(() => useImmer<FormProps<typeof controls>>({
+                controls,
+                formParams,
+                formSettings: {
+                    ...DEFAULT_FORM_SETTINGS,
+                    formName: FORM_NAME,
+                    ...customFormConfig
+                },
+                controlsExample: {}
+            }))
+
+        let [flukyForm, setForm] = result.current,
+            controlHandler: ControlsCycleHandler = (control, controlName, form, formIndex, controlIndex, setForm) => {
+                return control.type === 'text'
+            },
+            cycleResult = controlsCycle(controlHandler, controls, flukyForm, null, setForm)
+
+        expect(cycleResult).toBeTruthy()
+    })
+
 })
 
+describe('form-cycle', () => {
+    const formParams: FormParamsProps = {
+            loaded: false,
+            triedSubmit: false,
+            isSubmitBtnLocked: false,
+            errorList: [],
+            commonError: ''
+        },
+        customFormConfig = {}
+
+
+    test('form cycle run handler for all single form controls(single/multi)', () => {
+
+        const controls: FormControls = {
+                username: {
+                    type: 'text'
+                },
+                profession: [
+                    {
+                        type: 'text',
+                    }
+                ]
+            },
+            { result } = renderHook(() => useImmer<FormProps<typeof controls>>({
+                controls,
+                formParams,
+                formSettings: {
+                    ...DEFAULT_FORM_SETTINGS,
+                    formName: FORM_NAME,
+                    ...customFormConfig
+                },
+                controlsExample: {}
+            }))
+
+        let [flukyForm, setForm] = result.current,
+            handledControlList = {},
+            controlHandler: ControlsCycleHandler = (control, controlName, form, formIndex, controlIndex, setForm) => {
+
+                if (controlIndex !== null) {
+                    handledControlList[controlName]
+                        ? handledControlList[controlName].push(control)
+                        : handledControlList[controlName] = [control]
+                } else {
+                    handledControlList = {...handledControlList, [controlName]: control}
+                }
+
+                return true
+            }
+
+        formCycle(flukyForm, controlHandler, setForm)
+
+        expect(handledControlList).toEqual(controls)
+    })
+
+    test('form cycle run handler for all multi form controls(single/multi)', () => {
+
+        const controls: FormControls = [{
+                username: {
+                    type: 'text'
+                },
+                profession: [
+                    {
+                        type: 'text',
+                    }
+                ]
+            }],
+            { result } = renderHook(() => useImmer<FormProps<typeof controls>>({
+                controls,
+                formParams,
+                formSettings: {
+                    ...DEFAULT_FORM_SETTINGS,
+                    formName: FORM_NAME,
+                    ...customFormConfig
+                },
+                controlsExample: {}
+            }))
+
+        let [flukyForm, setForm] = result.current,
+            handledControlList = [],
+            controlHandler: ControlsCycleHandler = (control, controlName, form, formIndex, controlIndex, setForm) => {
+
+                if (formIndex !== null) {
+
+                    // handledControlList[formIndex] = {[controlName]: control}
+
+                    if (controlIndex !== null) {
+                        handledControlList[formIndex][controlName]
+                            ? handledControlList[formIndex][controlName].push(control)
+                            : handledControlList[formIndex][controlName] = [control]
+                    } else {
+                        handledControlList = [{...handledControlList[formIndex], [controlName]: control}]
+                    }
+
+                }
+
+                return true
+            }
+
+        formCycle(flukyForm, controlHandler, setForm)
+
+        expect(handledControlList).toEqual(controls)
+    })
+
+    test('if handler return false in single control, formCycle return false', () => {
+
+        const controls: FormControls = {
+                username: {
+                    type: 'text'
+                },
+                profession: [
+                    {
+                        type: 'text',
+                        value: 'HR'
+                    },
+                    {
+                        type: 'text',
+                        value: 'Admin'
+                    }
+                ]
+            },
+            { result } = renderHook(() => useImmer<FormProps<typeof controls>>({
+                controls,
+                formParams,
+                formSettings: {
+                    ...DEFAULT_FORM_SETTINGS,
+                    formName: FORM_NAME,
+                    ...customFormConfig
+                },
+                controlsExample: {}
+            }))
+
+        let [flukyForm, setForm] = result.current,
+            controlHandler: ControlsCycleHandler = (control, controlName, form, formIndex, controlIndex, setForm) => {
+                return control.value !== 'Admin'
+            },
+            cycleResult = formCycle(flukyForm, controlHandler, setForm)
+
+        expect(cycleResult).toBeFalsy()
+    })
+
+    test('if handler return true in all control, formCycle return true', () => {
+
+        const controls: FormControls = {
+                username: {
+                    type: 'text'
+                },
+                profession: [
+                    {
+                        type: 'text',
+                        value: 'HR'
+                    },
+                    {
+                        type: 'text',
+                        value: 'Admin'
+                    }
+                ]
+            },
+            { result } = renderHook(() => useImmer<FormProps<typeof controls>>({
+                controls,
+                formParams,
+                formSettings: {
+                    ...DEFAULT_FORM_SETTINGS,
+                    formName: FORM_NAME,
+                    ...customFormConfig
+                },
+                controlsExample: {}
+            }))
+
+        let [flukyForm, setForm] = result.current,
+            controlHandler: ControlsCycleHandler = (control, controlName, form, formIndex, controlIndex, setForm) => {
+                return control.type === 'text'
+            },
+            cycleResult = formCycle(flukyForm, controlHandler, setForm)
+
+        expect(cycleResult).toBeTruthy()
+    })
+
+})
 
