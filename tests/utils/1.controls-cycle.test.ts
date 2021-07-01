@@ -1,9 +1,9 @@
 import {useImmer} from 'use-immer';
+import { renderHook } from '@testing-library/react-hooks'
 
-import {controlsCycle, formCycle} from './../../src/utils/controls-cycle'
-import { renderHook, act } from '@testing-library/react-hooks'
-import {ControlsCycleHandler, FormControls, FormParamsProps, FormProps} from "src/types";
-import {DEFAULT_FORM_SETTINGS, FORM_NAME} from "./../../src/const";
+import {ControlsCycleHandler, FormControls, FormParamsProps, FormProps} from "@common-types";
+import {controlsCycle, formCycle} from '@utils/control-utils/controls-cycle'
+import {DEFAULT_FORM_SETTINGS, FORM_NAME} from "@const";
 
 
 describe('controls-cycle', () => {

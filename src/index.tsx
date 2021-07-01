@@ -3,7 +3,9 @@ import React, {useEffect} from 'react';
 import axios from 'axios'
 import {useImmer} from 'use-immer';
 
-import {DEFAULT_FORM_SETTINGS, FORM_NAME} from "./const";
+import {DEFAULT_FORM_SETTINGS, FORM_NAME} from "@const";
+
+import {combineValidatorsSettingsLayers} from '@add-control-props-layers/add-validators-settings-layers'
 
 import {initActiveForm, submitForm} from './action/form'
 import {addControlExample, removeControlFromListByIndex, addFormExample, removeFormByIndex} from './action/dynamic-form'
@@ -55,7 +57,6 @@ import './style.less'
  */
 export const useFlukyForm: UseFlukyForm = (controls, customFormConfig) => {
 
-
     const formParams: FormParamsProps = {
             loaded: false,
             triedSubmit: false,
@@ -63,13 +64,15 @@ export const useFlukyForm: UseFlukyForm = (controls, customFormConfig) => {
             errorList: [],
             commonError: ''
           },
+          formValidatorsSetting = combineValidatorsSettingsLayers(DEFAULT_FORM_SETTINGS.formValidatorsSetting, customFormConfig.formValidatorsSetting),
           [flukyForm, setForm] = useImmer<FormProps<typeof controls>>({
               controls,
               formParams,
               formSettings: {
                   ...DEFAULT_FORM_SETTINGS,
                   formName: FORM_NAME,
-                  ...customFormConfig
+                  ...customFormConfig,
+                  formValidatorsSetting
               },
               controlsExample: {}
           })

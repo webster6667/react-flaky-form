@@ -1,7 +1,7 @@
 import {AxiosResponse} from "axios";
 
-import {formCycle} from "./../utils/controls-cycle"
-import {addControlSetting} from './../utils/add-control-setting'
+import {formCycle} from "@control-utils/controls-cycle"
+import {addControlSetting} from '@utils/add-control-setting'
 import {validateControlBeforeSubmit} from './../helpers/vaidate-control-before-submit'
 
 import {

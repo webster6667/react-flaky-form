@@ -24,7 +24,7 @@ export type ControlsCycle = (
     formControls: FormControls,
     form: FormProps,
     formIndex: number | null,
-    setForm: SetFormProps
+    setForm?: SetFormProps
 ) => boolean
 
 /**
@@ -69,6 +69,20 @@ export interface ValidatorSettingProps {
  * Список настроек валидатора
  */
 export interface ValidatorsSettingList {
+    minLength?: ValidatorSettingProps | boolean,
+    maxLength?: ValidatorSettingProps | boolean,
+    minValue?: ValidatorSettingProps | boolean,
+    maxValue?: ValidatorSettingProps | boolean,
+    required?: ValidatorSettingProps | boolean,
+    number?: ValidatorSettingProps | boolean,
+    email?: ValidatorSettingProps | boolean
+}
+
+/**
+ * @description
+ * Список настроек валидатора
+ */
+export interface ValidatorsSettingListInsideHandler {
     minLength?: ValidatorSettingProps,
     maxLength?: ValidatorSettingProps,
     minValue?: ValidatorSettingProps,
@@ -142,6 +156,10 @@ export interface SubmitValidatorProps {
 }
 
 //Настройки передаваемые для всей формы при инициализации
+/**
+ * @description
+ * Объект формы, при инициализации
+ */
 export interface FormConfigProps {
     formName?: string,
     lockSubmitBtnEvent?: false | 'required-empty' | 'lock-validator-has-error',
@@ -244,9 +262,10 @@ export interface InputMaskProps {
     _maskValue?: string
 }
 
-export interface ControlHandler {
-    (currentControl: ControlProps, form: FormProps, hooksData: HookProps, eventType: typeof inputEvents, setForm:SetFormProps):any
-}
+
+// export interface ControlHandler {
+//     (currentControl: ControlProps, form: FormProps, hooksData: HookProps, eventType: typeof inputEvents, setForm:SetFormProps):any
+// }
 
 /**
  * @description
@@ -304,15 +323,12 @@ export interface ControlProps {
     customMask?(VMasker, hookData: HookProps): any
 }
 
-export interface ControlDataForValidator {
-    currentControl: ControlProps,
-    controlIndex: null | number,
-    formIndex: null | number
-}
-
-//Тип для контрола
+/**
+ * @description
+ * Тип для контрола отдельной формы(мульти/сингл)
+ */
 export interface ControlsProps {
-    [propName: string]: ControlProps | Array<ControlProps>
+    [propName: string]: ControlProps | ControlProps[]
 }
 
 /**
@@ -355,12 +371,6 @@ export type SetFormProps = (setFormFunc: (form: FormProps) => any) => any
 /**
  * Хук инициализации
  */
-export type UseFlukyForm = <T extends FormControls>(controls: T, customFormConfig: FormConfigProps) => [FormProps<T>, SetFormProps]
-
-//@todo: проблемы с авто комплитом при заполнении контрола
-
-//@todo: подумать над названиями контролов
-//@todo: ControlProps - именно значения контролов
-//@todo: MultiControlProps - именно значения мультиконтрола
+export type UseFlukyForm = <T extends ControlsProps[] | ControlsProps>(controls: T extends ControlsProps[] ? ControlsProps[] : ControlsProps, customFormConfig: FormConfigProps) => [FormProps<T extends ControlsProps[] ? ControlsProps[] : ControlsProps>, SetFormProps]
 
 

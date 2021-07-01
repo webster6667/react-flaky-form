@@ -1,4 +1,4 @@
-import {FormConfigProps} from "./types"
+import {FormConfigProps} from "@common-types"
 
 
 const globalObject:any = global,

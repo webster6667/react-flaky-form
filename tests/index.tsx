@@ -4,7 +4,10 @@ export const SingleForm = () => {
 
     let [myForm, setMyForm] = useFlukyForm({
             username: {
-                type: 'text'
+                type: 'text',
+                validatorsSetting: {
+                    maxLength: {liveEnable: true}
+                }
             }
         },
         {

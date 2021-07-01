@@ -1,13 +1,14 @@
+import {getControlFromForm} from '@control-utils/get-control-from-form'
+import {controlHandler} from '@control-handlers/live-input-handler'
 // import {toggleSubmitBtnLockRelativeLockValidatorError} from './lock-submit-btn-validator'
-import {getControlFromForm} from './get-control-from-form'
-import {controlHandler} from './control-handlers'
 
 import {
     HookProps,
     inputEvents,
-    SetFormProps
-} from "./../types"
+    SetFormProps,
+} from '@common-types'
 
+import {AddControlHandler} from "./types"
 
 /**
  * @description
@@ -18,20 +19,21 @@ import {
  * @param {string} controlName - Имя контрола (username or password)
  * @param {number | null} controlIndex - Индекс элемента вложенного контрола(если это вложенный контрол)
  * @param {number | null} formIndex - Индекс формы(если это мульти форма)
- * @param {SetForm} SetFormProps - Функция изменяющая главный объект формы
+ * @param {SetFormProps} setForm - Функция изменяющая главный объект формы
  * @param {typeof inputEvents} eventType - Тип события который произошел на контроле
  * @param {string | number} selectedValue - Выбранное значение если это кликабильный контрол
  *
  * @returns {void}
  */
-export const addControlHandler = (newValue: string | number,
-                                  controlName: string,
-                                  controlIndex: number | null = null,
-                                  formIndex: number | null = null,
-                                  setForm: SetFormProps,
-                                  eventType: typeof inputEvents = null,
-                                  selectedValue: string | number | null
-                                  ):void => {
+export const addControlHandler:AddControlHandler = (
+                                  newValue,
+                                  controlName,
+                                  controlIndex = null,
+                                  formIndex = null,
+                                  setForm,
+                                  eventType = null,
+                                  selectedValue
+             ) => {
 
         setForm((form) => {
 
@@ -39,7 +41,7 @@ export const addControlHandler = (newValue: string | number,
              * 1.Получить контрол на который будет повешен обработчик
              * 2.Собрать все данные для хуков обработчика
              */
-            const currentControl = getControlFromForm(form, formIndex, controlIndex, controlName),
+            const currentControl = getControlFromForm(form, controlName, formIndex, controlIndex),
                   hookData: HookProps = {currentControl, controlIndex, formIndex, controlName, newValue, form, selectedValue}
 
             /**

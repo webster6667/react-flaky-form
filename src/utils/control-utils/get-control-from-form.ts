@@ -1,4 +1,6 @@
-import {ControlProps, ControlsProps, FormProps} from "./../types";
+import {ControlProps, ControlsProps, FormProps} from "@common-types";
+
+import {GetControlFromForm} from "./types"
 
 /**
  * @description
@@ -12,7 +14,7 @@ import {ControlProps, ControlsProps, FormProps} from "./../types";
  * @returns {ControlProps} - вернет контрол
  *
  */
-export const getControlFromForm = (form: FormProps, formIndex: number | null = null, controlIndex: number | null = null, controlName: string | number | null = null):ControlProps => {
+export const getControlFromForm: GetControlFromForm = (form, controlName = null, formIndex = null, controlIndex = null) => {
 
     /**
      * 1.Определить вид формы(одиночная или мульти)

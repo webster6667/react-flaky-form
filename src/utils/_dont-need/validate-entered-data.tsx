@@ -1,4 +1,4 @@
-import {LiveValidatorProps, ValidatorErrorProps, ValidatorSettingProps} from './../types'
+import {LiveValidatorProps, ValidatorErrorProps, ValidatorSettingProps, ValidatorsSettingListInsideHandler} from '@common-types'
 
 import {
     isShorterThanLimit,
@@ -34,7 +34,7 @@ const validateWrittenData:LiveValidatorProps = (hooksData) => {
           controlValidatorsRules = currentControl.validateRules || {},
           controlValidatorsSetting = currentControl.validatorsSetting || {},
           {minValue: minValueRules, maxValue: maxValueRules, minLength: minLengthRules, maxLength: maxLengthRules, required: requiredRules, number: numberRules, email: emailRules} = controlValidatorsRules,
-          {minValue: minValueSetting, maxValue: maxValueSetting, minLength: minLengthSetting, maxLength: maxLengthSetting, required: requiredSetting, number: numberSetting, email: emailSetting} = controlValidatorsSetting
+          {minValue: minValueSetting, maxValue: maxValueSetting, minLength: minLengthSetting, maxLength: maxLengthSetting, required: requiredSetting, number: numberSetting, email: emailSetting} = controlValidatorsSetting as ValidatorsSettingListInsideHandler
 
     /**
      * @description

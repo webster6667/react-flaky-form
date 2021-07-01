@@ -9,7 +9,7 @@
       "dom.iterable",
       "esnext"
     ],
-    "allowJs": false, //Проходится по js файлам
+    "allowJs": false,
     "declaration": true,
     "emitDeclarationOnly": true,
 
@@ -18,24 +18,38 @@
     "jsx": "preserve",
     "noImplicitAny": false,
 
-    "strict": true, //Строгий режим
+    "strict": true,
     "module": "esnext",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
-    "strictNullChecks": false
+    "strictNullChecks": false,
+    "paths": {
+      "@src/*": ["src/*"],
+      "@const": ["src/const"],
+      "@common-types": ["src/types.ts"],
+      "@utils/*": ["src/utils/*"],
+      "@control-utils/*": ["src/utils/control-utils/*"],
+      "@add-control-props-layers/*": ["src/utils/add-control-props-layers/*"],
+      "@control-handlers/*": ["src/utils/control-handlers/*"],
+      "@validators/*": ["src/utils/validators/*"]
+    }
   },
   "ts-node" : {
     "compilerOptions" : {
+      "baseUrl": "./",
       "target": "es6",
       "module" : "commonjs",
       "strict": false
     }
   },
-  "include": ["src/**/*"],
+
+  "include": [
+    "src/**/*",
+    "tests/**/*.test.ts"
+  ],
   "exclude": [
     "node_modules/",
     "lib",
-    "es",
-    "**/*.test.*"
+    "es"
   ]
 }

@@ -6,7 +6,7 @@ import {
     ControlsCycle,
     FormCycle,
     ControlsCycleHandler
-} from "../types";
+} from "@common-types";
 
 
 /**
