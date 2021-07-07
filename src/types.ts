@@ -98,6 +98,16 @@ export interface ValidatorsSettingListInsideHandler {
  */
 export interface ValidatorErrorProps {
     /**
+     * Была ли ошибка в контроле
+     */
+    hasError: boolean,
+
+    /**
+     * Блокировать ли ввод значения не прошедшее валидацию
+     */
+    shouldLockInput: boolean,
+
+    /**
      * Сообщение об ошибке
      */
     message?: string | null,
@@ -121,6 +131,14 @@ export interface ValidatorErrorProps {
      * Через сколько ошибка исчезает
      */
     hideErrorTimeout?: number | null
+}
+
+export interface ControlOutputDataProps<T = string | number | any[]> {
+    writeToControlValue: T,
+    errorDataForControl: ValidatorErrorProps,
+    hasError: boolean,
+    isWriteInputEnable: boolean,
+    debounceTimeout: number
 }
 
 //Правило срабатывание валидатора
@@ -151,7 +169,7 @@ export interface ValidatorsRulesList {
  * @description
  * Типизация функции живого валидатора
  */
-export type LiveValidator = (hookData: HookProps) => {shouldLockInput: boolean, hasError: boolean, modifiedValueToWrite?: string | number | null, errorData?: ValidatorErrorProps}
+export type LiveValidator = (hookData: HookProps) => {modifiedValueToWrite?: string | number | null, errorData: ValidatorErrorProps}
 
 export interface SubmitValidatorProps {
     (hookData: HookProps):{hasError: boolean, errorData?: ValidatorErrorProps}

@@ -1,5 +1,5 @@
 import {getControlFromForm} from '@control-utils/get-control-from-form'
-import {controlHandler} from '@control-handlers/live-input-handler'
+import {liveInputHandler} from '@control-handlers/live-input-handler'
 // import {toggleSubmitBtnLockRelativeLockValidatorError} from './lock-submit-btn-validator'
 
 import {
@@ -64,7 +64,7 @@ export const addControlHandler:AddControlHandler = (
              * @description
              * Функция изменения значения(валидация, запись ошибок, запись значения, блокировка записи)
              */
-            controlHandler(currentControl, form, hookData, eventType, setForm)
+            liveInputHandler(currentControl, form, hookData, eventType, setForm)
 
 
             /**

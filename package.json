@@ -65,7 +65,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.14.0",
-    "simple-input-validators": "^1.0.0",
+    "simple-input-validators": "^1.1.1",
     "vanilla-masker": "^1.2.0"
   },
   "homepage": "https://github.com/webster6667/MYLIBNAME#readme"

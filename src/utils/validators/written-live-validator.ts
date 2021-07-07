@@ -1,15 +1,17 @@
-import {LiveValidator, ValidatorsSettingListInsideHandler} from "@common-types";
+import {LiveValidator, ValidatorsSettingListInsideHandler, ValidatorErrorProps} from "@common-types";
 import {
     isGreaterThanLimit,
-    isLessThanLimit, isLongerThanLimit, isMailInvalid,
+    isLessThanLimit,
+    isLongerThanLimit,
+    isMailInvalid,
     isNumberValid,
     isShorterThanLimit,
-    isWrittenValueEmpty
+    isWrittenValueEmpty,
+    errorDataHandler
 } from "simple-input-validators";
 
 import {isLiveValidatorEnable} from './helpers/is-live-validator-enable'
 
-//@ts-ignore
 export const validateWrittenData:LiveValidator = (hooksData) => {
 
     /**
@@ -18,10 +20,19 @@ export const validateWrittenData:LiveValidator = (hooksData) => {
      * 3.Получить настройки валидаторов
      */
     const {currentControl, newValue} = hooksData,
-        controlValidatorsRules = currentControl.validateRules || {},
-        controlValidatorsSetting = currentControl.validatorsSetting || {},
-        {minValue: minValueRules, maxValue: maxValueRules, minLength: minLengthRules, maxLength: maxLengthRules, required: requiredRules, number: numberRules, email: emailRules} = controlValidatorsRules,
-        {minValue: minValueSetting, maxValue: maxValueSetting, minLength: minLengthSetting, maxLength: maxLengthSetting, required: requiredSetting, number: numberSetting, email: emailSetting} = controlValidatorsSetting as ValidatorsSettingListInsideHandler
+          controlValidatorsRules = currentControl.validateRules || {},
+          controlValidatorsSetting = currentControl.validatorsSetting || {},
+          {minValue: minValueRules, maxValue: maxValueRules, minLength: minLengthRules, maxLength: maxLengthRules, required: requiredRules, number: numberRules, email: emailRules} = controlValidatorsRules,
+          {minValue: minValueSetting, maxValue: maxValueSetting, minLength: minLengthSetting, maxLength: maxLengthSetting, required: requiredSetting, number: numberSetting, email: emailSetting} = controlValidatorsSetting as ValidatorsSettingListInsideHandler,
+          errorData: ValidatorErrorProps  = {
+              hasError: false,
+              shouldLockInput: false,
+              message: null,
+              limit: null,
+              showLiveErrorAfterFirstSubmit: null,
+              hideErrorTimeout: null,
+              showErrorTimeout: null,
+          }
 
     /**
      * @description
@@ -30,18 +41,10 @@ export const validateWrittenData:LiveValidator = (hooksData) => {
     if (typeof newValue === "string" || typeof newValue === "number") {
 
         const isInputNumberValid = isNumberValid(newValue, numberRules),
-            isInputNumberInvalid = !isInputNumberValid,
-            isWrittenValueNotEmpty = !isWrittenValueEmpty(newValue),
-            isInputTypeNumber = currentControl.type === 'number',
-            errorData = {
-                message: null,
-                limit: null,
-                hideErrorTimeout: null,
-                showErrorTimeout: null,
-                showLiveErrorAfterFirstSubmit: null,
-                hasError: false,
-                shouldLockInput: false
-            }
+              isInputNumberInvalid = !isInputNumberValid,
+              isWrittenValueNotEmpty = !isWrittenValueEmpty(newValue),
+              isInputTypeNumber = currentControl.type === 'number',
+              hasError = true
 
         /**
          * @description
@@ -53,35 +56,35 @@ export const validateWrittenData:LiveValidator = (hooksData) => {
              * Live validator for less value limit
              */
             if (isInputNumberValid && isLessThanLimit(newValue, minValueRules) && isLiveValidatorEnable(minValueSetting)) {
-                errorHandler(errorData, {...minValueRules, ...minValueSetting})
+                errorDataHandler(errorData, {...minValueRules, ...minValueSetting, hasError})
             }
 
             /**
              * Live validator for greater limit
              */
             if (isInputNumberValid && isGreaterThanLimit(newValue, maxValueRules) && isLiveValidatorEnable(maxValueSetting)) {
-                errorHandler(errorData, {...maxValueRules, ...maxValueSetting})
+                errorDataHandler(errorData, {...maxValueRules, ...maxValueSetting, hasError})
             }
 
             /**
              * Live validator for shorter limit
              */
             if (isShorterThanLimit(newValue, minLengthRules) && isLiveValidatorEnable(minLengthSetting)) {
-                errorHandler(errorData, {...minLengthRules, ...minLengthSetting})
+                errorDataHandler(errorData, {...minLengthRules, ...minLengthSetting, hasError})
             }
 
             /**
              * Live validator for longer limit
              */
             if (isLongerThanLimit(newValue, maxLengthRules) && isLiveValidatorEnable(maxLengthSetting)) {
-                errorHandler(errorData, {...maxLengthRules, ...maxLengthSetting})
+                errorDataHandler(errorData, {...maxLengthRules, ...maxLengthSetting, hasError})
             }
 
             /**
              * Live validator for valid email
              */
             if (emailRules && isMailInvalid(newValue) && isLiveValidatorEnable(emailSetting)) {
-                errorHandler(errorData, {...emailRules, ...emailSetting})
+                errorDataHandler(errorData, {...emailRules, ...emailSetting, hasError})
             }
 
         }
@@ -90,7 +93,7 @@ export const validateWrittenData:LiveValidator = (hooksData) => {
          * Live validator for required field
          */
         if (requiredRules && isWrittenValueNotEmpty && isLiveValidatorEnable(requiredSetting)) {
-            errorHandler(errorData, {...requiredRules, ...requiredSetting})
+            errorDataHandler(errorData, {...requiredRules, ...requiredSetting, hasError})
         }
 
 
@@ -98,11 +101,11 @@ export const validateWrittenData:LiveValidator = (hooksData) => {
          * Live validator for valid number
          */
         if (isInputTypeNumber && isInputNumberInvalid) {
-            errorHandler(errorData, {...numberRules, ...numberSetting})
+            errorDataHandler(errorData, {...numberRules, ...numberSetting, hasError})
         }
 
     }
 
-    // return {shouldLockInput, hasError, errorData}
+    return {errorData}
 
 }
