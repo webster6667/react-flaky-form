@@ -1,8 +1,12 @@
-import {} from '@validators/written-live-validator'
+import * as VMasker from "vanilla-masker";
+import {maskWriteValue} from '@validators/mask-validator'
+import {validateWrittenData} from '@validators/written-live-validator'
+import {validateClickedData} from '@validators/clicked-live-validator'
 
-import {HookProps, SetFormProps, ValidatorErrorProps} from "@common-types";
+
 import {getControlFromForm} from "@control-utils/get-control-from-form";
 
+import {HookProps, SetFormProps, ValidatorErrorProps} from "@common-types";
 import {LiveInputHandler} from "./types"
 
 /**
@@ -23,8 +27,8 @@ export const liveInputHandler: LiveInputHandler = (currentControl, form, hooksDa
      * Определить тип контрола(текстовый или кликабильный)
      */
     const {type} = currentControl,
-        textControlTypes = ['phone', 'number', 'text', 'password', 'date'],
-        isTextControl = textControlTypes.includes(type)
+          textControlTypes = ['phone', 'number', 'text', 'password', 'date'],
+          isTextControl = textControlTypes.includes(type)
 
 
     /**
@@ -36,10 +40,10 @@ export const liveInputHandler: LiveInputHandler = (currentControl, form, hooksDa
      * 6.Получить введенное(выбранное) значение
      * 7.Проверить, была ли попытка отправить форму
      */
-    const defaultValidateFunction = isTextControl ? validateWritedData : validateClickedData,
+    const defaultValidateFunction = isTextControl ? validateWrittenData : validateClickedData,
         liveValidator = currentControl.customLiveValidator || form.formSettings.customLiveValidator || defaultValidateFunction,
         additionalLiveValidator = currentControl.additionalLiveValidator || form.formSettings.additionalLiveValidator || null,
-        inputMask = currentControl.inputMask || null,
+        inputMask = currentControl.maskSetting || null,
         customMask = currentControl.customMask,
         newValue = hooksData.newValue,
         isFormTriedSubmit = form.formParams.triedSubmit

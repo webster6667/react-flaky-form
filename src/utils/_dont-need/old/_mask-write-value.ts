@@ -19,7 +19,7 @@ export function unmask(pattern: string, placeholder, textAfterMask: string | num
 }
 
 //Работа с маской
-export function _maskWriteValue(inputMask: InputMaskProps, currentControl: ControlProps, writeValue: string | number, eventType: string) {
+export function maskWriteValue(inputMask: InputMaskProps, currentControl: ControlProps, writeValue: string | number, eventType: string) {
 
     const {pattern, placeholder} = inputMask,
           clearValue = unmask(pattern, placeholder, writeValue)

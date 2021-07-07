@@ -1,6 +1,6 @@
-import {LiveValidatorProps, ValidatorErrorProps, ValidatorSettingProps} from "@src/types";
+import {LiveValidator, ValidatorErrorProps, ValidatorSettingProps} from "@src/types";
 
-export const validateClickedData:LiveValidatorProps = (hooksData) => {
+export const validateClickedData:LiveValidator = (hooksData) => {
     const {currentControl, newValue, form} = hooksData,
         controlValidatorsSetting = currentControl.validatorsSetting || {},
         controlValidatorsRules = currentControl.validateRules || {},

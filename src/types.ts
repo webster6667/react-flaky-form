@@ -1,7 +1,7 @@
 import {AxiosResponse} from "axios";
 
 let inputTypes: 'phone' | 'number' | 'text' | 'password' | 'radio' | 'checkbox' | 'select' | 'date'
-let placeholderVisibleValues: 'always' | 'hover' | 'focus' | 'write'
+let eventWhenPlaceholderVisible: 'always' | 'hover' | 'focus' | 'write'
 export let inputEvents: 'change' | 'mouseover' | 'mouseleave' | 'focus' | 'blur' | null
 
 /**
@@ -147,15 +147,17 @@ export interface ValidatorsRulesList {
     email?: Pick<ValidatorRulesProps, "message">
 }
 
-export interface LiveValidatorProps {
-    (hookData: HookProps):{shouldLockInput: boolean, hasError: boolean, modifiedValueToWrite?: string | number | null, errorData?: ValidatorErrorProps}
-}
+/**
+ * @description
+ * Типизация функции живого валидатора
+ */
+export type LiveValidator = (hookData: HookProps) => {shouldLockInput: boolean, hasError: boolean, modifiedValueToWrite?: string | number | null, errorData?: ValidatorErrorProps}
 
 export interface SubmitValidatorProps {
     (hookData: HookProps):{hasError: boolean, errorData?: ValidatorErrorProps}
 }
 
-//Настройки передаваемые для всей формы при инициализации
+
 /**
  * @description
  * Объект формы, при инициализации
@@ -174,10 +176,10 @@ export interface FormConfigProps {
     additionalLockSubmitBtnValidator?(hookData: HookProps):boolean,
 
     //Живой валидатор для всех контролов
-    customLiveValidator?:LiveValidatorProps,
+    customLiveValidator?:LiveValidator,
 
     //Дополнительный живой валидатор для всех контролов
-    additionalLiveValidator?:LiveValidatorProps,
+    additionalLiveValidator?:LiveValidator,
 
     //Хуки до и после всплывшей ошибки живого валидатора
     beforeLiveValidatorError?(hookData: HookProps): any,
@@ -252,20 +254,43 @@ export interface HookProps {
     selectedValue: number | string | null
 }
 
-
-export interface InputMaskProps {
-    placeholderVisible?: typeof placeholderVisibleValues,
-    pattern: string,
-    placeholder?: null | string
+/**
+ * @description
+ * Настройки маски
+ */
+export interface MaskSettingProps {
+    /**
+     * При каком событии отображать наложенную маску
+    */
+    eventWhenPlaceholderVisible?: typeof eventWhenPlaceholderVisible,
+    
+    /**
+     * Шаблон маски:
+     * Для любого символа используется число `9`, для любого символа буква `A`.
+     * Например +7(999)-999-99-99 | AA-AAA
+     */
+    maskPattern: string,
+    
+    /**
+     * Какой символ отображать вместо незаполненых
+     */
+    maskPlaceholder?: null | string,
+    
+    /**
+     * Сообщение, при несовпадении с маской(выводится после отправления формы)
+     */
     message?: string,
+    
+    /**
+     * Чистое значение, без маски
+     */
     clearValue?: string,
-    _maskValue?: string
+    
+    /**
+     * Маска с наложенным placeholder
+     */
+    _maskWithPlaceholder?: string
 }
-
-
-// export interface ControlHandler {
-//     (currentControl: ControlProps, form: FormProps, hooksData: HookProps, eventType: typeof inputEvents, setForm:SetFormProps):any
-// }
 
 /**
  * @description
@@ -286,14 +311,14 @@ export interface ControlProps {
     inputName?: string | null,
     validateRules?: ValidatorsRulesList,
     validatorsSetting?: ValidatorsSettingList,
-    inputMask?: InputMaskProps,
+    maskSetting?: MaskSettingProps,
     placeholder?: string | null,
 
     options?: ClickControlOptionsProps[]
 
     //Живые валидаторы
-    customLiveValidator?:LiveValidatorProps,
-    additionalLiveValidator?:LiveValidatorProps,
+    customLiveValidator?:LiveValidator,
+    additionalLiveValidator?:LiveValidator,
 
     //Хуки до и после всплывшей ошибки живого валидатора
     beforeLiveValidatorError?(hookData: HookProps): any,

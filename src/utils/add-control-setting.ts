@@ -9,7 +9,7 @@ import {addRequireFields} from '@add-control-props-layers/add-required-field'
 import {addControlExample} from '@add-control-props-layers/add-control-example'
 import {addValidatorsSettingsLayerToSingleControl} from "@add-control-props-layers/add-validators-settings-layers"
 
-import {addControlHandler} from "@add-control-handlers/add-control-handler"
+import {addControlHandler} from "@utils/add-control-handler"
 // import {isControlBtnSubmitValidationSuccess} from './../../helpers/lock-submit-btn-validator'
 
 /**

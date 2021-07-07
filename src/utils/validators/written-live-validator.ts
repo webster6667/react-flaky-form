@@ -1,4 +1,4 @@
-import {LiveValidatorProps, ValidatorsSettingListInsideHandler} from "@common-types";
+import {LiveValidator, ValidatorsSettingListInsideHandler} from "@common-types";
 import {
     isGreaterThanLimit,
     isLessThanLimit, isLongerThanLimit, isMailInvalid,
@@ -10,7 +10,7 @@ import {
 import {isLiveValidatorEnable} from './helpers/is-live-validator-enable'
 
 //@ts-ignore
-const validateWrittenData:LiveValidatorProps = (hooksData) => {
+export const validateWrittenData:LiveValidator = (hooksData) => {
 
     /**
      * 1.Получить данные для работы (контрол через который будут проходить данные, вводимое значение, всю форму)

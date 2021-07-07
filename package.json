@@ -15,7 +15,7 @@
     "build:esm": "cross-env NODE_ENV=esm rollup -c",
     "build:cjs": "cross-env NODE_ENV=cjs rollup -c",
     "build:theme": "lessc-each src/theme  dist/theme",
-    "dev:run": "ts-node src/utils/validate-entered-data.tsx"
+    "dev:run": "ts-node src/utils/validators/helpers/unmask.ts"
   },
   "repository": {
     "type": "git",
@@ -65,7 +65,8 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.14.0",
-    "simple-input-validators": "^1.0.0"
+    "simple-input-validators": "^1.0.0",
+    "vanilla-masker": "^1.2.0"
   },
   "homepage": "https://github.com/webster6667/MYLIBNAME#readme"
 }

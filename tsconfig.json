@@ -9,7 +9,7 @@
       "dom.iterable",
       "esnext"
     ],
-    "allowJs": false,
+    "allowJs": true,
     "declaration": true,
     "emitDeclarationOnly": true,
 
