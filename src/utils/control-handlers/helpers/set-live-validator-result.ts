@@ -14,9 +14,9 @@ import {LiveValidator, HookProps, ControlOutputDataProps} from "@common-types"
  */
 export const setLiveValidatorResult:GetValidatorResult = (validator, hookProps, controlOutputData) => {
     const {errorData = null, modifiedValueToWrite = null} = validator(hookProps),
-          {shouldLockInput, hasError} = errorData
+          {shouldLockNotValidWrite, hasError} = errorData
 
-    if (shouldLockInput) controlOutputData.isWriteInputEnable = false
+    if (shouldLockNotValidWrite) controlOutputData.isWriteInputEnable = false
     if (hasError) controlOutputData.hasError = true
 
     /**

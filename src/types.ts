@@ -8,11 +8,34 @@ export let inputEvents: 'change' | 'mouseover' | 'mouseleave' | 'focus' | 'blur'
  * Функция обработчик для каждого отдельного контрола
  */
 export type ControlsCycleHandler = (
+    /**
+     * Даные отдельного контрола с которым сейчас идет работа
+     */
     control: ControlProps,
+    
+    /**
+     * Имя контрола с которыми сейчас идет работа
+     */
     controlName: string,
+    
+    /**
+     * Глобальный объект форм
+     */
     form: FormProps,
+    
+    /**
+     * Индекс формы контрола(если есть)
+     */
     formIndex?: number | null,
+
+    /**
+     * Индекс контрола(если есть)
+     */
     controlIndex?: number | null,
+
+    /**
+     * Функция изменеия глобальныого объекта форм
+     */
     setForm?: SetFormProps
 ) => boolean
 
@@ -20,10 +43,29 @@ export type ControlsCycleHandler = (
  * Функция запускающая обработчик для контролов переданного объекта
  */
 export type ControlsCycle = (
+    /**
+     * Функция которая будет запущена для каждого контрола
+     */
     controlsCycleFunction: ControlsCycleHandler,
+
+    /**
+     * Список контролов, по которым пройдется функция
+     */
     formControls: FormControls,
+
+    /**
+     * Глобальный объект форм со всеми контролами
+     */
     form: FormProps,
+
+    /**
+     * Индекс формы
+     */
     formIndex: number | null,
+
+    /**
+     * Функция изменеия глобальныого объекта форм
+     */
     setForm?: SetFormProps
 ) => boolean
 
@@ -31,8 +73,19 @@ export type ControlsCycle = (
  * Функция запускающая обработчик для каждого контрола каждой формы
  */
 export type FormCycle = (
+    /**
+     * Глобальный объект форм
+     */
     form: FormProps,
+    
+    /**
+     * Функция которая сработает для всех контролов всех форм
+     */
     controlsCycleFunction: ControlsCycleHandler,
+
+    /**
+     * Функция изменеия глобальныого объекта форм
+     */
     setForm?: SetFormProps
 ) => boolean
 
@@ -48,7 +101,14 @@ interface ClickControlOptionsProps {
  * Параметры axios
  */
 interface FormActions {
+    /**
+     * Куда отправлять запрос за инитом
+     */
     toInit?: string,
+
+    /**
+     * Куда отправлять даныне из формы
+     */
     toSubmit?: string
 }
 
@@ -57,16 +117,35 @@ interface FormActions {
  * Параметры отдельного валидатора
  */
 export interface ValidatorSettingProps {
+    /**
+     * Включена ли живая валижация контрола
+     */
     liveEnable?: boolean,
+    
+    /**
+     * Начать ли живое отображение ошибок только после первой отправки формы
+     */
     showLiveErrorAfterFirstSubmit?: boolean,
+    
+    /**
+     * Блокировать ли вывыод в ипут данные не прошедшие валидацию
+     */
     shouldLockNotValidWrite?: boolean,
+    
+    /**
+     * Через какой таймаут отображать ошибки
+     */
     showErrorTimeout?: number | null,
+    
+    /**
+     * Через какой таймаут прятать ошибку
+     */
     hideErrorTimeout?: number | null
 }
 
 /**
  * @description
- * Список настроек валидатора
+ * Список настроек валидатора с внешней стороны(при обьявлении формы)
  */
 export interface ValidatorsSettingList {
     minLength?: ValidatorSettingProps | boolean,
@@ -80,7 +159,7 @@ export interface ValidatorsSettingList {
 
 /**
  * @description
- * Список настроек валидатора
+ * Список настроек валидатора внутри валидатора
  */
 export interface ValidatorsSettingListInsideHandler {
     minLength?: ValidatorSettingProps,
@@ -105,7 +184,7 @@ export interface ValidatorErrorProps {
     /**
      * Блокировать ли ввод значения не прошедшее валидацию
      */
-    shouldLockInput: boolean,
+    shouldLockNotValidWrite: boolean,
 
     /**
      * Сообщение об ошибке
@@ -133,11 +212,33 @@ export interface ValidatorErrorProps {
     hideErrorTimeout?: number | null
 }
 
+/**
+ * Объект данных ввывода из контрола в инпут
+ */
 export interface ControlOutputDataProps<T = string | number | any[]> {
+    /**
+     * Значение которое запишется из контрола в инпут
+     */
     writeToControlValue: T,
+    
+    /**
+     * Данные для отображения ошибок
+     */
     errorDataForControl: ValidatorErrorProps,
+    
+    /**
+     * Была ли ошибка хоть в одном из валидаторов
+     */
     hasError: boolean,
+    
+    /**
+     * Открыт ли инпут для записи данных из контрола
+     */
     isWriteInputEnable: boolean,
+    
+    /**
+     * ?
+     */
     debounceTimeout: number
 }
 

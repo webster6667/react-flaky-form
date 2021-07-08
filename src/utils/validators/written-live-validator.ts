@@ -26,7 +26,7 @@ export const validateWrittenData:LiveValidator = (hooksData) => {
           {minValue: minValueSetting, maxValue: maxValueSetting, minLength: minLengthSetting, maxLength: maxLengthSetting, required: requiredSetting, number: numberSetting, email: emailSetting} = controlValidatorsSetting as ValidatorsSettingListInsideHandler,
           errorData: ValidatorErrorProps  = {
               hasError: false,
-              shouldLockInput: false,
+              shouldLockNotValidWrite: false,
               message: null,
               limit: null,
               showLiveErrorAfterFirstSubmit: null,
@@ -92,7 +92,7 @@ export const validateWrittenData:LiveValidator = (hooksData) => {
         /**
          * Live validator for required field
          */
-        if (requiredRules && isWrittenValueNotEmpty && isLiveValidatorEnable(requiredSetting)) {
+        if (requiredRules && isWrittenValueEmpty(newValue) && isLiveValidatorEnable(requiredSetting)) {
             errorDataHandler(errorData, {...requiredRules, ...requiredSetting, hasError})
         }
 
@@ -100,7 +100,7 @@ export const validateWrittenData:LiveValidator = (hooksData) => {
         /**
          * Live validator for valid number
          */
-        if (isInputTypeNumber && isInputNumberInvalid) {
+        if (numberRules && isInputNumberInvalid) {
             errorDataHandler(errorData, {...numberRules, ...numberSetting, hasError})
         }
 

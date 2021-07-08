@@ -43,12 +43,12 @@ export const liveInputHandler: LiveInputHandler = (currentControl, form, hooksDa
      * 7.Проверить, была ли попытка отправить форму
      */
     const defaultValidateFunction = isTextControl ? validateWrittenData : validateClickedData,
-        liveValidator = currentControl.customLiveValidator || form.formSettings.customLiveValidator || defaultValidateFunction,
-        additionalLiveValidator = currentControl.additionalLiveValidator || form.formSettings.additionalLiveValidator || null,
-        inputMask = currentControl.maskSetting || null,
-        customMask = currentControl.customMask,
-        newValue = hooksData.newValue,
-        isFormTriedSubmit = form.formParams.triedSubmit
+          liveValidator = currentControl.customLiveValidator || form.formSettings.customLiveValidator || defaultValidateFunction,
+          additionalLiveValidator = currentControl.additionalLiveValidator || form.formSettings.additionalLiveValidator || null,
+          inputMask = currentControl.maskSetting || null,
+          customMask = currentControl.customMask,
+          newValue = hooksData.newValue,
+          isFormTriedSubmit = form.formParams.triedSubmit
 
     /**
      * Проверка наличия всех валидаторов
