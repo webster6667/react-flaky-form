@@ -22,6 +22,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "strictNullChecks": false,
     "paths": {
       "@src/*": ["src/*"],
@@ -31,6 +32,7 @@
       "@control-utils/*": ["src/utils/control-utils/*"],
       "@add-control-props-layers/*": ["src/utils/add-control-props-layers/*"],
       "@control-handlers/*": ["src/utils/control-handlers/*"],
+      "@error-handlers/*": ["src/utils/error-handlers/*"],
       "@validators/*": ["src/utils/validators/*"]
     }
   },

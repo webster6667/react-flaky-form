@@ -1,5 +1,6 @@
 import {isLiveValidatorEnable} from '@validators/helpers/is-live-validator-enable'
 import {validateWrittenData} from '@validators/written-live-validator'
+import {setLiveValidatorResult} from '@control-handlers/helpers/set-live-validator-result'
 
 import {
     ValidatorSettingProps,
@@ -9,7 +10,7 @@ import {
     FormParamsProps,
     ValidatorErrorProps,
     ValidatorsRulesList,
-    ValidatorsSettingListInsideHandler
+    ValidatorsSettingListInsideHandler, ControlOutputDataProps
 } from "@common-types"
 
 import {DEFAULT_FORM_SETTINGS} from "@const";
@@ -343,6 +344,46 @@ describe('written validator return right error data', () => {
               }
 
         expect(errorData).toEqual(expectedResult)
+    });
+
+    test('setLiveValidatorResult written validator result to common error object', () => {
+
+        const newValue = 2,
+            limit = 5,
+            message = 'less than limit',
+            validatorName = 'minValue',
+            validateRules = {
+                limit,
+                message
+            },
+            validatorSettings = {
+                liveEnable: true
+            },
+            hookData = getHookData(newValue, validatorName, validateRules, validatorSettings),
+            controlOutputData: ControlOutputDataProps<typeof newValue> = {
+                writeToControlValue: newValue,
+                errorDataForControl: null,
+                hasAnyError: false,
+                isWriteInputEnable: true
+            },
+            expectedResult: ControlOutputDataProps<typeof newValue> = {
+                writeToControlValue: 2,
+                errorDataForControl: {
+                    hasError: true,
+                    shouldLockNotValidWrite: false,
+                    message: 'less than limit',
+                    limit: 5,
+                    showLiveErrorAfterFirstSubmit: null,
+                    hideErrorTimeout: null,
+                    showErrorTimeout: null
+                },
+                hasAnyError: true,
+                isWriteInputEnable: true
+            }
+            
+        setLiveValidatorResult(validateWrittenData, hookData, controlOutputData)
+
+        expect(controlOutputData).toEqual(expectedResult)
     });
     
 })

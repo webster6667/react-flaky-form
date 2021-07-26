@@ -3,13 +3,15 @@ import {maskWriteValue} from '@validators/mask-validator'
 import {validateWrittenData} from '@validators/written-live-validator'
 import {validateClickedData} from '@validators/clicked-live-validator'
 
+import {getControlTimerName} from '@control-utils/get-control-timer-name'
 
-import {getControlFromForm} from "@control-utils/get-control-from-form";
+import {liveValidatorShowErrorHandler} from './live-validator-show-error-handler'
+import {setLiveValidatorResult} from './helpers/set-live-validator-result'
 
-import {HookProps, SetFormProps, ValidatorErrorProps, ControlOutputDataProps} from "@common-types";
+
+import {HookProps, SetFormProps, ControlOutputDataProps} from "@common-types";
 import {LiveInputHandler} from "./types"
 
-import {setLiveValidatorResult} from './helpers/set-live-validator-result'
 
 /**
  * @description
@@ -69,9 +71,8 @@ export const liveInputHandler: LiveInputHandler = (currentControl, form, hooksDa
     const controlOutputData: ControlOutputDataProps<typeof newValue> = {
         writeToControlValue: newValue,
         errorDataForControl: null,
-        hasError: false,
-        isWriteInputEnable: true,
-        debounceTimeout: 0
+        hasAnyError: false,
+        isWriteInputEnable: true
     }
 
 
@@ -100,16 +101,17 @@ export const liveInputHandler: LiveInputHandler = (currentControl, form, hooksDa
 
         const {
             errorDataForControl,
-            hasError,
+            hasAnyError,
             writeToControlValue,
-            isWriteInputEnable,
-            debounceTimeout
-        } = controlOutputData
+            isWriteInputEnable
+        } = controlOutputData,
+        showErrorTimerName = getControlTimerName(hooksData, 'showError')
 
         /**
-         * Настройки вывода ошибок(?)
+         * Настройки вывода ошибок
          */
-        const {showLiveErrorAfterFirstSubmit = false, showErrorTimeout = 0} = errorDataForControl || {}
+        const {showLiveErrorAfterFirstSubmit = false, showErrorTimeout = 0} = errorDataForControl || {},
+               showLiveErrorAlways = !showLiveErrorAfterFirstSubmit
 
         /**
          * Настройки таймаута вывода ошибок
@@ -126,71 +128,27 @@ export const liveInputHandler: LiveInputHandler = (currentControl, form, hooksDa
         /**
          * Выключить флаг наличия ошибки у контрола
          */
-        if (!hasError) {
+        if (!hasAnyError) {
             currentControl.hasError = false
 
-            //Очистить таймауты скрытия??
+            /**
+             * После того как была отображенна ошибка, был создан таймер через сколько она должна скрытся
+             * Если ошибка исчезает до отработки таймера, нужно отчистить таймер, для того что бы они не начали срабатывать в ненужный момент
+             */
             // clearErrorVisibleHandlerTimeout(hooksData, 'hideError')
         }
 
-        // //Функция отображения ошибки с задержкой
-        // const showError = errorVisibleHandler((errorDataForControl: ValidatorErrorProps, controlLabel: string, writeToControlValue: string | number, hooksData: HookProps, setForm: SetFormProps) => {
-        //
-        //
-        //     setForm((form) => {
-        //         const {controlIndex, formIndex, controlName} = hooksData,
-        //             currentControl = getControlFromForm(form, formIndex, controlIndex, controlName),
-        //             {message = null, limit = null, hideErrorTimeout = null} = errorDataForControl || {},
-        //             beforeError = currentControl.beforeLiveValidatorError || form.formSettings.beforeLiveValidatorError || null,
-        //             afterError = currentControl.afterLiveValidatorError || form.formSettings.afterLiveValidatorError || null
-        //
-        //         //Хук перед всплытием ошибки
-        //         if (typeof beforeError === "function") {
-        //             beforeError(hooksData)
-        //         }
-        //
-        //         //Распарсить ошибку
-        //         if (errorDataForControl) {
-        //             currentControl.error = messageParser(message, controlLabel, writeToControlValue, limit)
-        //         }
-        //
-        //         //Отобразить ошибку
-        //         currentControl.hasError = true
-        //
-        //         //Скрыть ошибку через указанное время
-        //         const hideError = errorVisibleHandler((hooksData: HookProps, setForm: SetFormProps) => {
-        //
-        //             setForm((form) => {
-        //                 const {controlIndex, formIndex, controlName} = hooksData,
-        //                     currentControl = getControlFromForm(form, formIndex, controlIndex, controlName)
-        //
-        //                 currentControl.hasError = false
-        //             })
-        //
-        //         }, hideErrorTimeout, true, hooksData, 'hideError')
-        //
-        //
-        //         //Прятать ошибку через таймаут, если его указали
-        //         if (hideErrorTimeout) {
-        //             hideError(hooksData, setForm)
-        //         }
-        //
-        //         //Хук после всплытием ошибки
-        //         if (typeof afterError === "function") {
-        //             afterError(hooksData)
-        //         }
-        //
-        //     })
-        //
-        // }, debounceTimeout, hasSomeError, hooksData, 'showError')
-        //
-        //
-        // //Если отображать нужно отображать ошибку только после первой отправки
-        // if (showLiveErrorAfterFirstSubmit && isFormTriedSubmit) {
-        //     showError(errorDataForControl, currentControl.label, writeToControlValue, hooksData, setForm)
-        // } else if(showLiveErrorAfterFirstSubmit === false) {
-        //     showError(errorDataForControl, currentControl.label, writeToControlValue, hooksData, setForm)
-        // }
+
+        /**
+         * Отобразить ошибки в живом времени, только после первой попытки отправки формы
+         */
+        if (showLiveErrorAfterFirstSubmit && isFormTriedSubmit) {
+            liveValidatorShowErrorHandler(errorDataForControl, hooksData, form, setForm, 0, showErrorTimeout)
+            // showError(errorDataForControl, currentControl.label, writeToControlValue, hooksData, setForm)
+        } else if(showLiveErrorAlways) {
+            liveValidatorShowErrorHandler(errorDataForControl, hooksData, form, setForm, 0, showErrorTimeout)
+            // showError(errorDataForControl, currentControl.label, writeToControlValue, hooksData, setForm)
+        }
 
     }
 

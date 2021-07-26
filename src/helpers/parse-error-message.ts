@@ -13,8 +13,8 @@ export const messageParser = (message: string = '', controlName: string | number
         if (limit) {
 
             parseMessage = parseMessage.replace(/\[([\s\S]+?)\]/g, str => {
-                const wordsArray = str.replace(/[\[\]]/g, '').split(','),
-                    decOfNumResult = declOfNum(limit, wordsArray)
+                const arrayOfDeclinedWords = str.replace(/[\[\]]/g, '').split(','),
+                      declinedWord = declOfNum(limit, wordsArray)
 
                 return decOfNumResult
             })

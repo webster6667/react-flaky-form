@@ -229,17 +229,12 @@ export interface ControlOutputDataProps<T = string | number | any[]> {
     /**
      * Была ли ошибка хоть в одном из валидаторов
      */
-    hasError: boolean,
+    hasAnyError: boolean,
     
     /**
      * Открыт ли инпут для записи данных из контрола
      */
-    isWriteInputEnable: boolean,
-    
-    /**
-     * ?
-     */
-    debounceTimeout: number
+    isWriteInputEnable: boolean
 }
 
 //Правило срабатывание валидатора
@@ -356,7 +351,11 @@ export interface FormParamsProps {
     /**
      * Общая ошибка для всей формы
      */
-    commonError?: string
+    commonError?: string,
+
+    errorTimeoutList?: {
+        [key: string]: NodeJS.Timeout
+    }
 }
 
 /**
@@ -364,12 +363,39 @@ export interface FormParamsProps {
  * Данные для хуков
  */
 export interface HookProps {
+    /**
+     * Данные текущего контрола
+     */
     currentControl: ControlProps,
+    
+    /**
+     * Индекс контрола
+     */
     controlIndex: number | null,
+    
+    /**
+     * Имя формы контрола
+     */
     controlName: string | number,
+    
+    /**
+     * Индекс формы
+     */
     formIndex: number | null,
+    
+    /**
+     * Значение которые пытались ввести 
+     */
     newValue?: string | number | any[],
+    
+    /**
+     * Весь объект формы
+     */
     form: FormProps,
+    
+    /**
+     * Выбранное значение ?
+     */
     selectedValue: number | string | null
 }
 

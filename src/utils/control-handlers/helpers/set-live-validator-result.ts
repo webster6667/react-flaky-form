@@ -17,7 +17,11 @@ export const setLiveValidatorResult:GetValidatorResult = (validator, hookProps, 
           {shouldLockNotValidWrite, hasError} = errorData
 
     if (shouldLockNotValidWrite) controlOutputData.isWriteInputEnable = false
-    if (hasError) controlOutputData.hasError = true
+    
+    /**
+     * Отметить флаг что в контроле была хоть одна ошибка
+     */
+    if (hasError) controlOutputData.hasAnyError = true
 
     /**
      * Если в валидаторе модифицировали вводимое значение, и вернули, записать в объект вывода

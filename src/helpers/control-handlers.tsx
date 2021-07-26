@@ -27,6 +27,15 @@ const errorVisibleHandler = (fn, ms: number, shouldFnCall: boolean, hooksData: H
 
 }
 
+const debounce = (fn, ms) => {
+    let timeout;
+    return function () {
+        const fnCall = () => { fn.apply(this, arguments) }
+        clearTimeout(timeout);
+        timeout = setTimeout(fnCall, ms)
+    };
+}
+
 //Выключить таймер ошибок для контрола
 const clearErrorVisibleHandlerTimeout = (hooksData: HookProps, timerName:string ):void => {
 
