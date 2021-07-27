@@ -34,7 +34,7 @@
       "@control-handlers/*": ["src/utils/control-handlers/*"],
       "@error-handlers/*": ["src/utils/error-handlers/*"],
       "@validators/*": ["src/utils/validators/*"],
-      "@mock-functions/*": ["test/mock-functions/*"]
+      "@mock-functions/*": ["tests/mock-functions/*"]
     }
   },
   "ts-node" : {
@@ -48,7 +48,7 @@
 
   "include": [
     "src/**/*",
-    "tests/**/*.test.ts"
+    "tests/**/*.ts"
   ],
   "exclude": [
     "node_modules/",

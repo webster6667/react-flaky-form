@@ -8,7 +8,7 @@ import {GetInitFormDataSingleControl, GetInitFormDataDynamicControls} from "./ty
 /**
  * Полностью инициализированная форма, с одним контролом
  */
-const getInitFormDataSingleControl:GetInitFormDataSingleControl = (currentControl, controlName = 'myControl') => {
+export const getInitFormDataSingleControl:GetInitFormDataSingleControl = (currentControl, controlName = 'myControl') => {
 
     const controls: FormControls = {
             [controlName]: currentControl
@@ -30,10 +30,10 @@ const getInitFormDataSingleControl:GetInitFormDataSingleControl = (currentContro
 /**
  * Полностью инициализированная форма, с динамически добавленными контролами
  */
-const getInitFormDataDynamicControls:GetInitFormDataDynamicControls = (controls: FormControls) => {
+export const getInitFormDataDynamicControls:GetInitFormDataDynamicControls = (controls) => {
 
     const  formParams = getRequireFormParams(),
-           initFormData: FormProps = {
+           initFormData: FormProps<typeof controls> = {
                 controls,
                 formParams,
                 formSettings: {

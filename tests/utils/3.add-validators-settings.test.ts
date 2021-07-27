@@ -1,5 +1,8 @@
 import {addValidatorsSettingsLayer, addValidatorsSettingsLayerToSingleControl, combineValidatorsSettingsLayers} from '@add-control-props-layers/add-validators-settings-layers'
 import {ControlProps, FormParamsProps, ValidatorsSettingList, FormConfigProps, FormProps} from "@common-types";
+
+import {getInitFormDataSingleControl} from '@mock-functions/get-initialized-full-form'
+
 import {DEFAULT_FORM_SETTINGS, FORM_NAME} from "@const";
 
 
@@ -109,36 +112,15 @@ describe('function add all validator settings layers to selected control', () =>
 
         const control: ControlProps = {
                 type: 'text'
-            },
-            controlName = 'username',
-            controls = {
-                [controlName]: control
-            },
-            newValidatorsSettingsLayer: ValidatorsSettingList = {},
-            formParams: FormParamsProps = {
-                loaded: false,
-                triedSubmit: false,
-                isSubmitBtnLocked: false,
-                errorList: [],
-                commonError: ''
-            },
-            customFormConfig = {},
-            form:FormProps = {
-                controls,
-                formParams,
-                formSettings: {
-                    ...DEFAULT_FORM_SETTINGS,
-                    formName: FORM_NAME,
-                    ...customFormConfig
-                },
-                controlsExample: {}
-            },
-            expectedControlState: ControlProps = {
-                ...control,
-                validatorsSetting: {
-                    ...DEFAULT_FORM_SETTINGS.formValidatorsSetting
-                }
-            }
+              },
+              {controlName, initFormData: form} = getInitFormDataSingleControl(control),
+              newValidatorsSettingsLayer: ValidatorsSettingList = {},
+              expectedControlState: ControlProps = {
+                  ...control,
+                  validatorsSetting: {
+                      ...DEFAULT_FORM_SETTINGS.formValidatorsSetting
+                  }
+              }
 
         addValidatorsSettingsLayerToSingleControl(control, controlName, newValidatorsSettingsLayer, form)
 

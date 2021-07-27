@@ -4,19 +4,19 @@ import {ControlProps, FormControls, FormParamsProps, FormProps, HookProps, Valid
 import {renderHook, act} from "@testing-library/react-hooks";
 import {DEFAULT_FORM_SETTINGS, FORM_NAME} from "@const";
 
+import {getRequireFormParams} from '@mock-functions/get-require-form-params'
+import {getInitFormDataSingleControl} from "@mock-functions/get-initialized-full-form";
+import {getHookData} from "@mock-functions/get-hook-data";
+
+
 import {defaultLiveErrorHandler} from "@error-handlers/live-validator-error-handler"
 import {hideLiveErrorAfterTimeout} from "@error-handlers/helpers/hide-live-error-after-timeout"
+
 
 /**
  * require data for form state
  */
-const formParams: FormParamsProps = {
-        loaded: false,
-        triedSubmit: false,
-        isSubmitBtnLocked: false,
-        errorList: [],
-        commonError: ''
-}
+const formParams = getRequireFormParams()
 
 describe('hide error after timeout', () => {
 
@@ -31,37 +31,17 @@ describe('hide error after timeout', () => {
     test('myControl.hasError will be false, after timeout ', () => {
 
         const currentControl:ControlProps = {
-                type: 'text'
+                type: 'text',
+                label: 'контрол',
+                hasError: true
             },
-            controlName = 'myControl',
-            controls: FormControls = {
-                [controlName]: {
-                    type: 'text',
-                    label: 'контрол',
-                    hasError: true
-                }
-            },
-            newValue = 2,
-            { result } = renderHook(() => useImmer<FormProps<typeof controls>>({
-                controls,
-                formParams,
-                formSettings: {
-                    ...DEFAULT_FORM_SETTINGS,
-                    formName: FORM_NAME
-                },
-                controlsExample: {}
-            }))
+            {controlName, initFormData} = getInitFormDataSingleControl(currentControl),
+            { result } = renderHook(() => useImmer<FormProps<typeof initFormData.controls>>(initFormData)),
+            newValue = 2
+
 
         let [form, setForm] = result.current,
-            hookData: HookProps = {
-                currentControl,
-                controlName,
-                newValue,
-                form,
-                controlIndex: null,
-                formIndex: null,
-                selectedValue: null
-            }
+            hookData = getHookData({currentControl, controlName, newValue})
 
         act(() => {
             hideLiveErrorAfterTimeout(hookData, setForm, 100)
@@ -71,7 +51,7 @@ describe('hide error after timeout', () => {
 
             setTimeout(() => {
 
-                let controlResult = result.current[0].controls.myControl as ControlProps,
+                let controlResult =  !Array.isArray(result.current[0].controls) ? result.current[0].controls[controlName] as ControlProps : null,
                     controlHasError = controlResult.hasError
 
                 expect(controlHasError).toBeFalsy()
@@ -100,28 +80,16 @@ describe('default live validator error handler', () => {
     test('myControl.hasError will be true ,myControl.error has parsed error message, after timeout', () => {
 
         const currentControl:ControlProps = {
-                type: 'text'
+                type: 'text',
+                label: 'контрол',
+                hasError: false
             },
-            controlName = 'myControl',
-            controls: FormControls = {
-                [controlName]: {
-                    type: 'text',
-                    label: 'контрол',
-                    hasError: false
-                }
-            },
-            newValue = 2,
-            { result } = renderHook(() => useImmer<FormProps<typeof controls>>({
-                controls,
-                formParams,
-                formSettings: {
-                    ...DEFAULT_FORM_SETTINGS,
-                    formName: FORM_NAME
-                },
-                controlsExample: {}
-            }))
+            {controlName, initFormData} = getInitFormDataSingleControl(currentControl),
+            { result } = renderHook(() => useImmer<FormProps<typeof initFormData.controls>>(initFormData)),
+            newValue = 2
 
-        let [form, setForm] = result.current,
+
+            let [form, setForm] = result.current,
             message = "limit has been exceeded, {limit} is maximum",
             limit = 3,
             errorDataForControl: ValidatorErrorProps  = {
@@ -148,7 +116,7 @@ describe('default live validator error handler', () => {
         })
 
 
-        let controlResult = result.current[0].controls.myControl as ControlProps,
+        let controlResult = !Array.isArray(result.current[0].controls) ? result.current[0].controls[controlName] as ControlProps : null,
             controlHasError = controlResult.hasError,
             controlErrorMessage = controlResult.error
 

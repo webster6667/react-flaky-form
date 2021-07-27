@@ -1,21 +1,16 @@
 import {useImmer} from 'use-immer';
 import { renderHook } from '@testing-library/react-hooks'
 
-import {ControlsCycleHandler, FormControls, FormParamsProps, FormProps} from "@common-types";
-import {controlsCycle, formCycle} from '@utils/control-utils/controls-cycle'
-import {DEFAULT_FORM_SETTINGS, FORM_NAME} from "@const";
+import {getRequireFormParams} from '@mock-functions/get-require-form-params'
+import {getInitFormDataDynamicControls} from '@mock-functions/get-initialized-full-form'
 
+
+import {ControlsCycleHandler, FormControls, FormProps} from "@common-types";
+import {controlsCycle, formCycle} from '@control-utils/controls-cycle'
 
 describe('controls-cycle', () => {
-    const formParams: FormParamsProps = {
-            loaded: false,
-            triedSubmit: false,
-            isSubmitBtnLocked: false,
-            errorList: [],
-            commonError: ''
-          },
-          customFormConfig = {}
 
+    const formParams = getRequireFormParams()
 
     test('control cycle run handler for all controls (single/multi)', () => {
 
@@ -29,16 +24,8 @@ describe('controls-cycle', () => {
                     }
                 ]
               },
-              { result } = renderHook(() => useImmer<FormProps<typeof controls>>({
-                          controls,
-                          formParams,
-                          formSettings: {
-                              ...DEFAULT_FORM_SETTINGS,
-                              formName: FORM_NAME,
-                              ...customFormConfig
-                          },
-                          controlsExample: {}
-              }))
+              initFormData = getInitFormDataDynamicControls(controls),
+              { result } = renderHook(() => useImmer<FormProps<typeof controls>>(initFormData))
 
         let [flukyForm, setForm] = result.current,
             handledControlList = {},
@@ -79,16 +66,8 @@ describe('controls-cycle', () => {
                     }
                 ]
             },
-            { result } = renderHook(() => useImmer<FormProps<typeof controls>>({
-                controls,
-                formParams,
-                formSettings: {
-                    ...DEFAULT_FORM_SETTINGS,
-                    formName: FORM_NAME,
-                    ...customFormConfig
-                },
-                controlsExample: {}
-            }))
+            initFormData = getInitFormDataDynamicControls(controls),
+            { result } = renderHook(() => useImmer<FormProps<typeof controls>>(initFormData))
 
         let [flukyForm, setForm] = result.current,
             controlHandler: ControlsCycleHandler = (control, controlName, form, formIndex, controlIndex, setForm) => {
@@ -116,16 +95,8 @@ describe('controls-cycle', () => {
                     }
                 ]
             },
-            { result } = renderHook(() => useImmer<FormProps<typeof controls>>({
-                controls,
-                formParams,
-                formSettings: {
-                    ...DEFAULT_FORM_SETTINGS,
-                    formName: FORM_NAME,
-                    ...customFormConfig
-                },
-                controlsExample: {}
-            }))
+            initFormData = getInitFormDataDynamicControls(controls),
+            { result } = renderHook(() => useImmer<FormProps<typeof controls>>(initFormData))
 
         let [flukyForm, setForm] = result.current,
             controlHandler: ControlsCycleHandler = (control, controlName, form, formIndex, controlIndex, setForm) => {
@@ -139,15 +110,6 @@ describe('controls-cycle', () => {
 })
 
 describe('form-cycle', () => {
-    const formParams: FormParamsProps = {
-            loaded: false,
-            triedSubmit: false,
-            isSubmitBtnLocked: false,
-            errorList: [],
-            commonError: ''
-        },
-        customFormConfig = {}
-
 
     test('form cycle run handler for all single form controls(single/multi)', () => {
 
@@ -161,16 +123,8 @@ describe('form-cycle', () => {
                     }
                 ]
             },
-            { result } = renderHook(() => useImmer<FormProps<typeof controls>>({
-                controls,
-                formParams,
-                formSettings: {
-                    ...DEFAULT_FORM_SETTINGS,
-                    formName: FORM_NAME,
-                    ...customFormConfig
-                },
-                controlsExample: {}
-            }))
+            initFormData = getInitFormDataDynamicControls(controls),
+            { result } = renderHook(() => useImmer<FormProps<typeof controls>>(initFormData))
 
         let [flukyForm, setForm] = result.current,
             handledControlList = {},
@@ -204,16 +158,8 @@ describe('form-cycle', () => {
                     }
                 ]
             }],
-            { result } = renderHook(() => useImmer<FormProps<typeof controls>>({
-                controls,
-                formParams,
-                formSettings: {
-                    ...DEFAULT_FORM_SETTINGS,
-                    formName: FORM_NAME,
-                    ...customFormConfig
-                },
-                controlsExample: {}
-            }))
+            initFormData = getInitFormDataDynamicControls(controls),
+            { result } = renderHook(() => useImmer<FormProps<typeof controls>>(initFormData))
 
         let [flukyForm, setForm] = result.current,
             handledControlList = [],
@@ -258,16 +204,8 @@ describe('form-cycle', () => {
                     }
                 ]
             },
-            { result } = renderHook(() => useImmer<FormProps<typeof controls>>({
-                controls,
-                formParams,
-                formSettings: {
-                    ...DEFAULT_FORM_SETTINGS,
-                    formName: FORM_NAME,
-                    ...customFormConfig
-                },
-                controlsExample: {}
-            }))
+            initFormData = getInitFormDataDynamicControls(controls),
+            { result } = renderHook(() => useImmer<FormProps<typeof controls>>(initFormData))
 
         let [flukyForm, setForm] = result.current,
             controlHandler: ControlsCycleHandler = (control, controlName, form, formIndex, controlIndex, setForm) => {
@@ -295,16 +233,8 @@ describe('form-cycle', () => {
                     }
                 ]
             },
-            { result } = renderHook(() => useImmer<FormProps<typeof controls>>({
-                controls,
-                formParams,
-                formSettings: {
-                    ...DEFAULT_FORM_SETTINGS,
-                    formName: FORM_NAME,
-                    ...customFormConfig
-                },
-                controlsExample: {}
-            }))
+            initFormData = getInitFormDataDynamicControls(controls),
+            { result } = renderHook(() => useImmer<FormProps<typeof controls>>(initFormData))
 
         let [flukyForm, setForm] = result.current,
             controlHandler: ControlsCycleHandler = (control, controlName, form, formIndex, controlIndex, setForm) => {

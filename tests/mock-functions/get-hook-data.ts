@@ -1,9 +1,11 @@
-import {FormControls, HookProps} from "@common-types";
+import {HookProps} from "@common-types";
+
+import {GetHookData} from "./types"
 
 /**
  * Данные для хуков
  */
-export const getHookData = ({controlName, currentControl, newValue, form, controlIndex, formIndex, selectedValue}) => {
+export const getHookData:GetHookData = ({controlName, currentControl, newValue, form, controlIndex = null, formIndex = null, selectedValue = null}) => {
 
     const hookData: HookProps = {
         currentControl,
