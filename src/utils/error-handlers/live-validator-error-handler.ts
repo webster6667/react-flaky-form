@@ -73,11 +73,9 @@ export const defaultLiveErrorHandler:DefaultLiveErrorHandler = (errorDataForCont
          * Скрыть ошибку через таймаут если его указали
          */
         if (hideErrorTimeout) {
-            const timeoutName = [controlName, formIndex, controlIndex].toString()
-            
-            console.log(timeoutName);
+            const hideErrorTimeoutId = hideLiveErrorAfterTimeout(hooksData, setForm, hideErrorTimeout)
 
-            form.formParams.errorTimeoutList[timeoutName] = hideLiveErrorAfterTimeout(hooksData, setForm, hideErrorTimeout)
+            currentControl._hideErrorTimeoutId = hideErrorTimeoutId
         }
 
         /**

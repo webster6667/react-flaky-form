@@ -3,8 +3,6 @@ import {maskWriteValue} from '@validators/mask-validator'
 import {validateWrittenData} from '@validators/written-live-validator'
 import {validateClickedData} from '@validators/clicked-live-validator'
 
-import {getControlTimerName} from '@control-utils/get-control-timer-name'
-
 import {liveValidatorShowErrorHandler} from './live-validator-show-error-handler'
 import {setLiveValidatorResult} from './helpers/set-live-validator-result'
 
@@ -28,9 +26,14 @@ import {LiveInputHandler} from "./types"
 export const liveInputHandler: LiveInputHandler = (currentControl, form, hooksData, eventType, setForm) => {
 
     /**
+     * Получить таймаут id ошибок
      * Определить тип контрола(текстовый или кликабильный)
      */
-    const {type} = currentControl,
+    const {
+           type,
+           _hideErrorTimeoutId: hasControlHideErrorTimeout = null,
+           _showErrorTimeoutId: showErrorTimeoutId,
+          } = currentControl,
           textControlTypes = ['phone', 'number', 'text', 'password', 'date'],
           isTextControl = textControlTypes.includes(type)
 
@@ -104,8 +107,7 @@ export const liveInputHandler: LiveInputHandler = (currentControl, form, hooksDa
             hasAnyError,
             writeToControlValue,
             isWriteInputEnable
-        } = controlOutputData,
-        showErrorTimerName = getControlTimerName(hooksData, 'showError')
+        } = controlOutputData
 
         /**
          * Настройки вывода ошибок
@@ -114,7 +116,7 @@ export const liveInputHandler: LiveInputHandler = (currentControl, form, hooksDa
                showLiveErrorAlways = !showLiveErrorAfterFirstSubmit
 
         /**
-         * Настройки таймаута вывода ошибок
+         * Настройки таймаута вывода ошибок ?
          */
         // debounceTimeout = showErrorTimeout ? showErrorTimeout : 0
 
@@ -135,7 +137,7 @@ export const liveInputHandler: LiveInputHandler = (currentControl, form, hooksDa
              * После того как была отображенна ошибка, был создан таймер через сколько она должна скрытся
              * Если ошибка исчезает до отработки таймера, нужно отчистить таймер, для того что бы они не начали срабатывать в ненужный момент
              */
-            // clearErrorVisibleHandlerTimeout(hooksData, 'hideError')
+            if (hasControlHideErrorTimeout) clearTimeout(currentControl._hideErrorTimeoutId)
         }
 
 
@@ -143,11 +145,9 @@ export const liveInputHandler: LiveInputHandler = (currentControl, form, hooksDa
          * Отобразить ошибки в живом времени, только после первой попытки отправки формы
          */
         if (showLiveErrorAfterFirstSubmit && isFormTriedSubmit) {
-            liveValidatorShowErrorHandler(errorDataForControl, hooksData, form, setForm, 0, showErrorTimeout)
-            // showError(errorDataForControl, currentControl.label, writeToControlValue, hooksData, setForm)
+            currentControl._showErrorTimeoutId = liveValidatorShowErrorHandler(errorDataForControl, hooksData, form, setForm, showErrorTimeoutId, showErrorTimeout)
         } else if(showLiveErrorAlways) {
-            liveValidatorShowErrorHandler(errorDataForControl, hooksData, form, setForm, 0, showErrorTimeout)
-            // showError(errorDataForControl, currentControl.label, writeToControlValue, hooksData, setForm)
+            currentControl._showErrorTimeoutId = liveValidatorShowErrorHandler(errorDataForControl, hooksData, form, setForm, showErrorTimeoutId, showErrorTimeout)
         }
 
     }

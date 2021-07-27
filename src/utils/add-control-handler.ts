@@ -35,6 +35,8 @@ export const addControlHandler:AddControlHandler = (
                                   selectedValue
              ) => {
 
+        //@todo: async/await хуки, добавить снаружи от setForm, и все сделать async
+
         setForm((form) => {
 
             /**

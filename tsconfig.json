@@ -33,7 +33,8 @@
       "@add-control-props-layers/*": ["src/utils/add-control-props-layers/*"],
       "@control-handlers/*": ["src/utils/control-handlers/*"],
       "@error-handlers/*": ["src/utils/error-handlers/*"],
-      "@validators/*": ["src/utils/validators/*"]
+      "@validators/*": ["src/utils/validators/*"],
+      "@mock-functions/*": ["test/mock-functions/*"]
     }
   },
   "ts-node" : {

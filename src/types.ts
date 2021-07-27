@@ -354,7 +354,7 @@ export interface FormParamsProps {
     commonError?: string,
 
     errorTimeoutList?: {
-        [key: string]: NodeJS.Timeout
+        [key: string]: ReturnType<typeof setTimeout>
     }
 }
 
@@ -458,6 +458,8 @@ export interface ControlProps {
     validatorsSetting?: ValidatorsSettingList,
     maskSetting?: MaskSettingProps,
     placeholder?: string | null,
+    _hideErrorTimeoutId?: null | ReturnType<typeof setTimeout>
+    _showErrorTimeoutId?: null | ReturnType<typeof setTimeout>
 
     options?: ClickControlOptionsProps[]
 
