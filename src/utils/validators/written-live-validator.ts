@@ -1,4 +1,4 @@
-import {LiveValidator, ValidatorsSettingListInsideHandler, ValidatorErrorProps} from "@common-types";
+import {LiveValidator, ValidatorsSettingListInsideHandler, ValidatorErrorProps, HookProps} from "@common-types";
 import {
     isGreaterThanLimit,
     isLessThanLimit,
@@ -12,6 +12,15 @@ import {
 
 import {isLiveValidatorEnable} from './helpers/is-live-validator-enable'
 
+/**
+ * @description
+ * Живой валидатор введенных данных в интуп
+ *
+ * @param {HookProps} hooksData - Данные для хуков(контрол, его данные, форма)
+ *
+ * @returns {{ValidatorErrorProps}}
+ *
+ */
 export const validateWrittenData:LiveValidator = (hooksData) => {
 
     /**
@@ -29,7 +38,7 @@ export const validateWrittenData:LiveValidator = (hooksData) => {
               shouldLockNotValidWrite: false,
               message: null,
               limit: null,
-              showLiveErrorAfterFirstSubmit: null,
+              showLiveErrorAfterFirstSubmit: false,
               hideErrorTimeout: null,
               showErrorTimeout: null,
           }

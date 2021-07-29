@@ -1,62 +1,30 @@
 import {useImmer} from 'use-immer';
 
-import {ControlProps, FormControls, FormParamsProps, FormProps, HookProps} from "@common-types";
+import {ControlProps, FormProps, ValidatorErrorProps} from "@common-types";
 import {act, renderHook} from "@testing-library/react-hooks";
 
+import {getInitFormDataSingleControl} from '@mock-functions/get-initialized-full-form'
+import {getHookData} from '@mock-functions/get-hook-data'
 
-import {DEFAULT_FORM_SETTINGS, FORM_NAME} from "@const";
+
 import {liveInputHandler} from "@control-handlers/live-input-handler";
 
 
-const formParams: FormParamsProps = {
-    loaded: false,
-    triedSubmit: false,
-    isSubmitBtnLocked: false,
-    errorList: [],
-    commonError: ''
-}
+//@todo: Маска работает +
+//@todo: Живой валидатор работает с выводом ошибки, без дебаунса +
+//@todo: Дополнительный валидатор работает +
+//@todo: Дополнительный валидатор модифицирует введенное значение +
+//@todo: Дополнительны валидатор сильнее обычного +
 
-//@todo: Маска работает
-//@todo: Живой валидатор работает
-//@todo: Дополнительный валидатор работает
-//@todo: Дополнительны валидатор дополняет живой
+//@todo: Кликабельный валидатор
+
+
 //@todo: Ошибки всплывают только после первой попытки
 //@todo: Ошибки всплывают всегда
 //@todo: Вывод данных блокируется
 //@todo: Вывод данных открыт
 //@todo: Ошибки всплывают по дебанусу если он есть
 //@todo: Ошибки скрываются через указанное време
-
-// const getFormData = (controlName, currentControl, newValue) => {
-//
-//     const controls: FormControls = {
-//             [controlName]: currentControl
-//         },
-//         dataForFormInit = {
-//             controls,
-//             formParams,
-//             formSettings: {
-//                 ...DEFAULT_FORM_SETTINGS,
-//                 formName: FORM_NAME
-//             },
-//             controlsExample: {}
-//         }
-//
-// }
-//
-// const getHookData = (controlName, currentControl, newValue, form) => {
-//     const hookData: HookProps = {
-//         currentControl,
-//         controlName,
-//         newValue,
-//         form,
-//         controlIndex: null,
-//         formIndex: null,
-//         selectedValue: null
-//     }
-//
-//     return hookData
-// }
 
 describe('live input handler', () => {
 
@@ -79,39 +47,232 @@ describe('live input handler', () => {
                     maskPattern: '+7(999)-999-99-99'
                 }
             },
-            controlName = 'myControl',
-            controls: FormControls = {
-                [controlName]: currentControl
-            },
-            newValue = 5,
-            { result } = renderHook(() => useImmer<FormProps<typeof controls>>({
-                controls,
-                formParams,
-                formSettings: {
-                    ...DEFAULT_FORM_SETTINGS,
-                    formName: FORM_NAME
-                },
-                controlsExample: {}
-            }))
+            {controlName, initFormData} = getInitFormDataSingleControl(currentControl),
+            { result } = renderHook(() => useImmer<FormProps<typeof initFormData.controls>>(initFormData)),
+            newValue = 5
 
-        let [form, setForm] = result.current,
-            hookData: HookProps = {
-                currentControl,
-                controlName,
-                newValue,
-                form,
-                controlIndex: null,
-                formIndex: null,
-                selectedValue: null
+
+            let [form, setForm] = result.current,
+            hookData = getHookData({currentControl, controlName, newValue, form}),
+            expectedControlProps = {
+                ...currentControl,
+                hasError: true,
+                value: '+7(5__)-___-__-__'
             }
 
         act(() => {
             liveInputHandler(currentControl, form, hookData, 'change', setForm)
         })
 
-        console.log(result.current[0]);
+        const controlStateAfterMaskValidate = result.current[0].controls[controlName]
+
+        expect(controlStateAfterMaskValidate).toEqual(expectedControlProps)
+    })
+
+    test('live write input validator is working', () => {
+
+        const currentControl:ControlProps = {
+                type: 'text',
+                label: 'контрол',
+                hasError: false,
+                validateRules: {
+                    maxValue: {
+                        message: 'limit {limit} was exceeded',
+                        limit: 3
+                    }
+                },
+                validatorsSetting: {
+                    maxValue: {
+                        liveEnable: true,
+                        showLiveErrorAfterFirstSubmit: false
+                    }
+                }
+            },
+            {controlName, initFormData} = getInitFormDataSingleControl(currentControl),
+            { result } = renderHook(() => useImmer<FormProps<typeof initFormData.controls>>(initFormData)),
+            newValue = 5
 
 
+        let [form, setForm] = result.current,
+            hookData = getHookData({currentControl, controlName, newValue, form}),
+            expectedControlProps = {
+                ...currentControl,
+                value: newValue,
+                hasError: true,
+                error: 'limit 3 was exceeded'
+            }
+
+        act(() => {
+            liveInputHandler(currentControl, form, hookData, 'change', setForm)
+        })
+
+        const controlStateAfterValidate = result.current[0].controls[controlName]
+
+        expect(controlStateAfterValidate).toEqual(expectedControlProps)
+    })
+
+    test('live write input validator is working', () => {
+
+        const currentControl:ControlProps = {
+                type: 'text',
+                label: 'контрол',
+                hasError: false,
+                validateRules: {
+                    maxValue: {
+                        message: 'limit {limit} was exceeded',
+                        limit: 3
+                    }
+                },
+                validatorsSetting: {
+                    maxValue: {
+                        liveEnable: true,
+                        showLiveErrorAfterFirstSubmit: false
+                    }
+                }
+            },
+            {controlName, initFormData} = getInitFormDataSingleControl(currentControl),
+            { result } = renderHook(() => useImmer<FormProps<typeof initFormData.controls>>(initFormData)),
+            newValue = 5
+
+
+        let [form, setForm] = result.current,
+            hookData = getHookData({currentControl, controlName, newValue, form}),
+            expectedControlProps = {
+                ...currentControl,
+                value: newValue,
+                hasError: true,
+                error: 'limit 3 was exceeded'
+            }
+
+        act(() => {
+            liveInputHandler(currentControl, form, hookData, 'change', setForm)
+        })
+
+        const controlStateAfterValidate = result.current[0].controls[controlName]
+
+        expect(controlStateAfterValidate).toEqual(expectedControlProps)
+    })
+
+    test('additional write validator is working', () => {
+
+        const currentControl:ControlProps = {
+                type: 'text',
+                label: 'контрол',
+                hasError: false,
+                validateRules: {
+                    maxValue: {
+                        message: 'limit {limit} was exceeded',
+                        limit: 10
+                    }
+                },
+                validatorsSetting: {
+                    maxValue: {
+                        liveEnable: true,
+                        showLiveErrorAfterFirstSubmit: false
+                    }
+                },
+                additionalLiveValidator: ({newValue}) => {
+                    const errorData: ValidatorErrorProps = {
+                        hasError: false,
+                        shouldLockNotValidWrite: false,
+                        message: null,
+                        limit: null,
+                        showLiveErrorAfterFirstSubmit: false,
+                        hideErrorTimeout: null,
+                        showErrorTimeout: null,
+                    }
+
+                    if (newValue === 6) {
+                        errorData.hasError = true
+                        errorData.message = '{writeValue} is not happy number'
+                    }
+
+                    return {errorData}
+
+                }
+            },
+            {controlName, initFormData} = getInitFormDataSingleControl(currentControl),
+            { result } = renderHook(() => useImmer<FormProps<typeof initFormData.controls>>(initFormData)),
+            newValue = 6
+
+
+        let [form, setForm] = result.current,
+            hookData = getHookData({currentControl, controlName, newValue, form}),
+            expectedControlProps = {
+                ...currentControl,
+                value: newValue,
+                hasError: true,
+                error: `${newValue} is not happy number`
+            }
+
+        act(() => {
+            liveInputHandler(currentControl, form, hookData, 'change', setForm)
+        })
+
+        const controlStateAfterValidate = result.current[0].controls[controlName]
+
+        expect(controlStateAfterValidate).toEqual(expectedControlProps)
+    })
+
+    test('additional write validator can modify written value', () => {
+
+        const currentControl:ControlProps = {
+                type: 'text',
+                label: 'контрол',
+                hasError: false,
+                validateRules: {
+                    maxValue: {
+                        message: 'limit {limit} was exceeded',
+                        limit: 10
+                    }
+                },
+                validatorsSetting: {
+                    maxValue: {
+                        liveEnable: true,
+                        showLiveErrorAfterFirstSubmit: false
+                    }
+                },
+                additionalLiveValidator: ({newValue}) => {
+                    const errorData: ValidatorErrorProps = {
+                        hasError: false,
+                        shouldLockNotValidWrite: false,
+                        message: null,
+                        limit: null,
+                        showLiveErrorAfterFirstSubmit: false,
+                        hideErrorTimeout: null,
+                        showErrorTimeout: null,
+                    }
+
+                    if (newValue === 6) {
+                        errorData.hasError = true
+                        errorData.message = '{writeValue} is not happy number'
+                    }
+
+                    return {modifiedValueToWrite: 666,errorData}
+
+                }
+            },
+            {controlName, initFormData} = getInitFormDataSingleControl(currentControl),
+            { result } = renderHook(() => useImmer<FormProps<typeof initFormData.controls>>(initFormData)),
+            newValue = 6
+
+
+        let [form, setForm] = result.current,
+            hookData = getHookData({currentControl, controlName, newValue, form}),
+            expectedControlProps = {
+                ...currentControl,
+                value: 666,
+                hasError: true,
+                error: `${newValue} is not happy number`
+            }
+
+        act(() => {
+            liveInputHandler(currentControl, form, hookData, 'change', setForm)
+        })
+
+        const controlStateAfterValidate = result.current[0].controls[controlName]
+        
+        expect(controlStateAfterValidate).toEqual(expectedControlProps)
     })
 
 })

@@ -1,47 +1,84 @@
-import {LiveValidator, ValidatorErrorProps, ValidatorSettingProps} from "@src/types";
+import {
+    isWrittenValueEmpty,
+    isLessThanLimit,
+    isGreaterThanLimit,
+    isShorterThanLimit,
+    isLongerThanLimit,
+    errorDataHandler
+} from "simple-input-validators";
+import getArraySum from 'get-array-sum';
+import {isLiveValidatorEnable} from './helpers/is-live-validator-enable'
 
+
+import {
+    LiveValidator,
+    ValidatorErrorProps,
+    ValidatorsSettingListInsideHandler
+} from "@src/types";
+
+/**
+ * @description
+ * Живой валидатор кликабельных инпутов
+ *
+ * @param {HookProps} hooksData - Данные для хуков(контрол, его данные, форма)
+ *
+ * @returns {{ValidatorErrorProps}}
+ *
+ */
 export const validateClickedData:LiveValidator = (hooksData) => {
-    const {currentControl, newValue, form} = hooksData,
-        controlValidatorsSetting = currentControl.validatorsSetting || {},
-        controlValidatorsRules = currentControl.validateRules || {},
-        {required: requiredRules} = controlValidatorsRules,
-        defaultLiveFormValidatorSettings = form.formSettings.formValidatorsSetting,
-        {
-            required: requiredSetting = defaultLiveFormValidatorSettings.required
-        } = controlValidatorsSetting,
-        errorData: ValidatorErrorProps  = {
-            hasError: false,
-            shouldLockNotValidWrite: false,
-            message: null,
-            limit: null,
-            showLiveErrorAfterFirstSubmit: null,
-            hideErrorTimeout: null,
-            showErrorTimeout: null,
-        }
+    const {currentControl, newValue} = hooksData,
+          controlValidatorsSetting = currentControl.validatorsSetting || {},
+          controlValidatorsRules = currentControl.validateRules || {},
+          {required: requiredRules, minValue: minValueRules, maxValue: maxValueRules, minLength: minLengthRules, maxLength: maxLengthRules} = controlValidatorsRules,
+          {required: requiredSetting, minValue: minValueSetting, maxValue: maxValueSetting, minLength: minLengthSetting, maxLength: maxLengthSetting} = controlValidatorsSetting as ValidatorsSettingListInsideHandler,
+          errorData: ValidatorErrorProps  = {
+              hasError: false,
+              shouldLockNotValidWrite: false,
+              message: null,
+              limit: null,
+              showLiveErrorAfterFirstSubmit: null,
+              hideErrorTimeout: null,
+              showErrorTimeout: null,
+          },
+          newValueArraySum = Array.isArray(newValue) ? getArraySum(newValue) : null,
+          shouldValidateArraySumValue = !isNaN(newValueArraySum),
+          hasError = true
+
+    /**
+     * Обязательное поле
+     */
+    if (requiredRules && isWrittenValueEmpty(newValue) && isLiveValidatorEnable(requiredSetting)) {
+        errorDataHandler(errorData, {...requiredRules, ...requiredSetting, hasError})
+    }
 
 
+    /**
+     * Минимальная сумма элементов
+     */
+    if (minValueRules && shouldValidateArraySumValue && isLessThanLimit(newValueArraySum, minValueRules) && isLiveValidatorEnable(minValueSetting)) {
+        errorDataHandler(errorData, {...minValueRules, ...minValueSetting, hasError})
+    }
 
-    // let hasError = false,
-    //     shouldLockInput = false,
-    //     errorData:ValidatorErrorProps = null
-    //
-    // //Записывает данные ошибок для дальнейшего отображения
-    // const errorHandler = (errorHandlerProps:ValidatorErrorProps, controlErrorSetting: ValidatorSettingProps):void => {
-    //     const {message = null, limit = null} = errorHandlerProps,
-    //         {showLiveErrorAfterFirstSubmit, hideErrorTimeout, showErrorTimeout} = controlErrorSetting
-    //
-    //     hasError = true
-    //
-    //     errorData = {message, limit, hideErrorTimeout, showErrorTimeout, showLiveErrorAfterFirstSubmit}
-    // }
-    //
-    // //Обязательное поле
-    // if (requiredRules && Array.isArray(newValue) && newValue.length === 0 && requiredSetting.liveEnable === true) {
-    //     errorHandler(requiredRules, requiredSetting)
-    //     shouldLockInput = false
-    // }
+    /**
+     * Максимальная сумма элементов
+     */
+    if (maxValueRules && shouldValidateArraySumValue && isGreaterThanLimit(newValueArraySum, maxValueRules) && isLiveValidatorEnable(maxValueSetting)) {
+        errorDataHandler(errorData, {...maxValueRules, ...maxValueSetting, hasError})
+    }
 
-    // return {shouldLockInput, hasError, errorData}
+    /**
+     * Минимальное кол-во элементов
+     */
+    if (minLengthRules && isShorterThanLimit(newValue, minLengthRules) && isLiveValidatorEnable(minLengthSetting)) {
+        errorDataHandler(errorData, {...minLengthRules, ...minLengthSetting, hasError})
+    }
+
+    /**
+     * Максимальное кол-во элементов
+     */
+    if (maxLengthRules && isLongerThanLimit(newValue, maxLengthRules) && isLiveValidatorEnable(maxLengthSetting)) {
+        errorDataHandler(errorData, {...maxLengthRules, ...maxLengthSetting, hasError})
+    }
 
     return {errorData}
 }

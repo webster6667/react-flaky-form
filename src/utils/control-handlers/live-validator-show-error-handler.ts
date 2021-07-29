@@ -19,27 +19,40 @@ import {LiveValidatorShowErrorHandler} from "./types"
  * @returns {void}
  *
  */
-export const liveValidatorShowErrorHandler:LiveValidatorShowErrorHandler = (errorDataForControl, hooksData, form, setForm, prevShowErrorTimeoutId, ms) => {
+export const liveValidatorShowErrorHandler:LiveValidatorShowErrorHandler = (errorDataForControl, hooksData, form, setForm, prevShowErrorTimeoutId, ms = 0) => {
 
-    //@todo: проверить нужен ли вообще дебаунс
 
     //@todo: Добавить кастомные обработчики живых ошибок form.customLiveErrorHandler || control.customLiveErrorHandler
     //@todo: Добавить additionalLiveErrorHandler
 
     const errorHandler = defaultLiveErrorHandler,
           callShowError = debounce(errorHandler, ms),
-          {hasError} = errorDataForControl
+          {hasError} = errorDataForControl,
+          shouldUseDebounce = ms
 
     let currentShowErrorTimeoutId = null
 
     /**
-     * Если ошибки нет, просто закрыть таймер отображения всех ошибок
-     * Если есть ошибка, отобразить в дебаунсе, если нет, закрыть предыдущий таймер
+     * Обработать ошибку с дебаунсом или нет
      */
-    if (hasError) {
-        currentShowErrorTimeoutId = callShowError(errorDataForControl, hooksData, setForm)
-    } else if(prevShowErrorTimeoutId) {
-        clearTimeout(prevShowErrorTimeoutId)
+    if (shouldUseDebounce) {
+
+        /**
+         * Если ошибки нет, просто закрыть таймер отображения всех ошибок
+         * Если есть ошибка, отобразить в дебаунсе, если нет, закрыть предыдущий таймер
+         */
+        if (hasError) {
+            currentShowErrorTimeoutId = callShowError(errorDataForControl, hooksData, setForm)
+        } else if(prevShowErrorTimeoutId) {
+            clearTimeout(prevShowErrorTimeoutId)
+        }
+
+    } else {
+
+        if (hasError) {
+            errorHandler(errorDataForControl, hooksData, setForm)
+        }
+
     }
 
     return currentShowErrorTimeoutId
