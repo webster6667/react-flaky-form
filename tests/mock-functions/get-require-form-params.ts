@@ -9,7 +9,7 @@ export const getRequireFormParams:GetRequireFormParams = (formParamsProps = {}) 
 
     const formParams: FormParamsProps = {
         loaded: false,
-        triedSubmit: false,
+        isFormTriedSubmit: false,
         isSubmitBtnLocked: false,
         errorList: [],
         commonError: '',

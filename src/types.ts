@@ -336,7 +336,7 @@ export interface FormParamsProps {
     /**
      * Была попытка отправки
      */
-    triedSubmit: boolean,
+    isFormTriedSubmit: boolean,
 
     /**
      * Блокировать ли кнопку

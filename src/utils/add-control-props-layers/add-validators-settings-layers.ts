@@ -98,17 +98,14 @@ export const addValidatorsSettingsLayerToSingleControl:AddValidatorsRulesLayerTo
 
 /**
  * @description
- * Наложить все слои валидаторов(глобальные, формы, контрола) для отдельного контрола
+ * Функция накладывает на слой валидатора, свойства из нового слоя, возвращая комбинированный слой валидаторов
  *
- * @param {ControlProps} control - Контрол на который накладывают слои валидатора
- * @param {string} controlName - Имя контрола(username or password)
- * @param {ValidatorsSettingList} formValidatorsSetting - Список валидаторов
- * @param {FormProps} form - главный объект формы
+ * @param {ValidatorsSettingList} bottomLayer - Основной слой валидаторов
+ * @param {ValidatorsSettingList} upperLayer - Слой который накладывается сверху
  *
- * @returns {void}
+ * @returns {ValidatorsSettingList}
  *
  */
-
 export const combineValidatorsSettingsLayers:CombineValidatorsSettingsLayers = (bottomLayer, upperLayer) => {
 
     const combineLayer = {...bottomLayer}

@@ -7,24 +7,19 @@ import {getInitFormDataSingleControl} from '@mock-functions/get-initialized-full
 import {getHookData} from '@mock-functions/get-hook-data'
 
 
+
 import {liveInputHandler} from "@control-handlers/live-input-handler";
 
 
-//@todo: Маска работает +
-//@todo: Живой валидатор работает с выводом ошибки, без дебаунса +
-//@todo: Дополнительный валидатор работает +
-//@todo: Дополнительный валидатор модифицирует введенное значение +
-//@todo: Дополнительны валидатор сильнее обычного +
-
-//@todo: Кликабельный валидатор
-
-
-//@todo: Ошибки всплывают только после первой попытки
-//@todo: Ошибки всплывают всегда
-//@todo: Вывод данных блокируется
-//@todo: Вывод данных открыт
-//@todo: Ошибки всплывают по дебанусу если он есть
 //@todo: Ошибки скрываются через указанное време
+
+/**
+ * В контроле появляется ошибка
+ * Через таймаут она должна исчезнуть
+ */
+
+//@todo: Если
+
 
 describe('live input handler', () => {
 
@@ -111,20 +106,19 @@ describe('live input handler', () => {
         expect(controlStateAfterValidate).toEqual(expectedControlProps)
     })
 
-    test('live write input validator is working', () => {
+    test('live click input validator is working', () => {
 
         const currentControl:ControlProps = {
-                type: 'text',
+                type: 'select',
                 label: 'контрол',
                 hasError: false,
                 validateRules: {
-                    maxValue: {
-                        message: 'limit {limit} was exceeded',
-                        limit: 3
+                    required: {
+                        message: 'select single option'
                     }
                 },
                 validatorsSetting: {
-                    maxValue: {
+                    required: {
                         liveEnable: true,
                         showLiveErrorAfterFirstSubmit: false
                     }
@@ -132,7 +126,7 @@ describe('live input handler', () => {
             },
             {controlName, initFormData} = getInitFormDataSingleControl(currentControl),
             { result } = renderHook(() => useImmer<FormProps<typeof initFormData.controls>>(initFormData)),
-            newValue = 5
+            newValue = ''
 
 
         let [form, setForm] = result.current,
@@ -141,7 +135,7 @@ describe('live input handler', () => {
                 ...currentControl,
                 value: newValue,
                 hasError: true,
-                error: 'limit 3 was exceeded'
+                error: 'select single option'
             }
 
         act(() => {
@@ -149,7 +143,7 @@ describe('live input handler', () => {
         })
 
         const controlStateAfterValidate = result.current[0].controls[controlName]
-
+        
         expect(controlStateAfterValidate).toEqual(expectedControlProps)
     })
 
@@ -273,6 +267,380 @@ describe('live input handler', () => {
         const controlStateAfterValidate = result.current[0].controls[controlName]
         
         expect(controlStateAfterValidate).toEqual(expectedControlProps)
+    })
+
+    test('live error dont show before first form submit if showLiveErrorAfterFirstSubmit === true', () => {
+
+        const currentControl:ControlProps = {
+                type: 'text',
+                label: 'контрол',
+                hasError: false,
+                validateRules: {
+                    maxValue: {
+                        message: 'limit {limit} was exceeded',
+                        limit: 3
+                    }
+                },
+                validatorsSetting: {
+                    maxValue: {
+                        liveEnable: true,
+                        showLiveErrorAfterFirstSubmit: true
+                    }
+                }
+            },
+            {controlName, initFormData} = getInitFormDataSingleControl(currentControl),
+            { result } = renderHook(() => useImmer<FormProps<typeof initFormData.controls>>(initFormData)),
+            newValue = 5
+
+
+        let [form, setForm] = result.current,
+            hookData = getHookData({currentControl, controlName, newValue, form}),
+            expectedControlProps = {
+                ...currentControl,
+                value: newValue,
+                hasError: false
+            }
+
+        act(() => {
+            liveInputHandler(currentControl, form, hookData, 'change', setForm)
+        })
+
+        const controlStateAfterValidate = result.current[0].controls[controlName]
+
+        expect(controlStateAfterValidate).toEqual(expectedControlProps)
+    })
+
+    test('live error show after first form submit if showLiveErrorAfterFirstSubmit === true', () => {
+
+        const currentControl:ControlProps = {
+                type: 'text',
+                label: 'контрол',
+                hasError: false,
+                validateRules: {
+                    maxValue: {
+                        message: 'limit {limit} was exceeded',
+                        limit: 3
+                    }
+                },
+                validatorsSetting: {
+                    maxValue: {
+                        liveEnable: true,
+                        showLiveErrorAfterFirstSubmit: true
+                    }
+                }
+            },
+            {controlName, initFormData} = getInitFormDataSingleControl(currentControl)
+
+        initFormData.formParams.isFormTriedSubmit = true
+
+        const { result } = renderHook(() => useImmer<FormProps<typeof initFormData.controls>>(initFormData)),
+              newValue = 5
+
+
+        let [form, setForm] = result.current,
+            hookData = getHookData({currentControl, controlName, newValue, form}),
+            expectedControlProps = {
+                ...currentControl,
+                value: newValue,
+                hasError: true,
+                error: 'limit 3 was exceeded'
+            }
+
+        act(() => {
+            liveInputHandler(currentControl, form, hookData, 'change', setForm)
+        })
+
+        const controlStateAfterValidate = result.current[0].controls[controlName]
+
+        expect(controlStateAfterValidate).toEqual(expectedControlProps)
+    })
+
+    test('write output should locking, if input not valid and shouldLockNotValidWrite === true', () => {
+
+        const currentControl:ControlProps = {
+                type: 'text',
+                label: 'контрол',
+                hasError: false,
+                validateRules: {
+                    maxLength: {
+                        message: 'not longer that 3 symbol',
+                        limit: 3
+                    }
+                },
+                validatorsSetting: {
+                    maxLength: {
+                        liveEnable: true,
+                        showLiveErrorAfterFirstSubmit: false,
+                        shouldLockNotValidWrite: true
+                    }
+                },
+                value: '123'
+              },
+              {controlName, initFormData} = getInitFormDataSingleControl(currentControl),
+              { result } = renderHook(() => useImmer<FormProps<typeof initFormData.controls>>(initFormData)),
+              newValue = '1234'
+
+
+        let [form, setForm] = result.current,
+            hookData = getHookData({currentControl, controlName, newValue, form}),
+            expectedControlProps = {
+                ...currentControl,
+                hasError: true,
+                error: 'not longer that 3 symbol'
+            }
+
+        act(() => {
+            liveInputHandler(currentControl, form, hookData, 'change', setForm)
+        })
+
+        const controlStateAfterValidate = result.current[0].controls[controlName]
+
+        expect(controlStateAfterValidate).toEqual(expectedControlProps)
+    })
+
+
+    test('error show after timeout if showErrorTimeout > 0', () => {
+
+        const currentControl:ControlProps = {
+                type: 'text',
+                label: 'контрол',
+                hasError: false,
+                validateRules: {
+                    maxValue: {
+                        message: 'limit {limit} was exceeded',
+                        limit: 3
+                    }
+                },
+                validatorsSetting: {
+                    maxValue: {
+                        liveEnable: true,
+                        showLiveErrorAfterFirstSubmit: false,
+                        shouldLockNotValidWrite: true,
+                        showErrorTimeout: 100
+                    }
+                }
+            },
+            {controlName, initFormData} = getInitFormDataSingleControl(currentControl),
+            { result } = renderHook(() => useImmer<FormProps<typeof initFormData.controls>>(initFormData)),
+            newValue = 5
+
+
+        let [form, setForm] = result.current,
+            hookData = getHookData({currentControl, controlName, newValue, form}),
+            expectedControlPropsAfterTimeout = {
+                ...currentControl,
+                hasError: true,
+                error: 'limit 3 was exceeded',
+                _showErrorTimeoutId: 1
+            },
+            controlPropsAfterTimeout
+
+
+        act(() => {
+            liveInputHandler(currentControl, form, hookData, 'change', setForm)
+            
+            setTimeout(() => {
+                controlPropsAfterTimeout = result.current[0].controls[controlName]
+            },200);
+            
+            jest.runAllTimers();
+        })
+
+        expect(controlPropsAfterTimeout).toEqual(expectedControlPropsAfterTimeout)
+
+    })
+
+    test('error dont show after submit if showErrorTimeout > 0', () => {
+
+        const currentControl:ControlProps = {
+                type: 'text',
+                label: 'контрол',
+                hasError: false,
+                validateRules: {
+                    maxValue: {
+                        message: 'limit {limit} was exceeded',
+                        limit: 3
+                    }
+                },
+                validatorsSetting: {
+                    maxValue: {
+                        liveEnable: true,
+                        showLiveErrorAfterFirstSubmit: false,
+                        shouldLockNotValidWrite: true,
+                        showErrorTimeout: 100
+                    }
+                }
+            },
+            {controlName, initFormData} = getInitFormDataSingleControl(currentControl),
+            { result } = renderHook(() => useImmer<FormProps<typeof initFormData.controls>>(initFormData)),
+            newValue = 5
+
+
+        let [form, setForm] = result.current,
+            hookData = getHookData({currentControl, controlName, newValue, form}),
+            expectedControlPropsAfterSubmit = {
+                ...currentControl,
+                _showErrorTimeoutId: 1,
+            }
+
+
+        act(() => {
+            liveInputHandler(currentControl, form, hookData, 'change', setForm)
+        })
+
+        const controlStateAfterValidate = result.current[0].controls[controlName]
+        
+        expect(controlStateAfterValidate).toEqual(expectedControlPropsAfterSubmit)
+    })
+
+    /**
+     * Появляется первый таймаут, показать ошибку через 200 сек
+     * Через 150 сек появляется новый таймаут, и отменяет первый таймаут
+     * Через 210 сек от первого таймаута, в контроле не должно быть ошибки, так как ее отображение перетер 2-й таймаут
+     * Но через 360 в контроле должена быть ошибка второго таймаута
+     */
+    test('first error show will be cleared when next timeout will be call', () => {
+
+        const currentControl:ControlProps = {
+                type: 'text',
+                label: 'контрол',
+                hasError: false,
+                validateRules: {
+                    minValue: {
+                        message: 'minimum {limit}',
+                        limit: 3
+                    },
+                    maxLength: {
+                        message: '{limit} length is limit',
+                        limit: 2
+                    }
+                },
+                validatorsSetting: {
+                    minValue: {
+                        liveEnable: true,
+                        showErrorTimeout: 200
+                    },
+                    maxLength: {
+                        liveEnable: true,
+                        shouldLockNotValidWrite: false,
+                        showErrorTimeout: 400
+                    }
+                }
+            },
+            {controlName, initFormData} = getInitFormDataSingleControl(currentControl),
+            { result } = renderHook(() => useImmer<FormProps<typeof initFormData.controls>>(initFormData)),
+            newValue = 2,
+            valueForSecondTimeout = 222
+
+
+
+        let [form, setForm] = result.current,
+            hookData = getHookData({currentControl, controlName, newValue, form}),
+            expectedControlPropsAfterFirstTimeout = {
+                ...currentControl,
+                value: valueForSecondTimeout,
+                hasError: false,
+                _showErrorTimeoutId: 5
+            },
+            expectedControlPropsAfterSecondTimeout = {
+                ...currentControl,
+                value: valueForSecondTimeout,
+                hasError: true,
+                error: '2 length is limit',
+                _showErrorTimeoutId: 5
+            },
+            controlPropsAfterFirstTimeout,
+            controlPropsAfterSecondTimeout
+
+
+        act(() => {
+            liveInputHandler(currentControl, form, hookData, 'change', setForm)
+
+
+            setTimeout(() => {
+                currentControl.value = valueForSecondTimeout
+                const newHookData = getHookData({currentControl: currentControl, controlName, newValue: valueForSecondTimeout, form})
+
+                liveInputHandler(currentControl, form, newHookData, 'change', setForm)
+
+            },100);
+
+            setTimeout(() => {
+                controlPropsAfterFirstTimeout = result.current[0].controls[controlName]
+            },210);
+
+            setTimeout(() => {
+                controlPropsAfterSecondTimeout = result.current[0].controls[controlName]
+            },610);
+
+            jest.runAllTimers();
+        })
+
+        expect(controlPropsAfterFirstTimeout).toEqual(expectedControlPropsAfterFirstTimeout);
+        expect(controlPropsAfterSecondTimeout).toEqual(expectedControlPropsAfterSecondTimeout);
+    })
+
+    test('error hide after timeout if hideErrorTimeout > 0', () => {
+
+        const currentControl:ControlProps = {
+                type: 'text',
+                label: 'контрол',
+                hasError: false,
+                validateRules: {
+                    maxValue: {
+                        message: 'limit {limit} was exceeded',
+                        limit: 3
+                    }
+                },
+                validatorsSetting: {
+                    maxValue: {
+                        liveEnable: true,
+                        showLiveErrorAfterFirstSubmit: false,
+                        shouldLockNotValidWrite: true,
+                        showErrorTimeout: 100,
+                        hideErrorTimeout: 100
+                    }
+                }
+            },
+            {controlName, initFormData} = getInitFormDataSingleControl(currentControl),
+            { result } = renderHook(() => useImmer<FormProps<typeof initFormData.controls>>(initFormData)),
+            newValue = 5
+
+
+        let [form, setForm] = result.current,
+            hookData = getHookData({currentControl, controlName, newValue, form}),
+            expectedControlPropsAfterTimeout = {
+                ...currentControl,
+                hasError: true,
+                error: 'limit 3 was exceeded',
+                _showErrorTimeoutId: 1,
+                _hideErrorTimeoutId: 4
+            },
+            expectedControlPropsAfterHideTimeout = {
+                ...expectedControlPropsAfterTimeout,
+                hasError: false
+            },
+            controlPropsAfterTimeout,
+            controlPropsAfterHideTimeout
+
+
+
+        act(() => {
+            liveInputHandler(currentControl, form, hookData, 'change', setForm)
+
+            setTimeout(() => {
+                controlPropsAfterTimeout = result.current[0].controls[controlName]
+            },200);
+
+            setTimeout(() => {
+                controlPropsAfterHideTimeout = result.current[0].controls[controlName]
+            },350);
+
+            jest.runAllTimers();
+        })
+
+        expect(controlPropsAfterTimeout).toEqual(expectedControlPropsAfterTimeout)
+        expect(controlPropsAfterHideTimeout).toEqual(expectedControlPropsAfterHideTimeout)
     })
 
 })

@@ -53,7 +53,7 @@ export const liveInputHandler: LiveInputHandler = (currentControl, form, hooksDa
           inputMask = currentControl.maskSetting || null,
           customMask = currentControl.customMask,
           newValue = hooksData.newValue,
-          isFormTriedSubmit = form.formParams.triedSubmit
+          isFormTriedSubmit = form.formParams.isFormTriedSubmit
 
     /**
      * Проверка наличия всех валидаторов
@@ -114,11 +114,6 @@ export const liveInputHandler: LiveInputHandler = (currentControl, form, hooksDa
          */
         const {showLiveErrorAfterFirstSubmit = false, showErrorTimeout = 0} = errorDataForControl || {},
                showLiveErrorAlways = !showLiveErrorAfterFirstSubmit
-
-        /**
-         * Настройки таймаута вывода ошибок ?
-         */
-        // debounceTimeout = showErrorTimeout ? showErrorTimeout : 0
 
         /**
          * Записать новое значение, если инпут нигде не был заблокирован

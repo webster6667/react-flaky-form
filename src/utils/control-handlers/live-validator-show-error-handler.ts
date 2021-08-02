@@ -42,6 +42,7 @@ export const liveValidatorShowErrorHandler:LiveValidatorShowErrorHandler = (erro
          * Если есть ошибка, отобразить в дебаунсе, если нет, закрыть предыдущий таймер
          */
         if (hasError) {
+            clearTimeout(prevShowErrorTimeoutId)
             currentShowErrorTimeoutId = callShowError(errorDataForControl, hooksData, setForm)
         } else if(prevShowErrorTimeoutId) {
             clearTimeout(prevShowErrorTimeoutId)
