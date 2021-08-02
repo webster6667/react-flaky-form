@@ -1,4 +1,7 @@
-export const defaultBeforeSubmitValidator:SubmitValidatorProps = (hooksData) => {
+import {SubmitValidatorProps, ValidatorErrorProps} from "@src/types";
+import {inputNumberValidator} from "@src/helpers/input-number-validator";
+
+export const defaultAfterSubmitValidator:SubmitValidatorProps = (hooksData) => {
 
     let {currentControl: control} = hooksData,
         {value: controlValue = '', hasError = false, validateRules = {}, inputMask = null, customMask = null} = control,

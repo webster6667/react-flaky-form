@@ -1,7 +1,7 @@
 import {
-    ControlProps,
     FormProps,
-    SetFormProps
+    SetFormProps,
+    CurrentControlData
 } from "@common-types"
 import {AddControlSetting} from "./types"
 
@@ -10,51 +10,43 @@ import {addControlExample} from '@add-control-props-layers/add-control-example'
 import {addValidatorsSettingsLayerToSingleControl} from "@add-control-props-layers/add-validators-settings-layers"
 
 import {addControlHandler} from "@utils/add-control-handler"
-// import {isControlBtnSubmitValidationSuccess} from './../../helpers/lock-submit-btn-validator'
+import {shouldLockSubmitBtnByControl} from '@control-handlers/submit-btn-lock-handler'
 
 /**
  * @description
  * Добавить все настройки контролу (валидаторы, экземпляры и тд)
  *
- * @param {ControlProps} control - Контрол которому добавляют настройки
- * @param {string} controlName - Имя контрола(username or password)
+ * @param {CurrentControlData} currentControlData - Все данные по перебираемому контролу
  * @param {FormProps} form - главный объект формы
- * @param {number} formIndex - Индекс формы
- * @param {number} controlIndex - Индекс вложенного контрола
  * @param {SetFormProps} setForm - функция изменяющая главный объект формы
  *
  * @returns {boolean}
  */
-export const addControlSetting: AddControlSetting = (control, controlName, form, formIndex = null, controlIndex = null, setForm) => {
+export const addControlSetting: AddControlSetting = (currentControlData, form, setForm) => {
 
-    const {type = null} = control,
-          {formName} = form.formSettings,
+    const {currentControl, controlName} = currentControlData,
+          {type = null} = currentControl,
           controlsExampleList = form.controlsExample
 
 
     if (!type) {
         console.error(`type is require control prop`);
     } else {
-        /**
-         * Настройка валидатора, описанная для этой формы
-         */
-        let formValidatorsSetting = form.formSettings.formValidatorsSetting || {}
 
         /**
          * Добавить обязательные поля
          */
-        addRequireFields(control, controlName, formName)
+        addRequireFields(currentControlData)
 
         /**
          * Наложить все слои настроек валидатора для контрола
          */
-        addValidatorsSettingsLayerToSingleControl(control, controlName, formValidatorsSetting, form)
-
+        addValidatorsSettingsLayerToSingleControl(currentControl, form)
 
         /**
          * Обработчик входных данных
          */
-        control.setValue = (
+        currentControl.setValue = (
             newValue,
             controlIndex,
             formIndex,
@@ -65,16 +57,12 @@ export const addControlSetting: AddControlSetting = (control, controlName, form,
         /**
          * Записать экземпляр контрола
          */
-        addControlExample(controlsExampleList, controlName, control, controlIndex)
+        addControlExample(controlsExampleList, currentControlData)
 
-        //Проверить, проходит ли контрол валидатор блокирующий кнопку
-        // const shouldLockSubmitBtn = !isControlBtnSubmitValidationSuccess(control, controlName, form, formIndex, controlIndex)
-
-        // //Заблокировать кнопку если где-то была ошибка
-        // if (shouldLockSubmitBtn) {
-        //     form.formParams.isSubmitBtnLocked = true
-        // }
-
+        /**
+         * Проверить при инициализации контрола, блокировать ли кнопку
+         */
+        form.formParams.isSubmitBtnLocked = shouldLockSubmitBtnByControl(currentControlData ,form)
     }
 
 

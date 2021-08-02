@@ -8,30 +8,16 @@ export let inputEvents: 'change' | 'mouseover' | 'mouseleave' | 'focus' | 'blur'
  * Функция обработчик для каждого отдельного контрола
  */
 export type ControlsCycleHandler = (
+
     /**
-     * Даные отдельного контрола с которым сейчас идет работа
+     * Данные текущего контрола
      */
-    control: ControlProps,
-    
-    /**
-     * Имя контрола с которыми сейчас идет работа
-     */
-    controlName: string,
-    
+    currentControlData: CurrentControlData,
+
     /**
      * Глобальный объект форм
      */
     form: FormProps,
-    
-    /**
-     * Индекс формы контрола(если есть)
-     */
-    formIndex?: number | null,
-
-    /**
-     * Индекс контрола(если есть)
-     */
-    controlIndex?: number | null,
 
     /**
      * Функция изменеия глобальныого объекта форм
@@ -131,6 +117,11 @@ export interface ValidatorSettingProps {
      * Блокировать ли вывыод в ипут данные не прошедшие валидацию
      */
     shouldLockNotValidWrite?: boolean,
+
+    /**
+     * Блокировать ли кнопку отправки при не валидном значении
+     */
+    shouldLockSubmitBtnWhenControlInvalid?: boolean,
     
     /**
      * Через какой таймаут отображать ошибки
@@ -360,6 +351,37 @@ export interface FormParamsProps {
 
 /**
  * @description
+ * Данные контрола, с которым ведется работа
+ */
+export interface CurrentControlData {
+    /**
+     * Данные текущего контрола
+     */
+    currentControl: ControlProps,
+
+    /**
+     * Индекс контрола
+     */
+    controlIndex: number | null,
+
+    /**
+     * Имя формы контрола
+     */
+    controlName: string,
+
+    /**
+     * Индекс формы
+     */
+    formIndex: number | null,
+
+    /**
+     * Имя формы
+     */
+    formName: string,
+}
+
+/**
+ * @description
  * Данные для хуков
  */
 export interface HookProps {
@@ -376,7 +398,7 @@ export interface HookProps {
     /**
      * Имя формы контрола
      */
-    controlName: string | number,
+    controlName: string,
     
     /**
      * Индекс формы

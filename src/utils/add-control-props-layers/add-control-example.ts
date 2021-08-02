@@ -13,7 +13,7 @@ import {AddControlExample} from "./types"
  *
  * @returns {void}
  */
-export const addControlExample:AddControlExample = (controlsExampleList, controlName, control, controlIndex) => {
+export const addControlExample:AddControlExample = (controlsExampleList, {controlIndex, controlName, currentControl}) => {
 
     const isGroupControl = controlIndex === 0,
           isSingleControl = controlIndex === null
@@ -22,10 +22,10 @@ export const addControlExample:AddControlExample = (controlsExampleList, control
     /**
      * Сделать экземпляр первого элемента, вложенного контрола
      */
-    if (isGroupControl) controlsExampleList[controlName] = [{...control}]
+    if (isGroupControl) controlsExampleList[controlName] = [{...currentControl}]
 
     /**
      * Сделать экземпляр одиночного контрола
      */
-    if (isSingleControl) controlsExampleList[controlName] = {...control}
+    if (isSingleControl) controlsExampleList[controlName] = {...currentControl}
 }

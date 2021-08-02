@@ -29,14 +29,16 @@ describe('controls-cycle', () => {
 
         let [flukyForm, setForm] = result.current,
             handledControlList = {},
-            controlHandler: ControlsCycleHandler = (control, controlName, form, formIndex, controlIndex, setForm) => {
-            
+            controlHandler: ControlsCycleHandler = (currentControlData, form, setForm) => {
+                const {controlIndex, controlName, currentControl} = currentControlData
+
+
                 if (controlIndex !== null) {
                     handledControlList[controlName]
-                        ? handledControlList[controlName].push(control)
-                        : handledControlList[controlName] = [control]
+                        ? handledControlList[controlName].push(currentControl)
+                        : handledControlList[controlName] = [currentControl]
                 } else {
-                    handledControlList = {...handledControlList, [controlName]: control}
+                    handledControlList = {...handledControlList, [controlName]: currentControl}
                 }
 
               return true
@@ -70,8 +72,8 @@ describe('controls-cycle', () => {
             { result } = renderHook(() => useImmer<FormProps<typeof controls>>(initFormData))
 
         let [flukyForm, setForm] = result.current,
-            controlHandler: ControlsCycleHandler = (control, controlName, form, formIndex, controlIndex, setForm) => {
-                return control.value !== 'Admin'
+            controlHandler: ControlsCycleHandler = ({currentControl}, form, setForm) => {
+                return currentControl.value !== 'Admin'
             },
             cycleResult = controlsCycle(controlHandler, controls, flukyForm, null, setForm)
 
@@ -99,8 +101,8 @@ describe('controls-cycle', () => {
             { result } = renderHook(() => useImmer<FormProps<typeof controls>>(initFormData))
 
         let [flukyForm, setForm] = result.current,
-            controlHandler: ControlsCycleHandler = (control, controlName, form, formIndex, controlIndex, setForm) => {
-                return control.type === 'text'
+            controlHandler: ControlsCycleHandler = ({currentControl}, form, setForm) => {
+                return currentControl.type === 'text'
             },
             cycleResult = controlsCycle(controlHandler, controls, flukyForm, null, setForm)
 
@@ -128,14 +130,14 @@ describe('form-cycle', () => {
 
         let [flukyForm, setForm] = result.current,
             handledControlList = {},
-            controlHandler: ControlsCycleHandler = (control, controlName, form, formIndex, controlIndex, setForm) => {
+            controlHandler: ControlsCycleHandler = ({controlIndex, controlName, currentControl}, form, setForm) => {
 
                 if (controlIndex !== null) {
                     handledControlList[controlName]
-                        ? handledControlList[controlName].push(control)
-                        : handledControlList[controlName] = [control]
+                        ? handledControlList[controlName].push(currentControl)
+                        : handledControlList[controlName] = [currentControl]
                 } else {
-                    handledControlList = {...handledControlList, [controlName]: control}
+                    handledControlList = {...handledControlList, [controlName]: currentControl}
                 }
 
                 return true
@@ -163,7 +165,7 @@ describe('form-cycle', () => {
 
         let [flukyForm, setForm] = result.current,
             handledControlList = [],
-            controlHandler: ControlsCycleHandler = (control, controlName, form, formIndex, controlIndex, setForm) => {
+            controlHandler: ControlsCycleHandler = ({formIndex, controlIndex, controlName, currentControl}, form, setForm) => {
 
                 if (formIndex !== null) {
 
@@ -171,10 +173,10 @@ describe('form-cycle', () => {
 
                     if (controlIndex !== null) {
                         handledControlList[formIndex][controlName]
-                            ? handledControlList[formIndex][controlName].push(control)
-                            : handledControlList[formIndex][controlName] = [control]
+                            ? handledControlList[formIndex][controlName].push(currentControl)
+                            : handledControlList[formIndex][controlName] = [currentControl]
                     } else {
-                        handledControlList = [{...handledControlList[formIndex], [controlName]: control}]
+                        handledControlList = [{...handledControlList[formIndex], [controlName]: currentControl}]
                     }
 
                 }
@@ -208,8 +210,8 @@ describe('form-cycle', () => {
             { result } = renderHook(() => useImmer<FormProps<typeof controls>>(initFormData))
 
         let [flukyForm, setForm] = result.current,
-            controlHandler: ControlsCycleHandler = (control, controlName, form, formIndex, controlIndex, setForm) => {
-                return control.value !== 'Admin'
+            controlHandler: ControlsCycleHandler = ({currentControl}, form, setForm) => {
+                return currentControl.value !== 'Admin'
             },
             cycleResult = formCycle(flukyForm, controlHandler, setForm)
 
@@ -237,8 +239,8 @@ describe('form-cycle', () => {
             { result } = renderHook(() => useImmer<FormProps<typeof controls>>(initFormData))
 
         let [flukyForm, setForm] = result.current,
-            controlHandler: ControlsCycleHandler = (control, controlName, form, formIndex, controlIndex, setForm) => {
-                return control.type === 'text'
+            controlHandler: ControlsCycleHandler = ({currentControl}, form, setForm) => {
+                return currentControl.type === 'text'
             },
             cycleResult = formCycle(flukyForm, controlHandler, setForm)
 

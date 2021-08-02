@@ -65,7 +65,7 @@ describe('written validator return right error data', () => {
                   controlName = 'mycontrol',
                   formParams:FormParamsProps = {
                     loaded: true,
-                    triedSubmit: false
+                    isFormTriedSubmit: false
                   },
                   form: FormProps = {
                     controls: {
@@ -90,7 +90,7 @@ describe('written validator return right error data', () => {
               shouldLockNotValidWrite: false,
               message: null,
               limit: null,
-              showLiveErrorAfterFirstSubmit: null,
+              showLiveErrorAfterFirstSubmit: false,
               hideErrorTimeout: null,
               showErrorTimeout: null
           }
@@ -102,8 +102,7 @@ describe('written validator return right error data', () => {
               {errorData} = validateWrittenData(hookData),
               expectedResult: ValidatorErrorProps = {
                     ...defaultErrorData,
-                    hasError: false,
-                    shouldLockNotValidWrite: false
+                    hasError: false
               }
         
         expect(errorData).toEqual(expectedResult)
@@ -129,7 +128,9 @@ describe('written validator return right error data', () => {
                   ...defaultErrorData,
                   hasError: true,
                   message,
-                  limit
+                  limit,
+                  shouldLockNotValidWrite: false,
+                  showLiveErrorAfterFirstSubmit: false
               }
 
         expect(errorData).toEqual(expectedResult)
@@ -373,7 +374,7 @@ describe('written validator return right error data', () => {
                     shouldLockNotValidWrite: false,
                     message: 'less than limit',
                     limit: 5,
-                    showLiveErrorAfterFirstSubmit: null,
+                    showLiveErrorAfterFirstSubmit: false,
                     hideErrorTimeout: null,
                     showErrorTimeout: null
                 },

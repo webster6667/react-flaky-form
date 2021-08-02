@@ -1,18 +1,17 @@
-import {ControlProps} from "@common-types";
+import {CurrentControlData} from "@common-types";
 import {AddRequireFields} from './types'
 
 /**
  * @description
  * Добавить обязательные поля для функционирования контролов
  *
- * @param {ControlProps} control - Контрол которому добавят обящательные поля
- * @param {string} controlName - Имя контрола (username or password)
- * @param {string} formName - Имя формы(RegistrationForm or LoginForm)
+ * @param {CurrentControlData} singleControlData - Все данные переданного контрола
  *
  * @returns {void}
  */
-export const addRequireFields:AddRequireFields = (control, controlName, formName) => {
-    const isSelectInput = control.type === 'select'
+export const addRequireFields:AddRequireFields = (singleControlData) => {
+    const {currentControl: control, controlName, formName} = singleControlData,
+          isSelectInput = control.type === 'select'
 
     control.error = ''
     control.hasError = false

@@ -1,5 +1,5 @@
 import {addControlExample} from '@add-control-props-layers/add-control-example'
-import {ControlsProps, ControlProps} from "src/types";
+import {ControlsProps, ControlProps, CurrentControlData} from "@common-types";
 
 
 describe('function create control example', () => {
@@ -11,11 +11,12 @@ describe('function create control example', () => {
               control: ControlProps = {
                       type: 'text'
               },
+              currentControlData:CurrentControlData = {currentControl: control, controlName, formName: '', controlIndex: null, formIndex: null},
               expectedExampleList: ControlsProps = {
                     [controlName]: control
               }
 
-        addControlExample(exampleControlList, controlName, control, null)
+        addControlExample(exampleControlList, currentControlData)
 
         expect(exampleControlList).toEqual(expectedExampleList)
 
@@ -44,7 +45,9 @@ describe('function create control example', () => {
         if (Array.isArray(multiControl)) {
 
             multiControl.map((control, controlIndex) => {
-                addControlExample(exampleControlList, controlName, control, controlIndex)
+                const currentControlData:CurrentControlData = {currentControl: control, controlName, formName: '',  controlIndex, formIndex: null}
+
+                addControlExample(exampleControlList, currentControlData)
             })
 
         }

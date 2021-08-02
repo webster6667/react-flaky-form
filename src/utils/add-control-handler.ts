@@ -1,6 +1,7 @@
 import {getControlFromForm} from '@control-utils/get-control-from-form'
 import {liveInputHandler} from '@control-handlers/live-input-handler'
-// import {toggleSubmitBtnLockRelativeLockValidatorError} from './lock-submit-btn-validator'
+import {shouldLockSubmitBtnByForm} from '@control-handlers/submit-btn-lock-handler'
+
 
 import {
     HookProps,
@@ -78,8 +79,11 @@ export const addControlHandler:AddControlHandler = (
                 afterChange(hookData)
             }
 
-            //Заблокировать кнопку если не пройденный ошибки lockBtn валидатора, разблокировать если все пройдены
-            // toggleSubmitBtnLockRelativeLockValidatorError(form)
+            /**
+             * После каждого ввода проверять по всем контролам формы(так как текущий контрол может влиять на другие)
+             * Блокировать ли кнопку отправки
+             */
+            form.formParams.isSubmitBtnLocked = shouldLockSubmitBtnByForm(form)
         })
 
 }

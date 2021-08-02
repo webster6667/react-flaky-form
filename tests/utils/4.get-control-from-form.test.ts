@@ -18,14 +18,17 @@ describe('function get need control from multi/singleton form and from singleton
               },
               formParams: FormParamsProps = {
                   loaded: false,
-                  triedSubmit: false
+                  isFormTriedSubmit: false
               },
               form:FormProps = {
                   controls,
                   formParams,
+                  formSettings: {
+                      formName: 'myForm'
+                  },
                   controlsExample: {}
               },
-              controlHandler:ControlsCycleHandler = (control, controlName, form, formIndex, controlIndex) => {
+              controlHandler:ControlsCycleHandler = ({controlName, formIndex, controlIndex}, form) => {
                 returnedControl = getControlFromForm(form, controlName, formIndex, controlIndex)
                 return true
               }
@@ -48,14 +51,17 @@ describe('function get need control from multi/singleton form and from singleton
             },
             formParams: FormParamsProps = {
                 loaded: false,
-                triedSubmit: false
+                isFormTriedSubmit: false
             },
             form:FormProps = {
                 controls,
                 formParams,
+                formSettings: {
+                    formName: 'myForm'
+                },
                 controlsExample: {}
             },
-            controlHandler:ControlsCycleHandler = (control, controlName, form, formIndex, controlIndex) => {
+            controlHandler:ControlsCycleHandler = ({controlName, formIndex, controlIndex}, form) => {
                 returnedControl = getControlFromForm(form, controlName, formIndex, controlIndex)
                 return true
             }
@@ -78,14 +84,17 @@ describe('function get need control from multi/singleton form and from singleton
             }],
             formParams: FormParamsProps = {
                 loaded: false,
-                triedSubmit: false
+                isFormTriedSubmit: false
             },
             form:FormProps = {
                 controls,
                 formParams,
+                formSettings: {
+                    formName: 'myForm'
+                },
                 controlsExample: {}
             },
-            controlHandler:ControlsCycleHandler = (control, controlName, form, formIndex, controlIndex) => {
+            controlHandler:ControlsCycleHandler = ({controlName, formIndex, controlIndex}, form) => {
                 returnedControl = getControlFromForm(form, controlName, formIndex, controlIndex)
                 return true
             }
@@ -108,14 +117,17 @@ describe('function get need control from multi/singleton form and from singleton
             }],
             formParams: FormParamsProps = {
                 loaded: false,
-                triedSubmit: false
+                isFormTriedSubmit: false
             },
             form:FormProps = {
                 controls,
                 formParams,
+                formSettings: {
+                    formName: 'myForm'
+                },
                 controlsExample: {}
             },
-            controlHandler:ControlsCycleHandler = (control, controlName, form, formIndex, controlIndex) => {
+            controlHandler:ControlsCycleHandler = ({controlName, formIndex, controlIndex}, form) => {
                 returnedControl = getControlFromForm(form, controlName, formIndex, controlIndex)
                 return true
             }

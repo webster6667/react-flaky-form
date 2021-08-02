@@ -52,7 +52,6 @@ export const validateWrittenData:LiveValidator = (hooksData) => {
         const isInputNumberValid = isNumberValid(newValue, numberRules),
               isInputNumberInvalid = !isInputNumberValid,
               isWrittenValueNotEmpty = !isWrittenValueEmpty(newValue),
-              isInputTypeNumber = currentControl.type === 'number',
               hasError = true
 
         /**

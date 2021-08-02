@@ -5,7 +5,8 @@ import {
     SetFormProps,
     ControlsCycle,
     FormCycle,
-    ControlsCycleHandler
+    ControlsCycleHandler,
+    CurrentControlData
 } from "@common-types";
 
 
@@ -43,7 +44,8 @@ export const controlsCycle: ControlsCycle = (controlsCycleHandler, formControls,
         if (Array.isArray(control)) {
 
             control.forEach((controlItem, controlIndex) => {
-                const isControlReturnTrue = controlsCycleHandler(controlItem, controlName, form, formIndex, controlIndex, setForm)
+                const currentControlData:CurrentControlData = {currentControl: controlItem, controlName, controlIndex, formIndex, formName: form.formSettings.formName},
+                      isControlReturnTrue = controlsCycleHandler(currentControlData, form, setForm)
 
                 if (isControlReturnTrue !== true) isAllControlsReturnTrue = false
             })
@@ -52,7 +54,8 @@ export const controlsCycle: ControlsCycle = (controlsCycleHandler, formControls,
          * Одиночный контрол
          */
         } else {
-            const isControlReturnTrue = controlsCycleHandler(control, controlName, form, formIndex, null, setForm)
+            const currentControlData:CurrentControlData = {currentControl: control, controlName, controlIndex: null, formIndex, formName: form.formSettings.formName},
+                  isControlReturnTrue = controlsCycleHandler(currentControlData, form, setForm)
 
 
             if (isControlReturnTrue !== true) isAllControlsReturnTrue = false

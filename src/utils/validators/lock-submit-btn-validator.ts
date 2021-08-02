@@ -1,4 +1,14 @@
+// shouldLockSubmitBtnWhenControlInvalid
+
+import {ValidatorsSettingListInsideHandler} from "@src/types";
+
 export const defaultLockSubmitBtnValidator = (hookData: HookProps):boolean => {
+    const {currentControl, newValue} = hooksData,
+        controlValidatorsRules = currentControl.validateRules || {},
+        controlValidatorsSetting = currentControl.validatorsSetting || {},
+        {minValue: minValueSetting, maxValue: maxValueSetting, minLength: minLengthSetting, maxLength: maxLengthSetting, required: requiredSetting, number: numberSetting, email: emailSetting} = controlValidatorsSetting as ValidatorsSettingListInsideHandler
+
+
     let {form, currentControl: control} = hookData,
         {value: controlValue = '', validateRules = {}, validatorsSetting = {}} = control,
         currentControlLength = String(controlValue).length,

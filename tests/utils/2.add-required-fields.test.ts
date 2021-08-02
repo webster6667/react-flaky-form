@@ -1,5 +1,5 @@
 import {addRequireFields} from '@add-control-props-layers/add-required-field'
-import {ControlProps} from "@common-types";
+import {ControlProps, CurrentControlData} from "@common-types";
 
 
 describe('required fields have been added for all control types', () => {
@@ -18,9 +18,10 @@ describe('required fields have been added for all control types', () => {
                   controlName,
                   inputName: `${formName}[${controlName}]`,
                   value: ''
-              }
+              },
+              currentControlData:CurrentControlData = {currentControl: control, controlName, formName, controlIndex: null, formIndex: null}
 
-        addRequireFields(control, controlName, formName)
+        addRequireFields(currentControlData)
 
         expect(control).toEqual(expectedObject)
     })
@@ -34,6 +35,7 @@ describe('required fields have been added for all control types', () => {
               },
               controlName = 'username',
               formName = 'Form',
+              currentControlData:CurrentControlData = {currentControl: control, controlName, formName, controlIndex: null, formIndex: null},
               expectedObject = {
                   type: 'text',
                   error: '',
@@ -43,7 +45,7 @@ describe('required fields have been added for all control types', () => {
                   value
               }
 
-        addRequireFields(control, controlName, formName)
+        addRequireFields(currentControlData)
 
         expect(control).toEqual(expectedObject)
     })
@@ -64,6 +66,7 @@ describe('required fields have been added for all control types', () => {
               },
               controlName = 'username',
               formName = 'Form',
+              currentControlData:CurrentControlData = {currentControl: control, controlName, formName, controlIndex: null, formIndex: null},
               expectedObject = {
                   type: 'select',
                   options,
@@ -76,7 +79,7 @@ describe('required fields have been added for all control types', () => {
               }
 
 
-        addRequireFields(control, controlName, formName)
+        addRequireFields(currentControlData)
 
         expect(control).toEqual(expectedObject)
     })
@@ -103,6 +106,7 @@ describe('required fields have been added for all control types', () => {
             },
             controlName = 'username',
             formName = 'Form',
+            currentControlData:CurrentControlData = {currentControl: control, controlName, formName, controlIndex: null, formIndex: null},
             expectedObject = {
                 type: 'select',
                 options,
@@ -115,7 +119,7 @@ describe('required fields have been added for all control types', () => {
             }
 
 
-        addRequireFields(control, controlName, formName)
+        addRequireFields(currentControlData)
 
         expect(control).toEqual(expectedObject)
     })

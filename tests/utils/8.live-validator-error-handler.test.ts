@@ -1,8 +1,7 @@
 import {useImmer} from 'use-immer';
 
-import {ControlProps, FormControls, FormParamsProps, FormProps, HookProps, ValidatorErrorProps} from "@common-types";
+import {ControlProps, FormProps, HookProps, ValidatorErrorProps} from "@common-types";
 import {renderHook, act} from "@testing-library/react-hooks";
-import {DEFAULT_FORM_SETTINGS, FORM_NAME} from "@const";
 
 import {getRequireFormParams} from '@mock-functions/get-require-form-params'
 import {getInitFormDataSingleControl} from "@mock-functions/get-initialized-full-form";

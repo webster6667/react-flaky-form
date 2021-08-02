@@ -65,19 +65,19 @@ export const addValidatorsSettingsLayer: AddValidatorsRuleLayer = (control, vali
  * Наложить все слои валидаторов(глобальные, формы, контрола) для отдельного контрола
  *
  * @param {ControlProps} control - Контрол на который накладывают слои валидатора
- * @param {string} controlName - Имя контрола(username or password)
  * @param {ValidatorsSettingList} formValidatorsSetting - Список валидаторов
  * @param {FormProps} form - главный объект формы
  *
  * @returns {void}
  *
  */
-export const addValidatorsSettingsLayerToSingleControl:AddValidatorsRulesLayerToSingleControl = (control, controlName, formValidatorsSetting, form) => {
+export const addValidatorsSettingsLayerToSingleControl:AddValidatorsRulesLayerToSingleControl = (control, form) => {
 
     /**
      * Настройки валидатора для отдельного контрола(могут быть пустыми)
      */
-    const controlValidatorsSetting = control.validatorsSetting || {}
+    const controlValidatorsSetting = control.validatorsSetting || {},
+          formValidatorsSetting = form.formSettings.formValidatorsSetting || {}
 
     /**
      * Наложить слой настроек валидатора, описанный в глобальном объекте для всех форм проекта

@@ -113,8 +113,7 @@ describe('function add all validator settings layers to selected control', () =>
         const control: ControlProps = {
                 type: 'text'
               },
-              {controlName, initFormData: form} = getInitFormDataSingleControl(control),
-              newValidatorsSettingsLayer: ValidatorsSettingList = {},
+              {initFormData: form} = getInitFormDataSingleControl(control),
               expectedControlState: ControlProps = {
                   ...control,
                   validatorsSetting: {
@@ -122,7 +121,7 @@ describe('function add all validator settings layers to selected control', () =>
                   }
               }
 
-        addValidatorsSettingsLayerToSingleControl(control, controlName, newValidatorsSettingsLayer, form)
+        addValidatorsSettingsLayerToSingleControl(control, form)
 
         
         expect(control).toEqual(expectedControlState)
@@ -137,10 +136,9 @@ describe('function add all validator settings layers to selected control', () =>
             controls = {
                 [controlName]: control
             },
-            newValidatorsSettingsLayer: ValidatorsSettingList = {},
             formParams: FormParamsProps = {
                 loaded: false,
-                triedSubmit: false,
+                isFormTriedSubmit: false,
                 isSubmitBtnLocked: false,
                 errorList: [],
                 commonError: ''
@@ -176,7 +174,7 @@ describe('function add all validator settings layers to selected control', () =>
                 }
             }
 
-        addValidatorsSettingsLayerToSingleControl(control, controlName, newValidatorsSettingsLayer, form)
+        addValidatorsSettingsLayerToSingleControl(control, form)
 
         expect(control).toEqual(expectedControlState)
     })
@@ -195,10 +193,9 @@ describe('function add all validator settings layers to selected control', () =>
             controls = {
                 [controlName]: control
             },
-            newValidatorsSettingsLayer: ValidatorsSettingList = {},
             formParams: FormParamsProps = {
                 loaded: false,
-                triedSubmit: false,
+                isFormTriedSubmit: false,
                 isSubmitBtnLocked: false,
                 errorList: [],
                 commonError: ''
@@ -234,7 +231,7 @@ describe('function add all validator settings layers to selected control', () =>
                 }
             }
 
-        addValidatorsSettingsLayerToSingleControl(control, controlName, newValidatorsSettingsLayer, form)
+        addValidatorsSettingsLayerToSingleControl(control, form)
 
         expect(control).toEqual(expectedControlState)
     })

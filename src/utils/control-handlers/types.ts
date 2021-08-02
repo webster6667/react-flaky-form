@@ -1,4 +1,12 @@
-import {ControlProps, FormProps, HookProps, inputEvents, SetFormProps, ValidatorErrorProps} from "@common-types";
+import {
+    ControlProps,
+    CurrentControlData,
+    FormProps,
+    HookProps,
+    inputEvents,
+    SetFormProps,
+    ValidatorErrorProps
+} from "@common-types";
 
 /**
  * @description
@@ -11,3 +19,5 @@ export type LiveInputHandler = (currentControl: ControlProps, form: FormProps, h
  * Обработчик живых ошибок, отвечающий за выбор функции обработчика и контроль дебаунса
  */
 export type LiveValidatorShowErrorHandler = (errorDataForControl: ValidatorErrorProps, hooksData: HookProps, form: FormProps, setForm: SetFormProps, prevShowErrorTimeoutId: null | ReturnType<typeof setTimeout>, ms: number) => null | ReturnType<typeof setTimeout>
+
+export type ShouldLockSubmitBtnByControl = (currentControlData: CurrentControlData, form: FormProps) => boolean
