@@ -45,8 +45,7 @@ export const defaultStaticValidator:StaticValidator = (hooksData) => {
 
         const isInputNumberValid = isNumberValid(newValue, numberRules),
               isInputNumberInvalid = !isInputNumberValid,
-              isWrittenValueNotEmpty = !isWrittenValueEmpty(newValue),
-              hasError = true
+              isWrittenValueNotEmpty = !isWrittenValueEmpty(newValue)
 
         /**
          * @description
@@ -58,35 +57,35 @@ export const defaultStaticValidator:StaticValidator = (hooksData) => {
              * Validator for less value limit
              */
             if (isInputNumberValid && isLessThanLimit(newValue, minValueRules)) {
-                errorDataHandler(errorData, {...minValueRules, ...minValueSetting, hasError})
+                errorDataHandler(errorData, {...minValueRules, ...minValueSetting})
             }
 
             /**
              * Validator for greater limit
              */
             if (isInputNumberValid && isGreaterThanLimit(newValue, maxValueRules)) {
-                errorDataHandler(errorData, {...maxValueRules, ...maxValueSetting, hasError})
+                errorDataHandler(errorData, {...maxValueRules, ...maxValueSetting})
             }
 
             /**
              *Validator for shorter limit
              */
             if (isShorterThanLimit(newValue, minLengthRules)) {
-                errorDataHandler(errorData, {...minLengthRules, ...minLengthSetting, hasError})
+                errorDataHandler(errorData, {...minLengthRules, ...minLengthSetting})
             }
 
             /**
              * Validator for longer limit
              */
             if (isLongerThanLimit(newValue, maxLengthRules)) {
-                errorDataHandler(errorData, {...maxLengthRules, ...maxLengthSetting, hasError})
+                errorDataHandler(errorData, {...maxLengthRules, ...maxLengthSetting})
             }
 
             /**
              * Validator for valid email
              */
             if (emailRules && isMailInvalid(newValue)) {
-                errorDataHandler(errorData, {...emailRules, ...emailSetting, hasError})
+                errorDataHandler(errorData, {...emailRules, ...emailSetting})
             }
 
         }
@@ -95,7 +94,7 @@ export const defaultStaticValidator:StaticValidator = (hooksData) => {
          * Validator for required field
          */
         if (requiredRules && isWrittenValueEmpty(newValue)) {
-            errorDataHandler(errorData, {...requiredRules, ...requiredSetting, hasError})
+            errorDataHandler(errorData, {...requiredRules, ...requiredSetting})
         }
 
 
@@ -103,7 +102,7 @@ export const defaultStaticValidator:StaticValidator = (hooksData) => {
          * Validator for valid number
          */
         if (numberRules && isInputNumberInvalid) {
-            errorDataHandler(errorData, {...numberRules, ...numberSetting, hasError})
+            errorDataHandler(errorData, {...numberRules, ...numberSetting})
         }
 
     }

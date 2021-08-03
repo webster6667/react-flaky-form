@@ -34,7 +34,8 @@
       "@control-handlers/*": ["src/utils/control-handlers/*"],
       "@error-handlers/*": ["src/utils/error-handlers/*"],
       "@validators/*": ["src/utils/validators/*"],
-      "@mock-functions/*": ["tests/mock-functions/*"]
+      "@mock-functions/*": ["tests/mock-functions/*"],
+      "@tests/*": ["tests/*"]
     }
   },
   "ts-node" : {

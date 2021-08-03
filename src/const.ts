@@ -11,7 +11,6 @@ export const FORM_NAME: string = 'form'
 //Слои настроек формы (из библиотеки + из global проекта)
 export let DEFAULT_FORM_SETTINGS:FormConfigProps = {
     action: null,
-    lockSubmitBtnEvent: false,
     formName: FORM_NAME,
     ...activeFormEnvConfig,
     formValidatorsSetting: {

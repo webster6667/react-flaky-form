@@ -2,19 +2,16 @@ import {isLiveValidatorEnable} from '@validators/helpers/is-live-validator-enabl
 import {validateWrittenData} from '@validators/written-live-validator'
 import {setLiveValidatorResult} from '@control-handlers/helpers/set-live-validator-result'
 
+import {getHookData} from '@mock-functions/get-hook-data'
+import {getInitFormDataSingleControl} from "@mock-functions/get-initialized-full-form";
+import {defaultLiveValidatorErrorData} from '@tests/expected-default-values'
+
 import {
     ValidatorSettingProps,
     ControlProps,
-    HookProps,
-    FormProps,
-    FormParamsProps,
     ValidatorErrorProps,
-    ValidatorsRulesList,
-    ValidatorsSettingListInsideHandler, ControlOutputDataProps
+    ControlOutputDataProps, CurrentControlData
 } from "@common-types"
-
-import {DEFAULT_FORM_SETTINGS} from "@const";
-
 
 describe('function return is live validator enable from control settings object', () => {
 
@@ -48,89 +45,53 @@ describe('function return is live validator enable from control settings object'
 
 describe('written validator return right error data', () => {
 
-    const getHookData = (newValue: string | number, validatorName = 'empty', validatorRules = {}, validatorSettings = {}) => {
-
-            const validateRules: ValidatorsRulesList = {
-                    [validatorName]: validatorRules
-                  },
-                  validatorsSetting: ValidatorsSettingListInsideHandler = {
-                      ...DEFAULT_FORM_SETTINGS.formValidatorsSetting as ValidatorsSettingListInsideHandler,
-                      [validatorName]: validatorSettings
-                  },
-                  currentControl:ControlProps = {
-                    type: 'text',
-                    validateRules,
-                    validatorsSetting
-                  },
-                  controlName = 'mycontrol',
-                  formParams:FormParamsProps = {
-                    loaded: true,
-                    isFormTriedSubmit: false
-                  },
-                  form: FormProps = {
-                    controls: {
-                        [controlName]: currentControl
-                    },
-                    formParams
-                  },
-                  hookData: HookProps = {
-                      currentControl,
-                      controlName,
-                      newValue,
-                      form,
-                      controlIndex: null,
-                      formIndex: null,
-                      selectedValue: null
-                  }
-
-            return hookData
-          },
-          defaultErrorData: ValidatorErrorProps  = {
-              hasError: false,
-              shouldLockNotValidWrite: false,
-              message: null,
-              limit: null,
-              showLiveErrorAfterFirstSubmit: false,
-              hideErrorTimeout: null,
-              showErrorTimeout: null
-          }
-    
     test('if control has not rules, validator return errorData.hasError === false', () => {
 
         const newValue = 'abc',
-              hookData = getHookData(newValue),
+              currentControl:ControlProps = {
+                  type: 'text'
+              },
+              {controlName, initFormData: form} = getInitFormDataSingleControl(currentControl),
+              currentControlData:CurrentControlData = {currentControl, controlName, formName: form.formSettings.formName, controlIndex: null, formIndex: null},
+              hookData = getHookData({...currentControlData, form, newValue}),
               {errorData} = validateWrittenData(hookData),
               expectedResult: ValidatorErrorProps = {
-                    ...defaultErrorData,
-                    hasError: false
+                  ...defaultLiveValidatorErrorData,
+                  hasError: false
               }
-        
+
         expect(errorData).toEqual(expectedResult)
-        
     });
 
-    test('has error when new value greater than limit', () => {
+    test('has error when new value less than limit', () => {
 
-        const newValue = 2,
+        const newValue = 3,
               limit = 5,
               message = 'less than limit',
               validatorName = 'minValue',
-              validateRules = {
-                  limit,
-                  message
+              currentControl:ControlProps = {
+                type: 'text',
+                validateRules: {
+                    [validatorName]: {
+                        limit,
+                        message
+                    }
+                },
+                validatorsSetting: {
+                    [validatorName]: {
+                        liveEnable: true
+                    }
+                }
               },
-              validatorSettings = {
-                  liveEnable: true
-              },
-              hookData = getHookData(newValue, validatorName, validateRules, validatorSettings),
+              {controlName, initFormData: form} = getInitFormDataSingleControl(currentControl),
+              currentControlData:CurrentControlData = {currentControl, controlName, formName: form.formSettings.formName, controlIndex: null, formIndex: null},
+              hookData = getHookData({...currentControlData, form, newValue}),
               {errorData} = validateWrittenData(hookData),
               expectedResult: ValidatorErrorProps = {
-                  ...defaultErrorData,
+                  ...defaultLiveValidatorErrorData,
                   hasError: true,
                   message,
-                  limit,
-                  shouldLockNotValidWrite: false,
-                  showLiveErrorAfterFirstSubmit: false
+                  limit
               }
 
         expect(errorData).toEqual(expectedResult)
@@ -142,17 +103,26 @@ describe('written validator return right error data', () => {
               limit = 2,
               message = 'greater than limit',
               validatorName = 'maxValue',
-              validateRules = {
-                  limit,
-                  message
+              currentControl:ControlProps = {
+                  type: 'text',
+                  validateRules: {
+                      [validatorName]: {
+                          limit,
+                          message
+                      }
+                  },
+                  validatorsSetting: {
+                      [validatorName]: {
+                          liveEnable: true
+                      }
+                  }
               },
-              validatorSettings = {
-                  liveEnable: true
-              },
-              hookData = getHookData(newValue, validatorName, validateRules, validatorSettings),
+              {controlName, initFormData: form} = getInitFormDataSingleControl(currentControl),
+              currentControlData:CurrentControlData = {currentControl, controlName, formName: form.formSettings.formName, controlIndex: null, formIndex: null},
+              hookData = getHookData({...currentControlData, form, newValue}),
               {errorData} = validateWrittenData(hookData),
               expectedResult: ValidatorErrorProps = {
-                  ...defaultErrorData,
+                  ...defaultLiveValidatorErrorData,
                   hasError: true,
                   message,
                   limit
@@ -167,17 +137,26 @@ describe('written validator return right error data', () => {
               limit = 2,
               message = 'longer than limit',
               validatorName = 'maxLength',
-              validateRules = {
-                  limit,
-                  message
+              currentControl:ControlProps = {
+                  type: 'text',
+                  validateRules: {
+                      [validatorName]: {
+                          limit,
+                          message
+                      }
+                  },
+                  validatorsSetting: {
+                      [validatorName]: {
+                          liveEnable: true
+                      }
+                  }
               },
-              validatorSettings = {
-                  liveEnable: true
-              },
-              hookData = getHookData(newValue, validatorName, validateRules, validatorSettings),
+              {controlName, initFormData: form} = getInitFormDataSingleControl(currentControl),
+              currentControlData:CurrentControlData = {currentControl, controlName, formName: form.formSettings.formName, controlIndex: null, formIndex: null},
+              hookData = getHookData({...currentControlData, form, newValue}),
               {errorData} = validateWrittenData(hookData),
               expectedResult: ValidatorErrorProps = {
-                  ...defaultErrorData,
+                  ...defaultLiveValidatorErrorData,
                   hasError: true,
                   message,
                   limit
@@ -193,17 +172,26 @@ describe('written validator return right error data', () => {
               limit = 5,
               message = 'shorter than limit',
               validatorName = 'minLength',
-              validateRules = {
-                  limit,
-                  message
+              currentControl:ControlProps = {
+                  type: 'text',
+                  validateRules: {
+                      [validatorName]: {
+                          limit,
+                          message
+                      }
+                  },
+                  validatorsSetting: {
+                      [validatorName]: {
+                          liveEnable: true
+                      }
+                  }
               },
-              validatorSettings = {
-                  liveEnable: true
-              },
-              hookData = getHookData(newValue, validatorName, validateRules, validatorSettings),
+              {controlName, initFormData: form} = getInitFormDataSingleControl(currentControl),
+              currentControlData:CurrentControlData = {currentControl, controlName, formName: form.formSettings.formName, controlIndex: null, formIndex: null},
+              hookData = getHookData({...currentControlData, form, newValue}),
               {errorData} = validateWrittenData(hookData),
               expectedResult: ValidatorErrorProps = {
-                  ...defaultErrorData,
+                  ...defaultLiveValidatorErrorData,
                   hasError: true,
                   message,
                   limit
@@ -217,16 +205,25 @@ describe('written validator return right error data', () => {
         const newValue = 'abcd',
               message = 'not valid mail',
               validatorName = 'email',
-              validateRules = {
-                  message
+              currentControl:ControlProps = {
+                  type: 'text',
+                  validateRules: {
+                      [validatorName]: {
+                          message
+                      }
+                  },
+                  validatorsSetting: {
+                      [validatorName]: {
+                          liveEnable: true
+                      }
+                  }
               },
-              validatorSettings = {
-                  liveEnable: true
-              },
-              hookData = getHookData(newValue, validatorName, validateRules, validatorSettings),
+              {controlName, initFormData: form} = getInitFormDataSingleControl(currentControl),
+              currentControlData:CurrentControlData = {currentControl, controlName, formName: form.formSettings.formName, controlIndex: null, formIndex: null},
+              hookData = getHookData({...currentControlData, form, newValue}),
               {errorData} = validateWrittenData(hookData),
               expectedResult: ValidatorErrorProps = {
-                  ...defaultErrorData,
+                  ...defaultLiveValidatorErrorData,
                   hasError: true,
                   message
               }
@@ -239,16 +236,25 @@ describe('written validator return right error data', () => {
         const newValue = '',
               message = 'filed is required',
               validatorName = 'required',
-              validateRules = {
-                  message
+              currentControl:ControlProps = {
+                  type: 'text',
+                  validateRules: {
+                      [validatorName]: {
+                          message
+                      }
+                  },
+                  validatorsSetting: {
+                      [validatorName]: {
+                          liveEnable: true
+                      }
+                  }
               },
-              validatorSettings = {
-                  liveEnable: true
-              },
-              hookData = getHookData(newValue, validatorName, validateRules, validatorSettings),
+              {controlName, initFormData: form} = getInitFormDataSingleControl(currentControl),
+              currentControlData:CurrentControlData = {currentControl, controlName, formName: form.formSettings.formName, controlIndex: null, formIndex: null},
+              hookData = getHookData({...currentControlData, form, newValue}),
               {errorData} = validateWrittenData(hookData),
               expectedResult: ValidatorErrorProps = {
-                  ...defaultErrorData,
+                  ...defaultLiveValidatorErrorData,
                   hasError: true,
                   message
               }
@@ -261,38 +267,25 @@ describe('written validator return right error data', () => {
         const newValue = 'abc',
               message = 'number not valid',
               validatorName = 'number',
-              validateRules = {
-                  message
+              currentControl:ControlProps = {
+                  type: 'text',
+                  validateRules: {
+                      [validatorName]: {
+                          message
+                      }
+                  },
+                  validatorsSetting: {
+                      [validatorName]: {
+                          liveEnable: true
+                      }
+                  }
               },
-              validatorSettings = {
-                  liveEnable: true
-              },
-              hookData = getHookData(newValue, validatorName, validateRules, validatorSettings),
+              {controlName, initFormData: form} = getInitFormDataSingleControl(currentControl),
+              currentControlData:CurrentControlData = {currentControl, controlName, formName: form.formSettings.formName, controlIndex: null, formIndex: null},
+              hookData = getHookData({...currentControlData, form, newValue}),
               {errorData} = validateWrittenData(hookData),
               expectedResult: ValidatorErrorProps = {
-                  ...defaultErrorData,
-                  hasError: true,
-                  message
-              }
-
-        expect(errorData).toEqual(expectedResult)
-    });
-    
-    test('has error when number not valid', () => {
-
-        const newValue = 'abc',
-              message = 'number not valid',
-              validatorName = 'number',
-              validateRules = {
-                  message
-              },
-              validatorSettings = {
-                  liveEnable: true
-              },
-              hookData = getHookData(newValue, validatorName, validateRules, validatorSettings),
-              {errorData} = validateWrittenData(hookData),
-              expectedResult: ValidatorErrorProps = {
-                  ...defaultErrorData,
+                  ...defaultLiveValidatorErrorData,
                   hasError: true,
                   message
               }
@@ -305,22 +298,32 @@ describe('written validator return right error data', () => {
         const newValue = 'abc',
               message = 'number not valid',
               validatorName = 'number',
-              validateRules = {
-                  message
+              shouldLockNotValidWrite = true,
+              currentControl:ControlProps = {
+                  type: 'text',
+                  validateRules: {
+                      [validatorName]: {
+                          message
+                      }
+                  },
+                  validatorsSetting: {
+                      [validatorName]: {
+                          liveEnable: true,
+                          shouldLockNotValidWrite
+                      }
+                  }
               },
-              validatorSettings = {
-                  liveEnable: true,
-                  shouldLockNotValidWrite: true
-              },
-              hookData = getHookData(newValue, validatorName, validateRules, validatorSettings),
+              {controlName, initFormData: form} = getInitFormDataSingleControl(currentControl),
+              currentControlData:CurrentControlData = {currentControl, controlName, formName: form.formSettings.formName, controlIndex: null, formIndex: null},
+              hookData = getHookData({...currentControlData, form, newValue}),
               {errorData} = validateWrittenData(hookData),
               expectedResult: ValidatorErrorProps = {
-                  ...defaultErrorData,
-                  message,
+                  ...defaultLiveValidatorErrorData,
                   hasError: true,
-                  shouldLockNotValidWrite: true,
+                  shouldLockNotValidWrite,
+                  message
               }
-              
+
         expect(errorData).toEqual(expectedResult)
     });
 
@@ -330,17 +333,26 @@ describe('written validator return right error data', () => {
               limit = 5,
               message = 'longer than limit',
               validatorName = 'maxLength',
-              validateRules = {
-                  message,
-                  limit
+              currentControl:ControlProps = {
+                  type: 'text',
+                  validateRules: {
+                      [validatorName]: {
+                          message,
+                          limit
+                      }
+                  },
+                  validatorsSetting: {
+                      [validatorName]: {
+                          liveEnable: true
+                      }
+                  }
               },
-              validatorSettings = {
-                  liveEnable: true
-              },
-              hookData = getHookData(newValue, validatorName, validateRules, validatorSettings),
+              {controlName, initFormData: form} = getInitFormDataSingleControl(currentControl),
+              currentControlData:CurrentControlData = {currentControl, controlName, formName: form.formSettings.formName, controlIndex: null, formIndex: null},
+              hookData = getHookData({...currentControlData, form, newValue}),
               {errorData} = validateWrittenData(hookData),
               expectedResult: ValidatorErrorProps = {
-                  ...defaultErrorData,
+                  ...defaultLiveValidatorErrorData,
                   hasError: false
               }
 
@@ -350,42 +362,50 @@ describe('written validator return right error data', () => {
     test('setLiveValidatorResult written validator result to common error object', () => {
 
         const newValue = 2,
-            limit = 5,
-            message = 'less than limit',
-            validatorName = 'minValue',
-            validateRules = {
-                limit,
-                message
-            },
-            validatorSettings = {
-                liveEnable: true
-            },
-            hookData = getHookData(newValue, validatorName, validateRules, validatorSettings),
-            controlOutputData: ControlOutputDataProps<typeof newValue> = {
-                writeToControlValue: newValue,
-                errorDataForControl: null,
-                hasAnyError: false,
-                isWriteInputEnable: true
-            },
-            expectedResult: ControlOutputDataProps<typeof newValue> = {
-                writeToControlValue: 2,
-                errorDataForControl: {
-                    hasError: true,
-                    shouldLockNotValidWrite: false,
-                    message: 'less than limit',
-                    limit: 5,
-                    showLiveErrorAfterFirstSubmit: false,
-                    hideErrorTimeout: null,
-                    showErrorTimeout: null
-                },
-                hasAnyError: true,
-                isWriteInputEnable: true
-            }
-            
+              limit = 5,
+              message = 'less than limit',
+              validatorName = 'minValue',
+              currentControl:ControlProps = {
+                  type: 'text',
+                  validateRules: {
+                      [validatorName]: {
+                          message,
+                          limit
+                      }
+                  },
+                  validatorsSetting: {
+                      [validatorName]: {
+                          liveEnable: true
+                      }
+                  }
+              },
+              {controlName, initFormData: form} = getInitFormDataSingleControl(currentControl),
+              currentControlData:CurrentControlData = {currentControl, controlName, formName: form.formSettings.formName, controlIndex: null, formIndex: null},
+              hookData = getHookData({...currentControlData, form, newValue}),
+              controlOutputData: ControlOutputDataProps<typeof newValue> = {
+                  writeToControlValue: newValue,
+                  errorDataForControl: null,
+                  hasAnyError: false,
+                  isWriteInputEnable: true
+              },
+              {errorData} = validateWrittenData(hookData),
+              expectedErrorDataForControl: ValidatorErrorProps = {
+                  ...defaultLiveValidatorErrorData,
+                  hasError: true,
+                  message,
+                  limit
+              },
+              expectedResult: ControlOutputDataProps<typeof newValue> = {
+                  writeToControlValue: newValue,
+                  errorDataForControl: expectedErrorDataForControl,
+                  hasAnyError: true,
+                  isWriteInputEnable: true
+              }
+
         setLiveValidatorResult(validateWrittenData, hookData, controlOutputData)
 
         expect(controlOutputData).toEqual(expectedResult)
     });
-    
+
 })
 
