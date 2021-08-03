@@ -59,7 +59,7 @@ export const useFlukyForm: UseFlukyForm = (controls, customFormConfig) => {
 
     const formParams: FormParamsProps = {
             loaded: false,
-            triedSubmit: false,
+            isFormTriedSubmit: false,
             isSubmitBtnLocked: false,
             errorList: [],
             commonError: ''

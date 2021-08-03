@@ -1,6 +1,9 @@
-import {ShouldLockSubmitBtnByControl} from "./types"
+import {formCycle} from '@control-utils/controls-cycle'
+import {defaultStaticValidator} from '@validators/static-validator'
+import {setSubmitBtnValidatorResult} from './helpers/set-lock-submit-validator-result'
 
 import {CurrentControlData, HookProps} from "@common-types"
+import {ShouldLockSubmitBtnByControl, LockSubmitBtnErrorData, ShouldLockSubmitBtnByForm} from "./types"
 
 
 /**
@@ -15,70 +18,30 @@ import {CurrentControlData, HookProps} from "@common-types"
  */
 export const shouldLockSubmitBtnByControl:ShouldLockSubmitBtnByControl = (currentControlData, form) => {
 
-    //Определить тип блокирования кнопки
-    let lockSubmitBtnEvent = form.formSettings.lockSubmitBtnEvent,
-        shouldLockSubmitBtn = false,
-        {currentControl} = currentControlData
 
-    //дополнительный валидатор кнопки
-    const additionalLockSubmitBtnValidator = currentControl.additionalLockSubmitBtnValidator || form.formSettings.additionalLockSubmitBtnValidator || null
+    const {currentControl} = currentControlData,
+          hookData: HookProps = {...currentControlData, newValue: currentControl.value, selectedValue: null, form},
+          lockSubmitValidator = currentControl.customLockSubmitBtnValidator || form.formSettings.customLockSubmitBtnValidator || defaultStaticValidator,
+          additionalLockSubmitBtnValidator = currentControl.additionalLockSubmitBtnValidator || form.formSettings.additionalLockSubmitBtnValidator || null,
+          hasLockSubmitBtnValidator = typeof lockSubmitValidator === "function",
+          hasAdditionalLockSubmitBtnValidator = typeof hasLockSubmitBtnValidator === "function",
+          errorData:LockSubmitBtnErrorData = {shouldLockSubmitBtn: false}
 
+    if (hasLockSubmitBtnValidator) setSubmitBtnValidatorResult(lockSubmitValidator, hookData, errorData, true)
 
-    //Данные для хуков
-    const hookData: HookProps = {...currentControlData, newValue: currentControl.value, selectedValue: null, form}
+    if (hasAdditionalLockSubmitBtnValidator) setSubmitBtnValidatorResult(additionalLockSubmitBtnValidator, hookData, errorData)
 
-    //Валидатор на обязательные поля
-    if (lockSubmitBtnEvent === 'required-empty') {
-
-
-        if (control.validateRules && control.validateRules.required) {
-
-            if(control.value === '' || Array.isArray(control.value) && control.value.length === 0) {
-                shouldLockSubmitBtn = true
-            }
-
-        }
-
-    }
-
-    //Валидатор блокирующий по функциям
-    if (lockSubmitBtnEvent === 'lock-validator-has-error') {
-        //Взять любой из слоев валидатора кнопки
-        const lockSubmitValidator = control.customLockSubmitBtnValidator || form.formSettings.customLockSubmitBtnValidator || defaultLockSubmitBtnValidator
-
-        //Если контрол не проходит функциональный валидатор - блокируем кнопку
-        if (typeof lockSubmitValidator === 'function') {
-            // shouldLockSubmitBtn = true
-            shouldLockSubmitBtn = lockSubmitValidator(hookData)
-        }
-
-    }
-
-    //Блокировать кнопку, если не прошли дополнительные условия
-    if (typeof additionalLockSubmitBtnValidator === "function") {
-        shouldLockSubmitBtn = additionalLockSubmitBtnValidator(hookData)
-    }
-
-    return shouldLockSubmitBtn
+    return errorData.shouldLockSubmitBtn
 }
 
 /**
  * @description
  * Функция проходит через данные всех контролов, и на их основании определяет нужно ли блокировать кнопку
  *
- * @param {ControlProps} control - Контрол которому добавляют настройки
- * @param {string} controlName - Имя контрола(username or password)
- * @param {FormProps} form - главный объект формы
- * @param {number} formIndex - Индекс формы
- * @param {number} controlIndex - Индекс вложенного контрола
+ * @param {FormProps} form - главный объект формы, содержащий все контролы
  *
  * @returns {boolean}
- *
  */
-export const shouldLockSubmitBtnByForm = (form: FormProps) => {
-
-    //Пройтись циклам по всем контролам, чтоб узнать есть ли в одном из них ошибка
-    const shouldLockSubmitBtn = formCycle(form, shouldLockSubmitBtnByControl)
-
-    return shouldLockSubmitBtn
+export const shouldLockSubmitBtnByForm:ShouldLockSubmitBtnByForm = (form) => {
+    return formCycle(form, shouldLockSubmitBtnByControl)
 }

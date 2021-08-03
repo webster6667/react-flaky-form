@@ -1,4 +1,4 @@
-import {GetValidatorResult} from "./types"
+import {SetLiveValidatorResult} from "./types"
 
 import {LiveValidator, HookProps, ControlOutputDataProps} from "@common-types"
 
@@ -12,7 +12,7 @@ import {LiveValidator, HookProps, ControlOutputDataProps} from "@common-types"
  *
  * @returns {void}
  */
-export const setLiveValidatorResult:GetValidatorResult = (validator, hookProps, controlOutputData) => {
+export const setLiveValidatorResult:SetLiveValidatorResult = (validator, hookProps, controlOutputData) => {
     const {errorData = null, modifiedValueToWrite = null} = validator(hookProps),
           {shouldLockNotValidWrite, hasError} = errorData
 

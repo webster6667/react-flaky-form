@@ -175,7 +175,17 @@ export interface ValidatorErrorProps {
     /**
      * Блокировать ли ввод значения не прошедшее валидацию
      */
-    shouldLockNotValidWrite: boolean,
+    shouldLockNotValidWrite?: boolean,
+
+    /**
+     * Тригер определяющий блокировать ли кнопку отправки если текущий контрол не валиден
+     */
+    shouldLockSubmitBtnWhenControlInvalid?: boolean,
+
+    /**
+     * Блокировать ли кнопку отправки(нужно для валидатора блокировки кнопки)
+     */
+    shouldLockSubmitBtn?: boolean,
 
     /**
      * Сообщение об ошибке
@@ -201,6 +211,8 @@ export interface ValidatorErrorProps {
      * Через сколько ошибка исчезает
      */
     hideErrorTimeout?: number | null
+
+    [key: string]: any
 }
 
 /**
@@ -258,9 +270,11 @@ export interface ValidatorsRulesList {
  */
 export type LiveValidator = (hookData: HookProps) => {modifiedValueToWrite?: string | number | null, errorData: ValidatorErrorProps}
 
-export interface SubmitValidatorProps {
-    (hookData: HookProps):{hasError: boolean, errorData?: ValidatorErrorProps}
-}
+/**
+ * @description
+ * Типизация функции статического валидатора
+ */
+export type StaticValidator = (hookData: HookProps) => ValidatorErrorProps
 
 
 /**
@@ -269,16 +283,15 @@ export interface SubmitValidatorProps {
  */
 export interface FormConfigProps {
     formName?: string,
-    lockSubmitBtnEvent?: false | 'required-empty' | 'lock-validator-has-error',
 
     formValidatorsSetting?: ValidatorsSettingList,
     action?: FormActions | string,
 
     //кастомный валидатор блокирующий кнопку отправления
-    customLockSubmitBtnValidator?(hookData: HookProps):boolean,
+    customLockSubmitBtnValidator?:StaticValidator,
 
     //Дополнительный валидатор к дефолтному валидатору блокировки кнопки
-    additionalLockSubmitBtnValidator?(hookData: HookProps):boolean,
+    additionalLockSubmitBtnValidator?:StaticValidator,
 
     //Живой валидатор для всех контролов
     customLiveValidator?:LiveValidator,
@@ -299,10 +312,10 @@ export interface FormConfigProps {
     afterChange?(hookData: HookProps): any,
 
     //Кастомный валидатор после отправки формы для каждого контрола
-    customSubmitValidator?:SubmitValidatorProps,
+    customSubmitValidator?:StaticValidator,
 
     //Дополнительный валидатор перед отправкой для всех контролов
-    additionalSubmitValidator?:SubmitValidatorProps,
+    additionalSubmitValidator?:StaticValidator,
 
     //Хуки до и после отправки для каждого контрола
     beforeSubmitValidator?(hookData: HookProps): any,
@@ -502,16 +515,16 @@ export interface ControlProps {
     afterChange?(hookData: HookProps): any,
 
     //Валидаторы после отправки формы
-    customSubmitValidator?:SubmitValidatorProps,
-    additionalSubmitValidator?:SubmitValidatorProps,
+    customSubmitValidator?:StaticValidator,
+    additionalSubmitValidator?:StaticValidator,
 
     //Хуки для валидаторов после отправки
     beforeSubmitValidator?(hookData: HookProps): any,
     afterSubmitValidator?(hookData: HookProps): any,
 
     //Валидатор для блокировки кнопки
-    customLockSubmitBtnValidator?(hookData: HookProps): boolean,
-    additionalLockSubmitBtnValidator?(hookData: HookProps):boolean,
+    customLockSubmitBtnValidator?:StaticValidator,
+    additionalLockSubmitBtnValidator?:StaticValidator,
 
     //Кастомная маска
     customMask?(VMasker, hookData: HookProps): any

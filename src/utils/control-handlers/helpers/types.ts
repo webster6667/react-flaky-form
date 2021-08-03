@@ -1,3 +1,7 @@
-import {LiveValidator, HookProps, ControlOutputDataProps} from "@common-types"
+import {LiveValidator, HookProps, ControlOutputDataProps, LockSubmitValidator} from "@common-types"
 
-export type GetValidatorResult = (validator: LiveValidator, hooksData: HookProps, controlOutputDataProps: ControlOutputDataProps) => void
+import {LockSubmitBtnErrorData} from "./../types"
+
+export type SetLiveValidatorResult = (validator: LiveValidator, hooksData: HookProps, controlOutputDataProps: ControlOutputDataProps) => void
+
+export type SetSubmitBtnValidatorResult = (validator: LockSubmitValidator, hooksData: HookProps, errorData: LockSubmitBtnErrorData, shouldCheckValidatorSettings?: boolean) => void
