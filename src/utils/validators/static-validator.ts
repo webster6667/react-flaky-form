@@ -32,7 +32,6 @@ export const defaultStaticValidator:StaticValidator = (hooksData) => {
             limit: null,
             showLiveErrorAfterFirstSubmit: false,
             hideErrorTimeout: null,
-            showErrorTimeout: null,
             shouldLockSubmitBtnWhenControlInvalid: false,
             shouldLockSubmitBtn: false,
         }

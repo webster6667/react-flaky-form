@@ -9,3 +9,15 @@ export const defaultLiveValidatorErrorData: ValidatorErrorProps  = {
           hideErrorTimeout: null,
           showErrorTimeout: null
 }
+
+export const defaultStaticValidatorErrorData: ValidatorErrorProps  = {
+    hasError: false,
+    shouldLockNotValidWrite: false,
+    message: null,
+    limit: null,
+    showLiveErrorAfterFirstSubmit: false,
+    hideErrorTimeout: null,
+    shouldLockSubmitBtnWhenControlInvalid: false,
+    shouldLockSubmitBtn: false
+}
+
