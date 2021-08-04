@@ -24,7 +24,7 @@ export const shouldLockSubmitBtnByControl:ShouldLockSubmitBtnByControl = (curren
           lockSubmitValidator = currentControl.customLockSubmitBtnValidator || form.formSettings.customLockSubmitBtnValidator || defaultStaticValidator,
           additionalLockSubmitBtnValidator = currentControl.additionalLockSubmitBtnValidator || form.formSettings.additionalLockSubmitBtnValidator || null,
           hasLockSubmitBtnValidator = typeof lockSubmitValidator === "function",
-          hasAdditionalLockSubmitBtnValidator = typeof hasLockSubmitBtnValidator === "function",
+          hasAdditionalLockSubmitBtnValidator = typeof additionalLockSubmitBtnValidator === "function",
           errorData:LockSubmitBtnErrorData = {shouldLockSubmitBtn: false}
 
     if (hasLockSubmitBtnValidator) setSubmitBtnValidatorResult(lockSubmitValidator, hookData, errorData, true)

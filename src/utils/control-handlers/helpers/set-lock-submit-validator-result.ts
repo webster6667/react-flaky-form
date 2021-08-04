@@ -17,10 +17,14 @@ import {StaticValidator, HookProps} from "@common-types"
 export const setSubmitBtnValidatorResult:SetSubmitBtnValidatorResult = (validator, hookProps, errorData, shouldCheckValidatorSettings = false) => {
     const {hasError = false, shouldLockSubmitBtn = false} = validator(hookProps)
 
-    if (hasError && shouldCheckValidatorSettings && shouldLockSubmitBtn) {
-        errorData.shouldLockSubmitBtn = true
-    } else if(hasError) {
-        errorData.shouldLockSubmitBtn = true
+    if (hasError) {
+
+        if (shouldCheckValidatorSettings && shouldLockSubmitBtn) {
+            errorData.shouldLockSubmitBtn = true
+        } else if(shouldCheckValidatorSettings !== true) {
+            errorData.shouldLockSubmitBtn = true
+        }
+
     }
 
 }

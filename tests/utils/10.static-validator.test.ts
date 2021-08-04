@@ -18,7 +18,8 @@ describe('written validator return right error data', () => {
 
         const newValue = 'abc',
               currentControl:ControlProps = {
-                  type: 'text'
+                  type: 'text',
+                  value: newValue,
               },
               {controlName, initFormData: form} = getInitFormDataSingleControl(currentControl),
               currentControlData:CurrentControlData = {currentControl, controlName, formName: form.formSettings.formName, controlIndex: null, formIndex: null},
@@ -40,6 +41,7 @@ describe('written validator return right error data', () => {
               validatorName = 'minValue',
               currentControl:ControlProps = {
                   type: 'text',
+                  value: newValue,
                   validateRules: {
                       [validatorName]: {
                           limit,
@@ -69,6 +71,7 @@ describe('written validator return right error data', () => {
               validatorName = 'maxValue',
               currentControl:ControlProps = {
                   type: 'text',
+                  value: newValue,
                   validateRules: {
                       [validatorName]: {
                           limit,
@@ -98,6 +101,7 @@ describe('written validator return right error data', () => {
             validatorName = 'maxLength',
             currentControl:ControlProps = {
                 type: 'text',
+                value: newValue,
                 validateRules: {
                     [validatorName]: {
                         limit,
@@ -127,6 +131,7 @@ describe('written validator return right error data', () => {
               validatorName = 'minLength',
               currentControl:ControlProps = {
                   type: 'text',
+                  value: newValue,
                   validateRules: {
                       [validatorName]: {
                           limit,
@@ -156,6 +161,7 @@ describe('written validator return right error data', () => {
               validatorName = 'email',
               currentControl:ControlProps = {
                   type: 'text',
+                  value: newValue,
                   validateRules: {
                       [validatorName]: {
                           message
@@ -182,6 +188,7 @@ describe('written validator return right error data', () => {
               validatorName = 'required',
               currentControl:ControlProps = {
                   type: 'text',
+                  value: newValue,
                   validateRules: {
                       [validatorName]: {
                           message
@@ -208,6 +215,7 @@ describe('written validator return right error data', () => {
               validatorName = 'number',
               currentControl:ControlProps = {
                   type: 'text',
+                  value: newValue,
                   validateRules: {
                       [validatorName]: {
                           message
