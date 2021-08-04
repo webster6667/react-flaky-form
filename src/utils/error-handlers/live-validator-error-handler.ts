@@ -3,6 +3,8 @@ import messageLayoutsReplacer from 'message-layouts-replacer';
 import {getControlFromForm} from '@control-utils/get-control-from-form'
 
 import {hideLiveErrorAfterTimeout} from './helpers/hide-live-error-after-timeout'
+import {replaceLayoutSymbols} from './helpers/replace-layout-symbols'
+
 
 import {HookProps, SetFormProps} from "@common-types";
 import {DefaultLiveErrorHandler} from "./types";
@@ -42,25 +44,7 @@ export const defaultLiveErrorHandler:DefaultLiveErrorHandler = (errorDataForCont
          * Заменить шаблонные слова в тексте ошибки, на значения
          */
         if (errorDataForControl) {
-
-            currentControl.error = messageLayoutsReplacer(message, [
-                {
-                    searchLayout: '{limit}',
-                    valueToReplace: limit
-                },
-                {
-                    searchLayout: 'limitForDecline',
-                    valueToReplace: limit
-                },
-                {
-                    searchLayout: '{label}',
-                    valueToReplace: controlLabel
-                },
-                {
-                    searchLayout: '{writeValue}',
-                    valueToReplace: writeToControlValue
-                }
-            ])
+            currentControl.error = replaceLayoutSymbols(message, {limit, controlLabel, writeToControlValue})
         }
 
         /**

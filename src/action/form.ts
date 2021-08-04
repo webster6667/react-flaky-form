@@ -2,10 +2,10 @@ import {AxiosResponse} from "axios";
 
 import {formCycle} from "@control-utils/controls-cycle"
 import {addControlSetting} from '@utils/add-control-setting'
-import {validateControlBeforeSubmit} from './../helpers/vaidate-control-before-submit'
+import {controlsHandlerBeforeSubmit} from '@control-handlers/before-submit-handler'
 
 import {
-    FormConfigProps, FormControls,
+    FormConfigProps,
     FormParamsProps,
     FormProps,
     SetFormProps
@@ -16,10 +16,12 @@ export const submitForm = (setForm:SetFormProps) => {
 
     setForm( (form) => {
         form.formParams.errorList = []
-        form.formParams.triedSubmit = true
+        form.formParams.isFormTriedSubmit = true
 
-        //Провалидировать перед отправкой
-        let isAllControlsValid = formCycle(form, validateControlBeforeSubmit)
+        /**
+         * Про валидироват все контролы перед отправкой
+         */
+        let isAllControlsValid = formCycle(form, controlsHandlerBeforeSubmit)
 
         if (isAllControlsValid) {
             
@@ -30,16 +32,23 @@ export const submitForm = (setForm:SetFormProps) => {
                     axios.post(initAction).then((data) => {
                         const {status} = data
 
-                        //Хук успешной отправки
+                        /**
+                         * Хук успешной отправки
+                         */
                         if (status === 200 && typeof afterSuccessSubmit === "function") {
                             afterSuccessSubmit(data)
                         }
 
-                        //Хук не успешной отправки
+                        /**
+                         * Хук не успешной отправки
+                         */
                         if (status === 500 && typeof afterErrorSubmit === "function") {
                             afterErrorSubmit(data)
                         }
 
+                        /**
+                         * Хук после любой отправки
+                         */
                         if (typeof afterSubmit === "function") {
                             afterSubmit(data)
                         }
@@ -47,11 +56,16 @@ export const submitForm = (setForm:SetFormProps) => {
                     }).catch((data) => {
                         const {status} = data
 
-                        //Хук не успешной отправки
+                        /**
+                         * Хук не успешной отправки
+                         */
                         if (status === 500 && typeof afterErrorSubmit === "function") {
                             afterErrorSubmit(data)
                         }
 
+                        /**
+                         * Хук после любой отправки
+                         */
                         if (typeof afterSubmit === "function") {
                             afterSubmit(data)
                         }

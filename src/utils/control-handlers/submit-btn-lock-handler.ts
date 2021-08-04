@@ -1,6 +1,6 @@
 import {formCycle} from '@control-utils/controls-cycle'
 import {defaultStaticValidator} from '@validators/static-validator'
-import {setSubmitBtnValidatorResult} from './helpers/set-lock-submit-validator-result'
+import {setLockSubmitBtnValidatorResult} from './helpers/set-lock-submit-validator-result'
 
 import {CurrentControlData, HookProps} from "@common-types"
 import {ShouldLockSubmitBtnByControl, LockSubmitBtnErrorData, ShouldLockSubmitBtnByForm} from "./types"
@@ -27,9 +27,15 @@ export const shouldLockSubmitBtnByControl:ShouldLockSubmitBtnByControl = (curren
           hasAdditionalLockSubmitBtnValidator = typeof additionalLockSubmitBtnValidator === "function",
           errorData:LockSubmitBtnErrorData = {shouldLockSubmitBtn: false}
 
-    if (hasLockSubmitBtnValidator) setSubmitBtnValidatorResult(lockSubmitValidator, hookData, errorData, true)
+    /**
+     * Запуск валидатора по правилам
+     */
+    if (hasLockSubmitBtnValidator) setLockSubmitBtnValidatorResult(lockSubmitValidator, hookData, errorData, true)
 
-    if (hasAdditionalLockSubmitBtnValidator) setSubmitBtnValidatorResult(additionalLockSubmitBtnValidator, hookData, errorData)
+    /**
+     * Запуск дополнительного валидатора
+     */
+    if (hasAdditionalLockSubmitBtnValidator) setLockSubmitBtnValidatorResult(additionalLockSubmitBtnValidator, hookData, errorData)
 
     return errorData.shouldLockSubmitBtn
 }

@@ -20,8 +20,20 @@ export type LiveInputHandler = (currentControl: ControlProps, form: FormProps, h
  */
 export type LiveValidatorShowErrorHandler = (errorDataForControl: ValidatorErrorProps, hooksData: HookProps, form: FormProps, setForm: SetFormProps, prevShowErrorTimeoutId: null | ReturnType<typeof setTimeout>, ms: number) => null | ReturnType<typeof setTimeout>
 
+/**
+ * @description
+ * Обработчик всех контролов перед отправкой на сервер
+ */
+export type ControlsHandlerBeforeSubmit = (currentControlData: CurrentControlData, form: FormProps) => boolean
+
 export type ShouldLockSubmitBtnByControl = (currentControlData: CurrentControlData, form: FormProps) => boolean
 
 export type ShouldLockSubmitBtnByForm = (form: FormProps) => boolean
 
 export type LockSubmitBtnErrorData = {shouldLockSubmitBtn: boolean}
+
+export type BeforeSubmitErrorData = {
+    isControlBeforeSubmitValidationSuccess: boolean,
+    errorDataForControl: ValidatorErrorProps,
+    hasControlError: boolean
+}

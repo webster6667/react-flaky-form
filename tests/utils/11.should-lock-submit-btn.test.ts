@@ -1,10 +1,8 @@
 import {shouldLockSubmitBtnByControl} from '@control-handlers/submit-btn-lock-handler'
 import {getInitFormDataSingleControl} from "@mock-functions/get-initialized-full-form";
-import {getHookData} from "@mock-functions/get-hook-data";
 
 import {ControlProps, CurrentControlData} from "@common-types";
-import {defaultStaticValidator} from "@validators/static-validator";
-import {LockSubmitBtnErrorData} from "@control-handlers/types";
+
 
 describe('set-lock-submit-validator-result find, should lock submit btn', () => {
 

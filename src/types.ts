@@ -327,6 +327,8 @@ export interface FormConfigProps {
     afterSubmit?(axiosResponse: AxiosResponse): any
 }
 
+type errorListProps = {[key: string]: string} | {[key: string]: string}[]
+
 /**
  * @description
  * Внутренние параметры состояния формы
@@ -350,7 +352,7 @@ export interface FormParamsProps {
     /**
      * Список ошибок со всех контролов для каждой формы
      */
-    errorList?: {[key: string]: string}[] | {[key: string]: string}[][],
+    errorList?: errorListProps[],
 
     /**
      * Общая ошибка для всей формы

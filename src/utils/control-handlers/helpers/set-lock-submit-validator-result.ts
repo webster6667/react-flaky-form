@@ -1,4 +1,4 @@
-import {SetSubmitBtnValidatorResult} from "./types"
+import {SetLockSubmitBtnValidatorResult} from "./types"
 import {LockSubmitBtnErrorData} from "./../types"
 
 import {StaticValidator, HookProps} from "@common-types"
@@ -14,7 +14,7 @@ import {StaticValidator, HookProps} from "@common-types"
  *
  * @returns {void}
  */
-export const setSubmitBtnValidatorResult:SetSubmitBtnValidatorResult = (validator, hookProps, errorData, shouldCheckValidatorSettings = false) => {
+export const setLockSubmitBtnValidatorResult:SetLockSubmitBtnValidatorResult = (validator, hookProps, errorData, shouldCheckValidatorSettings = false) => {
     const {hasError = false, shouldLockSubmitBtn = false} = validator(hookProps)
 
     if (hasError) {
