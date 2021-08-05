@@ -1,4 +1,4 @@
-import * as VMasker from "vanilla-masker";
+import {mask} from "@validators/helpers/mask";
 import {maskWriteValue} from '@validators/mask-validator'
 import {validateWrittenData} from '@validators/written-live-validator'
 import {validateClickedData} from '@validators/clicked-live-validator'
@@ -83,7 +83,7 @@ export const liveInputHandler: LiveInputHandler = (currentControl, form, hooksDa
      * Инпут с кастомной маской
      */
     if (hasCustomMask) {
-        customMask(VMasker, hooksData)
+        customMask(mask, hooksData)
     } else if (hasMask && !Array.isArray(newValue)) {
         /**
          * Инпут с обычной маской

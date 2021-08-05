@@ -1,5 +1,5 @@
 {
-  "name": "MYLIBNAME",
+  "name": "react-fluky-form",
   "version": "0.0.1",
   "description": "Description",
   "main": "dist/index.cjs.js",
@@ -15,6 +15,7 @@
     "build:esm": "cross-env NODE_ENV=esm rollup -c",
     "build:cjs": "cross-env NODE_ENV=cjs rollup -c",
     "build:theme": "lessc-each src/theme  dist/theme",
+    "build:dev": "cross-env NODE_ENV=esm rollup -c --watch && build:types",
     "dev:run": "ts-node src/utils/validators/helpers/unmask.ts"
   },
   "repository": {
@@ -68,8 +69,7 @@
     "debounce-wrapper": "^1.0.6",
     "get-array-sum": "^1.0.1",
     "message-layouts-replacer": "^1.1.3",
-    "simple-input-validators": "^1.2.0",
-    "vanilla-masker": "^1.2.0"
+    "simple-input-validators": "^1.2.0"
   },
   "homepage": "https://github.com/webster6667/MYLIBNAME#readme"
 }

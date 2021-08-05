@@ -8,7 +8,7 @@ import {DEFAULT_FORM_SETTINGS, FORM_NAME} from "@const";
 import {combineValidatorsSettingsLayers} from '@add-control-props-layers/add-validators-settings-layers'
 
 import {initFlukyForm, submitFlukyFormHandler} from '@utils/form-actions'
-import {addControlExample, removeControlFromListByIndex, addFormExample, removeFormByIndex} from './action/dynamic-form'
+import {addControlExample, removeControlFromListByIndex, addFormExample, removeFormByIndex} from '@utils/dynamic-form-actions'
 
 import {
     FormConfigProps,
@@ -35,7 +35,7 @@ import './style.less'
  * @returns {[FormProps, any]} контролы с нужными настройками, функцию для изменения состояния формы
  *
  */
-export const useFlukyForm: UseFlukyForm = (controls, customFormConfig) => {
+const useFlukyForm: UseFlukyForm = (controls, customFormConfig) => {
 
     const formParams: FormParamsProps = {
             loaded: false,
@@ -81,7 +81,7 @@ export const useFlukyForm: UseFlukyForm = (controls, customFormConfig) => {
 
 }
 
-export const FlukyForm:FlukyFormComponent = ({
+const FlukyForm:FlukyFormComponent = ({
                                        children,
                                        className = 'form',
                                        id = null,
@@ -111,40 +111,18 @@ export const FlukyForm:FlukyFormComponent = ({
 }
 
 
-export const AddFormExample:AddFormExampleComponent = ({setForm, value = 'Добавить форму', children}) => {
+const AddFormExample:AddFormExampleComponent = ({setForm, value = 'Добавить форму', children}) => {
 
-    const clickHandler = (e) => {
-
-        //Добавить экземпляр формы
-        addFormExample(setForm)
-
-        // setForm((form:FormProps) => {
-        //
-        //     //Добавить собственно сгенерируемую форму
-        //     // let newFormControls: ControlsProps = {password: {
-        //     //             type:  'password',
-        //     //             label: 'Мароль',
-        //     //             validateRules: {
-        //     //                 minLength: {value: 2, message: 'Мало'}
-        //     //             }
-        //     // }}
-        //     //
-        //     // addNewForm(form, setForm, newFormControls)
-        //
-        // })
-
-    }
+    const clickHandler = (e) => addFormExample(setForm)
 
     return <div className={'add-form-clone'} onClick={clickHandler} >
         {value ? value : children}
     </div>
 }
 
-export const RemoveForm:RemoveFormComponent = ({setForm, formIndex, value, children}) => {
+const RemoveForm:RemoveFormComponent = ({setForm, formIndex, value, children}) => {
 
-    const clickHandler = (e) => {
-        removeFormByIndex(formIndex, setForm)
-    }
+    const clickHandler = (e) => removeFormByIndex(formIndex, setForm)
 
     return <div className={'remove-form-clone'} onClick={clickHandler} >
         {value ? value : children}
@@ -152,37 +130,8 @@ export const RemoveForm:RemoveFormComponent = ({setForm, formIndex, value, child
 
 }
 
-export const AddControlExample:AddControlComponent = ({setForm, controlName, formIndex = null}) => {
-
-
-    const clickHandler = (e) => {
-
-        // //Новый контрол в список
-        // const newControlToList: ControlProps = {
-        //     type: "text",
-        //     label: 'бузер',
-        //     validateRules: {
-        //         maxLength: {value: 5, message: 'Многовато'},
-        //         required: {message: 'обязательно'}
-        //     }
-        // }
-
-        // addNewControlToControlList(setForm, controlName, formIndex, newControlToList)
-
-        //Экземпляр контрола в список
-        addControlExample(setForm, controlName, formIndex)
-        
-
-        //Новый контрол в форму (нужно как-то во вью вывести)
-        // addNewControlToForm(setForm, 'newCont', {
-        //     type: "text",
-        //     label: 'Юзер',
-        //     validateRules: {
-        //         maxLength: {value: 2, message: 'Многовато'},
-        //         required: {message: 'обязательно'}
-        //     },
-        // }, 0)
-    }
+const AddControlExample:AddControlComponent = ({setForm, controlName, formIndex = null}) => {
+    const clickHandler = (e) => addControlExample(setForm, controlName, formIndex)
 
     return <div className={'add-form-clone'} onClick={clickHandler} >
         + c
@@ -190,11 +139,9 @@ export const AddControlExample:AddControlComponent = ({setForm, controlName, for
 
 }
 
-export const RemoveControl:RemoveControlComponent = ({setForm, controlName, controlIndex, formIndex = null}) => {
+const RemoveControl:RemoveControlComponent = ({setForm, controlName, controlIndex, formIndex = null}) => {
 
-    const clickHandler = (e) => {
-        removeControlFromListByIndex(setForm, controlName, formIndex, controlIndex)
-    }
+    const clickHandler = (e) => removeControlFromListByIndex(setForm, controlName, formIndex, controlIndex)
 
     return <div className={'remove-control'} onClick={clickHandler} >
         - c
@@ -203,3 +150,4 @@ export const RemoveControl:RemoveControlComponent = ({setForm, controlName, cont
 }
 
 
+export default FlukyForm

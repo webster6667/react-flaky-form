@@ -1,5 +1,6 @@
-import * as VMasker from "vanilla-masker";
+import {mask} from "./helpers/mask";
 import {unmask} from "./helpers/unmask";
+
 
 import {MaskSettingProps, ControlProps} from "@common-types";
 
@@ -56,7 +57,7 @@ export const maskWriteValue:MaskWriteValue = (maskSetting, currentControl, write
      * 2.Для сравнения введенного значения с длинной маски
      */
     if (hasControlMaskWithPlaceholderInSettings) {
-        currentControl.maskSetting._maskWithPlaceholder = VMasker.toPattern('', {pattern, placeholder: placeholder || '_'})
+        currentControl.maskSetting._maskWithPlaceholder = mask('', {pattern, placeholder: placeholder || '_'})
     }
 
 
@@ -73,7 +74,7 @@ export const maskWriteValue:MaskWriteValue = (maskSetting, currentControl, write
      * 4.Длинна значения с натянутой масской
      * 5.Равно ли значения инпута маске(valueAfterMask === +7(___)-___-__-__))
      */
-    let valueAfterMask = VMasker.toPattern(clearValue, {pattern, placeholder}),
+    let valueAfterMask = mask(clearValue, {pattern, placeholder}),
         hasError = false,
         maskWithPlaceholder = currentControl.maskSetting._maskWithPlaceholder,
         isInputValueEqualMaskWithPlaceholder = valueAfterMask === maskWithPlaceholder,
