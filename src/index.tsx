@@ -7,17 +7,21 @@ import {DEFAULT_FORM_SETTINGS, FORM_NAME} from "@const";
 
 import {combineValidatorsSettingsLayers} from '@add-control-props-layers/add-validators-settings-layers'
 
-import {initActiveForm, submitForm} from './action/form'
+import {initFlukyForm, submitFlukyFormHandler} from '@utils/form-actions'
 import {addControlExample, removeControlFromListByIndex, addFormExample, removeFormByIndex} from './action/dynamic-form'
 
 import {
     FormConfigProps,
     FormParamsProps,
     ControlsProps,
-    ActiveFormProps,
     FormProps,
     UseFlukyForm,
-} from "./types"
+    FlukyFormComponent,
+    AddFormExampleComponent,
+    RemoveFormComponent,
+    AddControlComponent,
+    RemoveControlComponent
+} from "@common-types"
 
 import './style.less'
 
@@ -30,30 +34,6 @@ import './style.less'
  * @param {FormConfigProps} customFormConfig - объект с настройками поведения формы, передаваемый с наружи(хуки, тип валидации и тд)
  * @returns {[FormProps, any]} контролы с нужными настройками, функцию для изменения состояния формы
  *
- * @example
- * const customFormConfig = {
- *      lockSubmitBtnEvent: false,
- *      action: '/api/multi-form',
- *      formName: 'SingleForm',
- *      afterErrorSubmit: (data) => {
- *          console.log('хук после отправки ошибки',data)
- *      }
- * }
- *
- * let [myForm, setMyForm] = useFlukyForm({
- *  username: {
- *       type: "text",
- *       label: 'Имя пользователя',
- *       beforeSubmitValidatorError: () => {
- *         console.log('До ошибки')
- *       },
- *       validateRules: {
- *           maxLength: {limit: 8, message: 'максимум {limit} [символ, символа, символов]'},
- *           minLength: {limit: 2, message: 'минимум {limit} [символ, символа, символов]'},
- *           required: {message: '{label} обязательное поле'}
- *       }
- *  }
- * }, customFormConfig)
  */
 export const useFlukyForm: UseFlukyForm = (controls, customFormConfig) => {
 
@@ -89,7 +69,7 @@ export const useFlukyForm: UseFlukyForm = (controls, customFormConfig) => {
 
 
                 setForm((form) => {
-                    initActiveForm(form, apiResponse, customFormConfig, formParams, setForm)
+                    initFlukyForm(form, apiResponse, customFormConfig, formParams, setForm)
                 })
 
             })();
@@ -101,20 +81,20 @@ export const useFlukyForm: UseFlukyForm = (controls, customFormConfig) => {
 
 }
 
-export function ActiveForm({
+export const FlukyForm:FlukyFormComponent = ({
                                        children,
                                        className = 'form',
                                        id = null,
                                        action = null,
                                        formState,
                                        setForm
-                                   }:ActiveFormProps) {
+                                   }) => {
 
        const {loaded} = formState.formParams,
              {formName: currentFormName} = formState.formSettings,
              submitHandler = (e) => {
                 e.preventDefault()
-                 submitForm(setForm)
+                submitFlukyFormHandler(setForm)
              }
 
     return (<form
@@ -131,26 +111,7 @@ export function ActiveForm({
 }
 
 
-interface AddControlButtonProps {
-    setForm: any,
-    controlName: string,
-    formIndex?: null | number,
-}
-
-interface AddFormButtonProps {
-    setForm: any,
-    value?: string,
-    children?: any
-}
-
-interface RemoveFormButtonProps {
-    setForm: any,
-    formIndex: number,
-    value?: string,
-    children?: any
-}
-
-export function AddFormExample({setForm, value = 'Добавить форму', children}:AddFormButtonProps) {
+export const AddFormExample:AddFormExampleComponent = ({setForm, value = 'Добавить форму', children}) => {
 
     const clickHandler = (e) => {
 
@@ -179,7 +140,7 @@ export function AddFormExample({setForm, value = 'Добавить форму', 
     </div>
 }
 
-export function RemoveForm({setForm, formIndex, value, children}:RemoveFormButtonProps) {
+export const RemoveForm:RemoveFormComponent = ({setForm, formIndex, value, children}) => {
 
     const clickHandler = (e) => {
         removeFormByIndex(formIndex, setForm)
@@ -191,7 +152,7 @@ export function RemoveForm({setForm, formIndex, value, children}:RemoveFormButto
 
 }
 
-export function AddControlExample({setForm, controlName, formIndex = null}:AddControlButtonProps) {
+export const AddControlExample:AddControlComponent = ({setForm, controlName, formIndex = null}) => {
 
 
     const clickHandler = (e) => {
@@ -229,7 +190,7 @@ export function AddControlExample({setForm, controlName, formIndex = null}:AddCo
 
 }
 
-export function RemoveControl({setForm, controlName, controlIndex, formIndex = null}) {
+export const RemoveControl:RemoveControlComponent = ({setForm, controlName, controlIndex, formIndex = null}) => {
 
     const clickHandler = (e) => {
         removeControlFromListByIndex(setForm, controlName, formIndex, controlIndex)

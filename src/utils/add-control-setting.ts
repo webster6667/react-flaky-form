@@ -62,7 +62,7 @@ export const addControlSetting: AddControlSetting = (currentControlData, form, s
         /**
          * Проверить при инициализации контрола, блокировать ли кнопку
          */
-        form.formParams.isSubmitBtnLocked = shouldLockSubmitBtnByControl(currentControlData ,form)
+        form.formParams.isSubmitBtnLocked = shouldLockSubmitBtnByControl(currentControlData, form)
     }
 
 

@@ -1,3 +1,5 @@
+import {isMultiControl, isSingletonControl} from '@control-utils/is-multi'
+
 import {ControlProps, ControlsProps} from "@common-types";
 import {AddControlExample} from "./types"
 
@@ -15,17 +17,13 @@ import {AddControlExample} from "./types"
  */
 export const addControlExample:AddControlExample = (controlsExampleList, {controlIndex, controlName, currentControl}) => {
 
-    const isGroupControl = controlIndex === 0,
-          isSingleControl = controlIndex === null
-
-
     /**
      * Сделать экземпляр первого элемента, вложенного контрола
      */
-    if (isGroupControl) controlsExampleList[controlName] = [{...currentControl}]
+    if (isMultiControl(controlIndex)) controlsExampleList[controlName] = [{...currentControl}]
 
     /**
      * Сделать экземпляр одиночного контрола
      */
-    if (isSingleControl) controlsExampleList[controlName] = {...currentControl}
+    if (isSingletonControl(controlIndex)) controlsExampleList[controlName] = {...currentControl}
 }

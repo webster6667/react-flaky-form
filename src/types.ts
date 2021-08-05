@@ -1,4 +1,5 @@
-import {AxiosResponse} from "axios";
+import React from 'react'
+import {AxiosResponse} from 'axios'
 
 let inputTypes: 'phone' | 'number' | 'text' | 'password' | 'radio' | 'checkbox' | 'select' | 'date'
 let eventWhenPlaceholderVisible: 'always' | 'hover' | 'focus' | 'write'
@@ -551,9 +552,10 @@ export interface FormProps<T = FormControls> {
     controlsExample?: ControlsProps
 }
 
-
-//Тип компонента activeForm
-export interface ActiveFormProps {
+/**
+ * Параметры компонента формы
+ */
+type FlukyFormProps = {
     className?: string,
     children: any,
     id?: string,
@@ -561,6 +563,11 @@ export interface ActiveFormProps {
     formState: FormProps,
     setForm: SetFormProps
 }
+
+/**
+ * Компонент формы
+ */
+export type FlukyFormComponent = (flukyFormProps:FlukyFormProps) => React.ReactElement
 
 /**
  * Отдельный контрол который может быть и одиночным и мульти контролом
@@ -582,4 +589,61 @@ export type SetFormProps = (setFormFunc: (form: FormProps) => any) => any
  */
 export type UseFlukyForm = <T extends ControlsProps[] | ControlsProps>(controls: T extends ControlsProps[] ? ControlsProps[] : ControlsProps, customFormConfig: FormConfigProps) => [FormProps<T extends ControlsProps[] ? ControlsProps[] : ControlsProps>, SetFormProps]
 
+/**
+ * Параметры компонента добавления формы
+ */
+type AddFormExampleProps = {
+    setForm: SetFormProps,
+    value?: string,
+    children?: any
+}
 
+/**
+ * Компонент добавления формы
+ */
+export type AddFormExampleComponent = (addFormExampleProps:AddFormExampleProps) => void
+
+
+/**
+ * Параметры компонента удаления формы
+ */
+type RemoveFormProps = {
+    setForm: SetFormProps,
+    formIndex: number | null,
+    value?: string,
+    children?: any
+}
+
+/**
+ * Компонент удаления формы
+ */
+export type RemoveFormComponent = (removeFormButtonProps:RemoveFormProps) => void
+
+/**
+ * Параметры компонента добавления экземпляра контрола
+ */
+type AddControlProps = {
+    setForm: SetFormProps,
+    controlName: string,
+    formIndex?: null | number,
+}
+
+/**
+ * Компонент добавления экземпляра контрола
+ */
+export type AddControlComponent = (AddControlProps:AddControlProps) => void
+
+/**
+ * Параметры компонента удаления экземпляра контрола
+ */
+type RemoveControlProps = {
+    setForm: SetFormProps,
+    controlName: string,
+    controlIndex: null | number,
+    formIndex: null | number
+}
+
+/**
+ * Компонент удаления экземпляра контрола
+ */
+export type RemoveControlComponent = (AddControlProps:RemoveControlProps) => void

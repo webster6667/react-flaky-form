@@ -2,7 +2,7 @@ import {formCycle} from '@control-utils/controls-cycle'
 import {defaultStaticValidator} from '@validators/static-validator'
 import {setLockSubmitBtnValidatorResult} from './helpers/set-lock-submit-validator-result'
 
-import {CurrentControlData, HookProps} from "@common-types"
+import {CurrentControlData, FormProps, HookProps} from "@common-types"
 import {ShouldLockSubmitBtnByControl, LockSubmitBtnErrorData, ShouldLockSubmitBtnByForm} from "./types"
 
 
