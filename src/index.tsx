@@ -150,4 +150,4 @@ const RemoveControl:RemoveControlComponent = ({setForm, controlName, controlInde
 }
 
 
-export default FlukyForm
+export  {FlukyForm, useFlukyForm, AddFormExample, RemoveForm, AddControlExample, RemoveControl}
