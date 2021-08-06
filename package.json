@@ -1,20 +1,19 @@
 {
   "name": "react-fluky-form",
   "version": "0.0.1",
-  "description": "Description",
+  "description": "test",
   "main": "dist/index.cjs.js",
   "types": "dist/index.d.ts",
-  "typings": "dist/index.d.ts",
   "module": "dist/index.esm.js",
   "scripts": {
     "test": "jest",
     "clean": "rimraf dist",
     "prebuild": "run-s clean",
-    "build": "run-s build:prod build:theme build:docs",
+    "build": "run-s build:prod",
     "build:docs": "jsdoc2md --template ./README.hbs --files ./src/*.tsx --configure ./jsdoc2md.json > ./README.md",
     "build:theme": "lessc-each src/theme  dist/theme",
     "build:prod": "cross-env NODE_ENV=prod rollup -c",
-    "build:dev": "cross-env NODE_ENV=dev rollup -c ",
+    "build:dev": "cross-env NODE_ENV=dev rollup -c --watch",
     "dev:run": "ts-node src/utils/validators/helpers/unmask.ts"
   },
   "repository": {

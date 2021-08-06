@@ -113,7 +113,7 @@ export const combineValidatorsSettingsLayers:CombineValidatorsSettingsLayers = (
     Object.keys(combineLayer).forEach(validatorName => {
 
         const validator = bottomLayer[validatorName],
-              newValidatorLayer = upperLayer[validatorName]
+              newValidatorLayer = upperLayer ? upperLayer[validatorName] : {}
 
         combineLayer[validatorName] = {...validator, ...newValidatorLayer}
     })

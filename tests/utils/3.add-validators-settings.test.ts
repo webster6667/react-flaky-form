@@ -106,6 +106,20 @@ test('function return combine validators layer, and not change original objects'
     expect(combinedValidatorSettingsLayer).toEqual(expectedValidatorSettingsLayer)
 })
 
+test('function return first setting layer, if first layer is empty', () => {
+
+    let validatorsSettings = {...DEFAULT_FORM_SETTINGS.formValidatorsSetting},
+        customFormConfig = {},
+        expectedValidatorSettingsLayer = {
+            ...validatorsSettings
+        }
+
+
+    const combinedValidatorSettingsLayer = combineValidatorsSettingsLayers(validatorsSettings, customFormConfig)
+
+    expect(combinedValidatorSettingsLayer).toEqual(expectedValidatorSettingsLayer)
+})
+
 describe('function add all validator settings layers to selected control', () => {
 
     test('function added first default settings layer', () => {

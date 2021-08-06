@@ -11,7 +11,6 @@ export const SingleForm = () => {
             }
         },
         {
-            lockSubmitBtnEvent: false,
             action: '/api/multi-form',
             formName: 'SingleForm'
         })
