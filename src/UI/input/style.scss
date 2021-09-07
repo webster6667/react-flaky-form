@@ -1,0 +1,109 @@
+$sixth-color: silver;
+$radius_md: 10px;
+$third-text-color: black;
+$error-color: red;
+
+.entry-field {
+  position: relative;
+  //.y-offset-extra-small(bottom);
+  
+
+
+  &__input {
+    width: 100%;
+    padding: 25px 20px 9px;
+
+    font-size: 16px;
+    color: #000;
+
+    background-color: $sixth-color;
+    border-radius: $radius_md;
+    border: none;
+
+    &:focus {
+        outline: none;
+    }
+    
+    &:focus + label, &[data-is-not-empty='true'] + label {
+      transform: scale(1) translateY(-20px);
+    }
+
+  }
+  
+  &__label {
+    //.transform-center(y,'scale(1.333)');
+    left: 20px;
+
+    cursor: text;
+    color: $third-text-color;
+    font-size: 14px;
+
+    transform-origin: left center;
+    transition: transform .3s;
+  }
+
+  &__error {
+    position: absolute;
+    top: 8px;
+    right: 20px;
+
+    margin: 0;
+
+    font-size: 12px;
+    line-height: 14px;
+
+    color: $error-color;
+    cursor: text;
+
+    opacity: 0;
+    transition: opacity 0.5s 0s ease;
+    
+    &_animate-enter-active, &_animate-enter-done {
+      opacity: 1;
+    }
+    
+  }
+
+  &__password-switch {
+    position: absolute;
+    right: 20px;
+    //.transform-center(y);
+
+    $size: 30px;
+    width: $size;
+    height: $size;
+
+    cursor: pointer;
+    //background: url("./img/eye.svg");
+
+    &[data-is-password-visible='true']:before {
+      content: '';
+      position: absolute;
+      left: 0;
+      //.transform-center(y,'rotate(-45deg)');
+
+      width: 100%;
+      height: 2px;
+
+      outline: 1px solid $sixth-color;
+      border-radius: 5px;
+      background-color: black;
+    }
+
+  }
+
+}
+
+.remove-control {
+  position: absolute;
+  left: 100%;
+  //.transform-center(y);
+
+  display: inline-flex;
+  width: 40px;
+  margin-left: 10px;
+  padding: 10px;
+
+  background-color: silver;
+  border-radius: 5px;
+}

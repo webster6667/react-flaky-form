@@ -1,4 +1,3 @@
-/// <reference types="node" />
 /// <reference types="react" />
 import React from "react";
 import { AxiosResponse } from "axios";
@@ -349,7 +348,7 @@ interface FormProps<T = FormControls> {
 /**
  * Параметры компонента формы
  */
-type FlukyFormProps = {
+type FlakyFormProps = {
     className?: string;
     children: any;
     id?: string;
@@ -360,7 +359,7 @@ type FlukyFormProps = {
 /**
  * Компонент формы
  */
-type FlukyFormComponent = (flukyFormProps: FlukyFormProps) => React.ReactElement;
+type FlakyFormComponent = (flakyFormProps: FlakyFormProps) => React.ReactElement;
 /**
  * Список всех контролов включая мульти формы и мульти контролы
  */
@@ -372,7 +371,7 @@ type SetFormProps = (setFormFunc: (form: FormProps) => any) => any;
 /**
  * Хук инициализации
  */
-type UseFlukyForm = <T extends ControlsProps[] | ControlsProps>(controls: T extends ControlsProps[] ? ControlsProps[] : ControlsProps, customFormConfig: FormConfigProps) => [
+type UseFlakyForm = <T extends ControlsProps[] | ControlsProps>(controls: T extends ControlsProps[] ? ControlsProps[] : ControlsProps, customFormConfig: FormConfigProps) => [
     FormProps<T extends ControlsProps[] ? ControlsProps[] : ControlsProps>,
     SetFormProps
 ];
@@ -426,6 +425,47 @@ type RemoveControlProps = {
  * Компонент удаления экземпляра контрола
  */
 type RemoveControlComponent = (AddControlProps: RemoveControlProps) => void;
+interface InputElementsClassNameProps {
+    input: string;
+    label: string;
+    error: string;
+}
+interface BemComponent {
+    className?: string;
+    children?: any;
+}
+interface FlakyInputProps extends BemComponent {
+    elementsClassName?: InputElementsClassNameProps;
+    type?: typeof inputTypes;
+    havePasswordVisibleSwitch?: boolean;
+    label?: string;
+    error?: string;
+    placeholder?: string | null;
+    hasError?: boolean;
+    inputName?: string | null;
+    value?: string | number | null | any[];
+    setValue?: any;
+    togglePasswordVisibility?: any;
+    labelProps?: {
+        [key: string]: string;
+    };
+    errorProps?: {
+        [key: string]: string;
+    };
+    inputProps?: {
+        [key: string]: string;
+    };
+    style?: {
+        [key: string]: string;
+    };
+    index?: null | number;
+    formIndex?: null | number;
+    inputMask?: null | MaskSettingProps;
+    customMask?: any;
+    [key: string]: any;
+}
+type FlakyInputComponent = (props: FlakyInputProps) => any;
+declare const FlakyInput: FlakyInputComponent;
 /**
  * @description
  * Хук инициализации формы
@@ -435,10 +475,10 @@ type RemoveControlComponent = (AddControlProps: RemoveControlProps) => void;
  * @returns {[FormProps, any]} контролы с нужными настройками, функцию для изменения состояния формы
  *
  */
-declare const useFlukyForm: UseFlukyForm;
-declare const FlukyForm: FlukyFormComponent;
+declare const useFlakyForm: UseFlakyForm;
+declare const FlakyForm: FlakyFormComponent;
 declare const AddFormExample: AddFormExampleComponent;
 declare const RemoveForm: RemoveFormComponent;
 declare const AddControlExample: AddControlComponent;
 declare const RemoveControl: RemoveControlComponent;
-export { FlukyForm, useFlukyForm, AddFormExample, RemoveForm, AddControlExample, RemoveControl };
+export { FlakyForm, FlakyInput, useFlakyForm, AddFormExample, RemoveForm, AddControlExample, RemoveControl };

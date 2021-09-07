@@ -38,7 +38,7 @@ describe('function create control example', () => {
               ],
               expectedExampleList: ControlsProps = {
                   [controlName]: [
-                      multiControl[0]
+                      multiControl[1]
                   ]
               }
 

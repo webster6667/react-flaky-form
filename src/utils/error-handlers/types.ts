@@ -1,10 +1,10 @@
-import {ValidatorErrorProps, HookProps, SetFormProps} from "@common-types"
+import {ValidatorErrorProps, HookProps, SetFormProps, FormProps} from "@common-types"
 
 /**
  * @description
  * Дефолтный обработчик живых ошибок
  */
-export type DefaultLiveErrorHandler = (errorDataForControl: ValidatorErrorProps, hooksData: HookProps, setForm: SetFormProps) => void
+export type DefaultLiveErrorHandler = (errorDataForControl: ValidatorErrorProps, hooksData: HookProps, form: FormProps, setForm: SetFormProps) => void
 
 /**
  * @description

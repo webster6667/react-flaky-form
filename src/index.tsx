@@ -10,20 +10,20 @@ import {combineValidatorsSettingsLayers} from '@add-control-props-layers/add-val
 import {initFlukyForm, submitFlukyFormHandler} from '@utils/form-actions'
 import {addControlExample, removeControlFromListByIndex, addFormExample, removeFormByIndex} from '@utils/dynamic-form-actions'
 
+import {FlakyInput} from '@UI/input'
+
 import {
     FormConfigProps,
     FormParamsProps,
     ControlsProps,
     FormProps,
-    UseFlukyForm,
-    FlukyFormComponent,
+    UseFlakyForm,
+    FlakyFormComponent,
     AddFormExampleComponent,
     RemoveFormComponent,
     AddControlComponent,
     RemoveControlComponent
 } from "@common-types"
-
-import './style.less'
 
 
 /**
@@ -35,7 +35,7 @@ import './style.less'
  * @returns {[FormProps, any]} контролы с нужными настройками, функцию для изменения состояния формы
  *
  */
-const useFlukyForm: UseFlukyForm = (controls, customFormConfig) => {
+const useFlakyForm: UseFlakyForm = (controls, customFormConfig) => {
 
     const formParams: FormParamsProps = {
             loaded: false,
@@ -81,7 +81,7 @@ const useFlukyForm: UseFlukyForm = (controls, customFormConfig) => {
 
 }
 
-const FlukyForm:FlukyFormComponent = ({
+const FlakyForm:FlakyFormComponent = ({
                                        children,
                                        className = 'form',
                                        id = null,
@@ -150,4 +150,4 @@ const RemoveControl:RemoveControlComponent = ({setForm, controlName, controlInde
 }
 
 
-export  {FlukyForm, useFlukyForm, AddFormExample, RemoveForm, AddControlExample, RemoveControl}
+export  {FlakyForm, FlakyInput, useFlakyForm, AddFormExample, RemoveForm, AddControlExample, RemoveControl}

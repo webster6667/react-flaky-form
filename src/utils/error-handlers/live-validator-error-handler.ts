@@ -1,12 +1,10 @@
-import messageLayoutsReplacer from 'message-layouts-replacer';
-
 import {getControlFromForm} from '@control-utils/get-control-from-form'
 
 import {hideLiveErrorAfterTimeout} from './helpers/hide-live-error-after-timeout'
 import {replaceLayoutSymbols} from './helpers/replace-layout-symbols'
 
 
-import {HookProps, SetFormProps} from "@common-types";
+import {HookProps, SetFormProps, FormProps} from "@common-types";
 import {DefaultLiveErrorHandler} from "./types";
 
 /**
@@ -15,61 +13,57 @@ import {DefaultLiveErrorHandler} from "./types";
  *
  * @param {ValidatorErrorProps} errorDataForControl - Результат работы живого валидатора(текст ошибки, данные когда и как показыавть ошибку)
  * @param {HookProps} hooksData - Данные хука
+ * @param {FormProps} form - Глобальный объект формы
  * @param {SetFormProps} setForm - Функция изменяющая глобальный объект формы
  *
  * @returns {void}
  *
  */
-export const defaultLiveErrorHandler:DefaultLiveErrorHandler = (errorDataForControl, hooksData, setForm) => {
+export const defaultLiveErrorHandler:DefaultLiveErrorHandler = (errorDataForControl, hooksData, form, setForm) => {
 
 
-    setForm((form) => {
+    const {controlName, formIndex, controlIndex, newValue: writeToControlValue} = hooksData,
+        currentControl = getControlFromForm(form, controlName, formIndex, controlIndex),
+        {label: controlLabel} = currentControl,
+        {message = null, limit = null, hideErrorTimeout = null} = errorDataForControl || {},
+        beforeError = currentControl.beforeLiveValidatorError || form.formSettings.beforeLiveValidatorError || null,
+        afterError = currentControl.afterLiveValidatorError || form.formSettings.afterLiveValidatorError || null
 
-        
-        const {controlName, formIndex, controlIndex, newValue: writeToControlValue} = hooksData,
-              currentControl = getControlFromForm(form, controlName, formIndex, controlIndex),
-              {label: controlLabel} = currentControl,
-              {message = null, limit = null, hideErrorTimeout = null} = errorDataForControl || {},
-              beforeError = currentControl.beforeLiveValidatorError || form.formSettings.beforeLiveValidatorError || null,
-              afterError = currentControl.afterLiveValidatorError || form.formSettings.afterLiveValidatorError || null
+    /**
+     * Хук перед всплытием ошибки
+     */
+    if (typeof beforeError === "function") {
+        beforeError(hooksData)
+    }
 
-        /**
-         * Хук перед всплытием ошибки
-         */
-        if (typeof beforeError === "function") {
-            beforeError(hooksData)
-        }
+    /**
+     * Заменить шаблонные слова в тексте ошибки, на значения
+     */
+    if (errorDataForControl) {
+        currentControl.error = replaceLayoutSymbols(message, {limit, controlLabel, writeToControlValue})
+    }
 
-        /**
-         * Заменить шаблонные слова в тексте ошибки, на значения
-         */
-        if (errorDataForControl) {
-            currentControl.error = replaceLayoutSymbols(message, {limit, controlLabel, writeToControlValue})
-        }
-
-        /**
-         * Отобразить ошибку
-         */
-        currentControl.hasError = true
+    /**
+     * Отобразить ошибку
+     */
+    currentControl.hasError = true
 
 
-        /**
-         * Скрыть ошибку через таймаут если его указали
-         */
-        if (hideErrorTimeout) {
-            const hideErrorTimeoutId = hideLiveErrorAfterTimeout(hooksData, setForm, hideErrorTimeout)
+    /**
+     * Скрыть ошибку через таймаут если его указали
+     */
+    if (hideErrorTimeout) {
+        const hideErrorTimeoutId = hideLiveErrorAfterTimeout(hooksData, setForm, hideErrorTimeout)
 
-            currentControl._hideErrorTimeoutId = hideErrorTimeoutId
-        }
+        currentControl._hideErrorTimeoutId = hideErrorTimeoutId
+    }
 
-        /**
-         * Хук после всплытием ошибки
-         */
-        if (typeof afterError === "function") {
-            afterError(hooksData)
-        }
-
-    })
+    /**
+     * Хук после всплытием ошибки
+     */
+    if (typeof afterError === "function") {
+        afterError(hooksData)
+    }
 
 
 

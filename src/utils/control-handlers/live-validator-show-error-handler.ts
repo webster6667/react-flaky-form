@@ -25,12 +25,14 @@ export const liveValidatorShowErrorHandler:LiveValidatorShowErrorHandler = (erro
     //@todo: Добавить кастомные обработчики живых ошибок form.customLiveErrorHandler || control.customLiveErrorHandler
     //@todo: Добавить additionalLiveErrorHandler
 
-    const errorHandler = defaultLiveErrorHandler,
+    const shouldUseDebounce = Boolean(ms),
+          errorHandler = shouldUseDebounce ? () => setForm((form) => {defaultLiveErrorHandler(errorDataForControl, hooksData, form, setForm)}) : () => defaultLiveErrorHandler(errorDataForControl, hooksData, form, setForm),
           callShowError = debounce(errorHandler, ms),
-          {hasError} = errorDataForControl,
-          shouldUseDebounce = ms
+          {hasError} = errorDataForControl
 
     let currentShowErrorTimeoutId = null
+
+
 
     /**
      * Обработать ошибку с дебаунсом или нет
@@ -43,7 +45,7 @@ export const liveValidatorShowErrorHandler:LiveValidatorShowErrorHandler = (erro
          */
         if (hasError) {
             clearTimeout(prevShowErrorTimeoutId)
-            currentShowErrorTimeoutId = callShowError(errorDataForControl, hooksData, setForm)
+            currentShowErrorTimeoutId = callShowError()
         } else if(prevShowErrorTimeoutId) {
             clearTimeout(prevShowErrorTimeoutId)
         }
@@ -51,7 +53,7 @@ export const liveValidatorShowErrorHandler:LiveValidatorShowErrorHandler = (erro
     } else {
 
         if (hasError) {
-            errorHandler(errorDataForControl, hooksData, setForm)
+            errorHandler()
         }
 
     }

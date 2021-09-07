@@ -1,7 +1,7 @@
 import React from 'react'
 import {AxiosResponse} from 'axios'
 
-let inputTypes: 'phone' | 'number' | 'text' | 'password' | 'radio' | 'checkbox' | 'select' | 'date'
+export let inputTypes: 'phone' | 'number' | 'text' | 'password' | 'radio' | 'checkbox' | 'select' | 'date'
 let eventWhenPlaceholderVisible: 'always' | 'hover' | 'focus' | 'write'
 export let inputEvents: 'change' | 'mouseover' | 'mouseleave' | 'focus' | 'blur' | null
 
@@ -555,7 +555,7 @@ export interface FormProps<T = FormControls> {
 /**
  * Параметры компонента формы
  */
-type FlukyFormProps = {
+type FlakyFormProps = {
     className?: string,
     children: any,
     id?: string,
@@ -567,7 +567,7 @@ type FlukyFormProps = {
 /**
  * Компонент формы
  */
-export type FlukyFormComponent = (flukyFormProps:FlukyFormProps) => React.ReactElement
+export type FlakyFormComponent = (flakyFormProps:FlakyFormProps) => React.ReactElement
 
 /**
  * Отдельный контрол который может быть и одиночным и мульти контролом
@@ -587,7 +587,7 @@ export type SetFormProps = (setFormFunc: (form: FormProps) => any) => any
 /**
  * Хук инициализации
  */
-export type UseFlukyForm = <T extends ControlsProps[] | ControlsProps>(controls: T extends ControlsProps[] ? ControlsProps[] : ControlsProps, customFormConfig: FormConfigProps) => [FormProps<T extends ControlsProps[] ? ControlsProps[] : ControlsProps>, SetFormProps]
+export type UseFlakyForm = <T extends ControlsProps[] | ControlsProps>(controls: T extends ControlsProps[] ? ControlsProps[] : ControlsProps, customFormConfig: FormConfigProps) => [FormProps<T extends ControlsProps[] ? ControlsProps[] : ControlsProps>, SetFormProps]
 
 /**
  * Параметры компонента добавления формы

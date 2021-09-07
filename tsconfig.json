@@ -26,6 +26,7 @@
     "strictNullChecks": false,
     "paths": {
       "@src/*": ["src/*"],
+      "@UI/*": ["src/UI/*"],
       "@const": ["src/const"],
       "@common-types": ["src/types.ts"],
       "@utils/*": ["src/utils/*"],
