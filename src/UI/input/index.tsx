@@ -27,7 +27,7 @@ export const FlakyInput:FlakyInputComponent = ({
                           setValue = () => {console.error('(Input-component) add handler to prop: setValue');},
                           controlIndex = null,
                           formIndex = null,
-                          inputMask = null,
+                          maskSetting = null,
                           togglePasswordVisibility = () => console.log('password visibility switch is empty')
                       }) => {
 
@@ -39,12 +39,14 @@ export const FlakyInput:FlakyInputComponent = ({
           labelClasses = elementClassesConcat(block(), 'label', {}, ''),
           errorClasses = elementClassesConcat(block(), 'error', {}, ''),
 
-          hasMask = inputMask && inputMask.eventWhenPlaceholderVisible !== 'write' && inputMask.eventWhenPlaceholderVisible,
+          hasMask = maskSetting && maskSetting.eventWhenPlaceholderVisible !== 'write' && maskSetting.eventWhenPlaceholderVisible,
           passwordClasses = elementClassesConcat(block(), 'password-switch', {}, ''),
           wrapperClickHandler = (e) => {
+          
               let target = e.target,
-                  {element} = target.dataset,
+                  {element} = target.dataset || {},
                   $input = target.closest(`[data-element="input-wrapper"]`).querySelector('input')
+
 
               if (element === 'mask-input') {
 
@@ -54,9 +56,9 @@ export const FlakyInput:FlakyInputComponent = ({
 
           },
           setCaretForMask = () => {
-              let clearValue = inputMask.clearValue,
-                  clearValueLength = clearValue ? inputMask.clearValue.length : 0,
-                  symbolForSearch = clearValueLength > 0 ? clearValue[clearValueLength - 1] : inputMask.eventWhenPlaceholderVisible,
+              let clearValue = maskSetting.clearValue,
+                  clearValueLength = clearValue ? maskSetting.clearValue.length : 0,
+                  symbolForSearch = clearValueLength > 0 ? clearValue[clearValueLength - 1] : maskSetting.eventWhenPlaceholderVisible,
                   caretIndex = clearValueLength > 0 ? +String(value).lastIndexOf(symbolForSearch) + 1 : +String(value).indexOf(symbolForSearch)
 
               if (~caretIndex) {
@@ -76,24 +78,25 @@ export const FlakyInput:FlakyInputComponent = ({
           },
           hoverHandler = (e) => {
 
-              if (inputMask && inputMask.eventWhenPlaceholderVisible === "hover") {
+              if (hasMask && maskSetting.eventWhenPlaceholderVisible === "hover") {
                   setValue(value, controlIndex, formIndex, e.type)
               }
 
           },
           mouseLeaveHandler = (e) => {
-              if (inputMask && inputMask.eventWhenPlaceholderVisible === "hover") {
+              if (hasMask && maskSetting.eventWhenPlaceholderVisible === "hover") {
                   setValue(value, controlIndex, formIndex, e.type)
               }
           },
           focusHandler = (e) => {
-              if (inputMask && inputMask.eventWhenPlaceholderVisible !== "write") {
+
+              if (hasMask && maskSetting.eventWhenPlaceholderVisible !== "write") {
                   setValue(value, controlIndex, formIndex, e.type)
               }
           },
           blurHandler = (e) => {
 
-              if (inputMask && inputMask.eventWhenPlaceholderVisible !== "always" && inputMask.eventWhenPlaceholderVisible !== "write") {
+              if (hasMask && maskSetting.eventWhenPlaceholderVisible !== "always" && maskSetting.eventWhenPlaceholderVisible !== "write") {
                   setValue(value, controlIndex, formIndex, e.type)
               }
 

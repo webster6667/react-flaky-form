@@ -1,7 +1,9 @@
-import React, {useEffect} from 'react';
+import 'element-closest-polyfill';
+
+import React, {useEffect, useState} from 'react';
 
 import axios from 'axios'
-import {useImmer} from 'use-immer';
+// import {useImmer} from 'use-immer'
 
 import {DEFAULT_FORM_SETTINGS, FORM_NAME} from "@const";
 
@@ -45,7 +47,7 @@ const useFlakyForm: UseFlakyForm = (controls, customFormConfig) => {
             commonError: ''
           },
           formValidatorsSetting = combineValidatorsSettingsLayers(DEFAULT_FORM_SETTINGS.formValidatorsSetting, customFormConfig.formValidatorsSetting),
-          [flukyForm, setForm] = useImmer<FormProps<typeof controls>>({
+          [flukyForm, setForm] = useState<FormProps<typeof controls>>({
               controls,
               formParams,
               formSettings: {
@@ -68,8 +70,12 @@ const useFlakyForm: UseFlakyForm = (controls, customFormConfig) => {
                       apiResponse = initAction ? await axios.post(initAction) : null
 
 
-                setForm((form) => {
+                setForm((prevForm) => {
+                    const form = {...prevForm}
+
                     initFlukyForm(form, apiResponse, customFormConfig, formParams, setForm)
+
+                    return form
                 })
 
             })();

@@ -11,6 +11,7 @@ import {addValidatorsSettingsLayerToSingleControl} from "@add-control-props-laye
 
 import {addControlHandler} from "@utils/add-control-handler"
 import {shouldLockSubmitBtnByControl} from '@control-handlers/submit-btn-lock-handler'
+import {maskWriteValue} from "@validators/mask-validator";
 
 /**
  * @description
@@ -25,7 +26,9 @@ import {shouldLockSubmitBtnByControl} from '@control-handlers/submit-btn-lock-ha
 export const addControlSetting: AddControlSetting = (currentControlData, form, setForm) => {
 
     const {currentControl, controlName} = currentControlData,
-          {type = null} = currentControl,
+          inputMask = currentControl.maskSetting || null,
+          hasMask = inputMask,
+          {type = null, value} = currentControl,
           controlsExampleList = form.controlsExample
 
 
@@ -53,6 +56,15 @@ export const addControlSetting: AddControlSetting = (currentControlData, form, s
             eventType = null,
             selectedValue = null
         ) => addControlHandler(newValue, controlName, controlIndex, formIndex, setForm, eventType, selectedValue)
+
+        /**
+         * Поставить маску на инпут изначально, если маска должна быть всегда видима
+         */
+        if (hasMask && !Array.isArray(value)) {
+            const shouldShowInputMaskAlways = inputMask.eventWhenPlaceholderVisible === "always"
+            if (shouldShowInputMaskAlways) maskWriteValue(inputMask, currentControl, value, 'focus')
+        }
+
 
         /**
          * Записать экземпляр контрола

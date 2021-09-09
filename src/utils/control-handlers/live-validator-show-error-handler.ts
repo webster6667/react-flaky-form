@@ -26,7 +26,13 @@ export const liveValidatorShowErrorHandler:LiveValidatorShowErrorHandler = (erro
     //@todo: Добавить additionalLiveErrorHandler
 
     const shouldUseDebounce = Boolean(ms),
-          errorHandler = shouldUseDebounce ? () => setForm((form) => {defaultLiveErrorHandler(errorDataForControl, hooksData, form, setForm)}) : () => defaultLiveErrorHandler(errorDataForControl, hooksData, form, setForm),
+          errorHandler = shouldUseDebounce
+              ? () => setForm((prevForm) => {
+                  form = {...prevForm}
+                  defaultLiveErrorHandler(errorDataForControl, hooksData, form, setForm)
+                  return form
+              })
+              : () => defaultLiveErrorHandler(errorDataForControl, hooksData, form, setForm),
           callShowError = debounce(errorHandler, ms),
           {hasError} = errorDataForControl
 

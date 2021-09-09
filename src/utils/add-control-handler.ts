@@ -38,7 +38,9 @@ export const addControlHandler:AddControlHandler = (
 
         //@todo: async/await хуки, добавить снаружи от setForm, и все сделать async
 
-        setForm((form) => {
+        setForm((prevForm) => {
+            const form = {...prevForm}
+
 
             /**
              * 1.Получить контрол на который будет повешен обработчик
@@ -84,6 +86,8 @@ export const addControlHandler:AddControlHandler = (
              * Блокировать ли кнопку отправки
              */
             form.formParams.isSubmitBtnLocked = shouldLockSubmitBtnByForm(form)
+
+            return form
         })
 
 }

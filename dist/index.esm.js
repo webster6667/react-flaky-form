@@ -1,6 +1,5 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import axios from 'axios';
-import { useImmer } from 'use-immer';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
 
@@ -834,9 +833,28 @@ var _regeneratorRuntime = {
   values
 };
 
-function ownKeys$b(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+if (typeof Element !== "undefined") {
+    if (!Element.prototype.matches) {
+        Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
+    }
 
-function _objectSpread$b(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$b(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$b(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+    if (!Element.prototype.closest) {
+        Element.prototype.closest = function (s) {
+            var el = this;
+
+            do {
+                if (el.matches(s)) return el;
+                el = el.parentElement || el.parentNode;
+            } while (el !== null && el.nodeType === 1);
+            
+            return null;
+        };
+    }
+}
+
+function ownKeys$d(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread$d(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$d(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$d(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 var globalObject = global,
     activeFormEnvConfig = globalObject.activeForm ? globalObject.activeForm : {},
@@ -845,11 +863,11 @@ var globalObject = global,
 
 var FORM_NAME = 'form'; //Слои настроек формы (из библиотеки + из global проекта)
 
-var DEFAULT_FORM_SETTINGS = _objectSpread$b(_objectSpread$b({
+var DEFAULT_FORM_SETTINGS = _objectSpread$d(_objectSpread$d({
   action: null,
   formName: FORM_NAME
 }, activeFormEnvConfig), {}, {
-  formValidatorsSetting: _objectSpread$b({
+  formValidatorsSetting: _objectSpread$d({
     minLength: {
       liveEnable: true,
       showLiveErrorAfterFirstSubmit: false,
@@ -902,9 +920,9 @@ var DEFAULT_FORM_SETTINGS = _objectSpread$b(_objectSpread$b({
   }, formValidatorsSetting)
 });
 
-function ownKeys$a(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys$c(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread$a(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$a(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$a(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread$c(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$c(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$c(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 /**
  * @description
@@ -941,12 +959,12 @@ var addValidatorsSettingsLayer = function addValidatorsSettingsLayer(control, va
      */
 
     if (isObject) {
-      controlValidatorsSetting[validatorName] = _objectSpread$a(_objectSpread$a({}, controlValidatorSettings), newValidatorSettingsLayer);
+      controlValidatorsSetting[validatorName] = _objectSpread$c(_objectSpread$c({}, controlValidatorSettings), newValidatorSettingsLayer);
     } else if (isBoolean) {
       /**
        * Если boolean, добавить к текущим настройкам валидатора контрола только включение режима живой валидации
        */
-      controlValidatorsSetting[validatorName] = _objectSpread$a(_objectSpread$a({}, controlValidatorSettings), {}, {
+      controlValidatorsSetting[validatorName] = _objectSpread$c(_objectSpread$c({}, controlValidatorSettings), {}, {
         liveEnable: newValidatorSettingsLayer
       });
     } else {
@@ -1000,12 +1018,12 @@ var addValidatorsSettingsLayerToSingleControl = function addValidatorsSettingsLa
  */
 
 var combineValidatorsSettingsLayers = function combineValidatorsSettingsLayers(bottomLayer, upperLayer) {
-  var combineLayer = _objectSpread$a({}, bottomLayer);
+  var combineLayer = _objectSpread$c({}, bottomLayer);
 
   Object.keys(combineLayer).forEach(function (validatorName) {
     var validator = bottomLayer[validatorName],
         newValidatorLayer = upperLayer ? upperLayer[validatorName] : {};
-    combineLayer[validatorName] = _objectSpread$a(_objectSpread$a({}, validator), newValidatorLayer);
+    combineLayer[validatorName] = _objectSpread$c(_objectSpread$c({}, validator), newValidatorLayer);
   });
   return combineLayer;
 };
@@ -1204,9 +1222,9 @@ var isMultiForm = function isMultiForm(formIndex) {
   return formIndex !== null;
 };
 
-function ownKeys$9(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys$b(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread$9(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$9(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$9(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread$b(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$b(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$b(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 /**
  * @description
  * Функция добавляющая экземпляр контрола(одиночного или вложенного),
@@ -1228,12 +1246,12 @@ var addControlExample$1 = function addControlExample(controlsExampleList, _ref) 
   /**
    * Сделать экземпляр первого элемента, вложенного контрола
    */
-  if (isMultiControl(controlIndex)) controlsExampleList[controlName] = [_objectSpread$9({}, currentControl)];
+  if (isMultiControl(controlIndex)) controlsExampleList[controlName] = [_objectSpread$b({}, currentControl)];
   /**
    * Сделать экземпляр одиночного контрола
    */
 
-  if (isSingletonControl(controlIndex)) controlsExampleList[controlName] = _objectSpread$9({}, currentControl);
+  if (isSingletonControl(controlIndex)) controlsExampleList[controlName] = _objectSpread$b({}, currentControl);
 };
 
 /**
@@ -1510,9 +1528,9 @@ var isLiveValidatorEnable = function isLiveValidatorEnable(controlValidatorsSett
   return controlValidatorsSetting.liveEnable === true;
 };
 
-function ownKeys$8(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys$a(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread$8(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$8(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$8(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread$a(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$a(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$a(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 /**
  * @description
  * Живой валидатор введенных данных в интуп
@@ -1576,7 +1594,7 @@ var validateWrittenData = function validateWrittenData(hooksData) {
        * Live validator for less value limit
        */
       if (isInputNumberValid && u(newValue, minValueRules) && isLiveValidatorEnable(minValueSetting)) {
-        y(errorData, _objectSpread$8(_objectSpread$8(_objectSpread$8({}, minValueRules), minValueSetting), {}, {
+        y(errorData, _objectSpread$a(_objectSpread$a(_objectSpread$a({}, minValueRules), minValueSetting), {}, {
           hasError: hasError
         }));
       }
@@ -1586,7 +1604,7 @@ var validateWrittenData = function validateWrittenData(hooksData) {
 
 
       if (isInputNumberValid && i(newValue, maxValueRules) && isLiveValidatorEnable(maxValueSetting)) {
-        y(errorData, _objectSpread$8(_objectSpread$8(_objectSpread$8({}, maxValueRules), maxValueSetting), {}, {
+        y(errorData, _objectSpread$a(_objectSpread$a(_objectSpread$a({}, maxValueRules), maxValueSetting), {}, {
           hasError: hasError
         }));
       }
@@ -1596,7 +1614,7 @@ var validateWrittenData = function validateWrittenData(hooksData) {
 
 
       if (t(newValue, minLengthRules) && isLiveValidatorEnable(minLengthSetting)) {
-        y(errorData, _objectSpread$8(_objectSpread$8(_objectSpread$8({}, minLengthRules), minLengthSetting), {}, {
+        y(errorData, _objectSpread$a(_objectSpread$a(_objectSpread$a({}, minLengthRules), minLengthSetting), {}, {
           hasError: hasError
         }));
       }
@@ -1606,7 +1624,7 @@ var validateWrittenData = function validateWrittenData(hooksData) {
 
 
       if (o(newValue, maxLengthRules) && isLiveValidatorEnable(maxLengthSetting)) {
-        y(errorData, _objectSpread$8(_objectSpread$8(_objectSpread$8({}, maxLengthRules), maxLengthSetting), {}, {
+        y(errorData, _objectSpread$a(_objectSpread$a(_objectSpread$a({}, maxLengthRules), maxLengthSetting), {}, {
           hasError: hasError
         }));
       }
@@ -1616,7 +1634,7 @@ var validateWrittenData = function validateWrittenData(hooksData) {
 
 
       if (emailRules && a(newValue) && isLiveValidatorEnable(emailSetting)) {
-        y(errorData, _objectSpread$8(_objectSpread$8(_objectSpread$8({}, emailRules), emailSetting), {}, {
+        y(errorData, _objectSpread$a(_objectSpread$a(_objectSpread$a({}, emailRules), emailSetting), {}, {
           hasError: hasError
         }));
       }
@@ -1627,7 +1645,7 @@ var validateWrittenData = function validateWrittenData(hooksData) {
 
 
     if (requiredRules && l(newValue) && isLiveValidatorEnable(requiredSetting)) {
-      y(errorData, _objectSpread$8(_objectSpread$8(_objectSpread$8({}, requiredRules), requiredSetting), {}, {
+      y(errorData, _objectSpread$a(_objectSpread$a(_objectSpread$a({}, requiredRules), requiredSetting), {}, {
         hasError: hasError
       }));
     }
@@ -1637,7 +1655,7 @@ var validateWrittenData = function validateWrittenData(hooksData) {
 
 
     if (numberRules && isInputNumberInvalid) {
-      y(errorData, _objectSpread$8(_objectSpread$8(_objectSpread$8({}, numberRules), numberSetting), {}, {
+      y(errorData, _objectSpread$a(_objectSpread$a(_objectSpread$a({}, numberRules), numberSetting), {}, {
         hasError: hasError
       }));
     }
@@ -1650,9 +1668,9 @@ var validateWrittenData = function validateWrittenData(hooksData) {
 
 function getArraySum(e){var n=arguments.length>1&&void 0!==arguments[1]&&arguments[1],r=e.reduce((function(e,r){return n&&isNaN(+r)?+e:+e+ +r}),0);return r}
 
-function ownKeys$7(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys$9(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread$7(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$7(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$7(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread$9(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$9(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$9(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 /**
  * @description
  * Живой валидатор кликабельных инпутов
@@ -1695,7 +1713,7 @@ var validateClickedData = function validateClickedData(hooksData) {
    */
 
   if (requiredRules && l(newValue) && isLiveValidatorEnable(requiredSetting)) {
-    y(errorData, _objectSpread$7(_objectSpread$7(_objectSpread$7({}, requiredRules), requiredSetting), {}, {
+    y(errorData, _objectSpread$9(_objectSpread$9(_objectSpread$9({}, requiredRules), requiredSetting), {}, {
       hasError: hasError
     }));
   }
@@ -1705,7 +1723,7 @@ var validateClickedData = function validateClickedData(hooksData) {
 
 
   if (minValueRules && shouldValidateArraySumValue && u(newValueArraySum, minValueRules) && isLiveValidatorEnable(minValueSetting)) {
-    y(errorData, _objectSpread$7(_objectSpread$7(_objectSpread$7({}, minValueRules), minValueSetting), {}, {
+    y(errorData, _objectSpread$9(_objectSpread$9(_objectSpread$9({}, minValueRules), minValueSetting), {}, {
       hasError: hasError
     }));
   }
@@ -1715,7 +1733,7 @@ var validateClickedData = function validateClickedData(hooksData) {
 
 
   if (maxValueRules && shouldValidateArraySumValue && i(newValueArraySum, maxValueRules) && isLiveValidatorEnable(maxValueSetting)) {
-    y(errorData, _objectSpread$7(_objectSpread$7(_objectSpread$7({}, maxValueRules), maxValueSetting), {}, {
+    y(errorData, _objectSpread$9(_objectSpread$9(_objectSpread$9({}, maxValueRules), maxValueSetting), {}, {
       hasError: hasError
     }));
   }
@@ -1725,7 +1743,7 @@ var validateClickedData = function validateClickedData(hooksData) {
 
 
   if (minLengthRules && t(newValue, minLengthRules) && isLiveValidatorEnable(minLengthSetting)) {
-    y(errorData, _objectSpread$7(_objectSpread$7(_objectSpread$7({}, minLengthRules), minLengthSetting), {}, {
+    y(errorData, _objectSpread$9(_objectSpread$9(_objectSpread$9({}, minLengthRules), minLengthSetting), {}, {
       hasError: hasError
     }));
   }
@@ -1735,7 +1753,7 @@ var validateClickedData = function validateClickedData(hooksData) {
 
 
   if (maxLengthRules && o(newValue, maxLengthRules) && isLiveValidatorEnable(maxLengthSetting)) {
-    y(errorData, _objectSpread$7(_objectSpread$7(_objectSpread$7({}, maxLengthRules), maxLengthSetting), {}, {
+    y(errorData, _objectSpread$9(_objectSpread$9(_objectSpread$9({}, maxLengthRules), maxLengthSetting), {}, {
       hasError: hasError
     }));
   }
@@ -1881,6 +1899,9 @@ var defaultLiveErrorHandler = function defaultLiveErrorHandler(errorDataForContr
   }
 };
 
+function ownKeys$8(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread$8(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$8(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$8(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 /**
  * @description
  * Функция которая выбирает обработчик ошибки, и обрабатывает его вместе с дебаунсом
@@ -1902,8 +1923,10 @@ var liveValidatorShowErrorHandler = function liveValidatorShowErrorHandler(error
   //@todo: Добавить additionalLiveErrorHandler
   var shouldUseDebounce = Boolean(ms),
       errorHandler = shouldUseDebounce ? function () {
-    return setForm(function (form) {
+    return setForm(function (prevForm) {
+      form = _objectSpread$8({}, prevForm);
       defaultLiveErrorHandler(errorDataForControl, hooksData, form, setForm);
+      return form;
     });
   } : function () {
     return defaultLiveErrorHandler(errorDataForControl, hooksData, form, setForm);
@@ -2105,9 +2128,9 @@ var liveInputHandler = function liveInputHandler(currentControl, form, hooksData
   }
 };
 
-function ownKeys$6(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys$7(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread$6(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$6(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$6(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread$7(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$7(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$7(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 /**
  * @description
  * Функция записывает данные ошибки статического валидатора, и определяет нужно ли блокировать форму отправки
@@ -2121,15 +2144,15 @@ var StaticValidatorErrorHandler = function StaticValidatorErrorHandler(commonErr
   var _propsToUpdate$should = propsToUpdate.shouldLockSubmitBtnWhenControlInvalid,
       shouldLockSubmitBtnWhenControlInvalid = _propsToUpdate$should === void 0 ? false : _propsToUpdate$should,
       shouldLockSubmitBtn = commonErrorData.shouldLockSubmitBtn ? true : shouldLockSubmitBtnWhenControlInvalid;
-  y(commonErrorData, _objectSpread$6(_objectSpread$6({}, propsToUpdate), {}, {
+  y(commonErrorData, _objectSpread$7(_objectSpread$7({}, propsToUpdate), {}, {
     hasError: true,
     shouldLockSubmitBtn: shouldLockSubmitBtn
   }));
 };
 
-function ownKeys$5(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys$6(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread$5(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$5(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$5(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread$6(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$6(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$6(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 var defaultStaticValidator = function defaultStaticValidator(hooksData) {
   /**
    * 1.Получить данные для работы (контрол через который будут проходить данные, вводимое значение, всю форму)
@@ -2183,7 +2206,7 @@ var defaultStaticValidator = function defaultStaticValidator(hooksData) {
        * Validator for less value limit
        */
       if (isInputNumberValid && u(value, minValueRules)) {
-        StaticValidatorErrorHandler(errorData, _objectSpread$5(_objectSpread$5({}, minValueRules), minValueSetting));
+        StaticValidatorErrorHandler(errorData, _objectSpread$6(_objectSpread$6({}, minValueRules), minValueSetting));
       }
       /**
        * Validator for greater limit
@@ -2191,7 +2214,7 @@ var defaultStaticValidator = function defaultStaticValidator(hooksData) {
 
 
       if (isInputNumberValid && i(value, maxValueRules)) {
-        StaticValidatorErrorHandler(errorData, _objectSpread$5(_objectSpread$5({}, maxValueRules), maxValueSetting));
+        StaticValidatorErrorHandler(errorData, _objectSpread$6(_objectSpread$6({}, maxValueRules), maxValueSetting));
       }
       /**
        *Validator for shorter limit
@@ -2199,7 +2222,7 @@ var defaultStaticValidator = function defaultStaticValidator(hooksData) {
 
 
       if (t(value, minLengthRules)) {
-        StaticValidatorErrorHandler(errorData, _objectSpread$5(_objectSpread$5({}, minLengthRules), minLengthSetting));
+        StaticValidatorErrorHandler(errorData, _objectSpread$6(_objectSpread$6({}, minLengthRules), minLengthSetting));
       }
       /**
        * Validator for longer limit
@@ -2207,7 +2230,7 @@ var defaultStaticValidator = function defaultStaticValidator(hooksData) {
 
 
       if (o(value, maxLengthRules)) {
-        StaticValidatorErrorHandler(errorData, _objectSpread$5(_objectSpread$5({}, maxLengthRules), maxLengthSetting));
+        StaticValidatorErrorHandler(errorData, _objectSpread$6(_objectSpread$6({}, maxLengthRules), maxLengthSetting));
       }
       /**
        * Validator for valid email
@@ -2215,7 +2238,7 @@ var defaultStaticValidator = function defaultStaticValidator(hooksData) {
 
 
       if (emailRules && a(value)) {
-        StaticValidatorErrorHandler(errorData, _objectSpread$5(_objectSpread$5({}, emailRules), emailSetting));
+        StaticValidatorErrorHandler(errorData, _objectSpread$6(_objectSpread$6({}, emailRules), emailSetting));
       }
     }
     /**
@@ -2224,7 +2247,7 @@ var defaultStaticValidator = function defaultStaticValidator(hooksData) {
 
 
     if (requiredRules && l(value)) {
-      StaticValidatorErrorHandler(errorData, _objectSpread$5(_objectSpread$5({}, requiredRules), requiredSetting));
+      StaticValidatorErrorHandler(errorData, _objectSpread$6(_objectSpread$6({}, requiredRules), requiredSetting));
     }
     /**
      * Validator for valid number
@@ -2232,7 +2255,7 @@ var defaultStaticValidator = function defaultStaticValidator(hooksData) {
 
 
     if (numberRules && isInputNumberInvalid) {
-      StaticValidatorErrorHandler(errorData, _objectSpread$5(_objectSpread$5({}, numberRules), numberSetting));
+      StaticValidatorErrorHandler(errorData, _objectSpread$6(_objectSpread$6({}, numberRules), numberSetting));
     }
   }
 
@@ -2268,9 +2291,9 @@ var setLockSubmitBtnValidatorResult = function setLockSubmitBtnValidatorResult(v
   }
 };
 
-function ownKeys$4(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys$5(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread$4(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$4(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$4(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread$5(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$5(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$5(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 /**
  * @description
  * Функция проходит через данные контрола, и на их основании определяет блокировать ли кнопку ввода
@@ -2284,7 +2307,7 @@ function _objectSpread$4(target) { for (var i = 1; i < arguments.length; i++) { 
 
 var shouldLockSubmitBtnByControl = function shouldLockSubmitBtnByControl(currentControlData, form) {
   var currentControl = currentControlData.currentControl,
-      hookData = _objectSpread$4(_objectSpread$4({}, currentControlData), {}, {
+      hookData = _objectSpread$5(_objectSpread$5({}, currentControlData), {}, {
     newValue: currentControl.value,
     selectedValue: null,
     form: form
@@ -2322,6 +2345,9 @@ var shouldLockSubmitBtnByForm = function shouldLockSubmitBtnByForm(form) {
   return formCycle(form, shouldLockSubmitBtnByControl);
 };
 
+function ownKeys$4(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread$4(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$4(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$4(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 /**
  * @description
  * Функция добавить обработку входных данных, для всех типов контролов,
@@ -2345,11 +2371,14 @@ var addControlHandler = function addControlHandler(newValue, controlName) {
   var eventType = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : null;
   var selectedValue = arguments.length > 6 ? arguments[6] : undefined;
   //@todo: async/await хуки, добавить снаружи от setForm, и все сделать async
-  setForm(function (form) {
+  setForm(function (prevForm) {
+    var form = _objectSpread$4({}, prevForm);
     /**
      * 1.Получить контрол на который будет повешен обработчик
      * 2.Собрать все данные для хуков обработчика
      */
+
+
     var currentControl = getControlFromForm(form, controlName, formIndex, controlIndex),
         hookData = {
       currentControl: currentControl,
@@ -2399,6 +2428,7 @@ var addControlHandler = function addControlHandler(newValue, controlName) {
 
 
     form.formParams.isSubmitBtnLocked = shouldLockSubmitBtnByForm(form);
+    return form;
   });
 };
 
@@ -2416,8 +2446,11 @@ var addControlHandler = function addControlHandler(newValue, controlName) {
 var addControlSetting = function addControlSetting(currentControlData, form, setForm) {
   var currentControl = currentControlData.currentControl,
       controlName = currentControlData.controlName,
+      inputMask = currentControl.maskSetting || null,
+      hasMask = inputMask,
       _currentControl$type = currentControl.type,
       type = _currentControl$type === void 0 ? null : _currentControl$type,
+      value = currentControl.value,
       controlsExampleList = form.controlsExample;
 
   if (!type) {
@@ -2441,6 +2474,15 @@ var addControlSetting = function addControlSetting(currentControlData, form, set
       var selectedValue = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : null;
       return addControlHandler(newValue, controlName, controlIndex, formIndex, setForm, eventType, selectedValue);
     };
+    /**
+     * Поставить маску на инпут изначально, если маска должна быть всегда видима
+     */
+
+
+    if (hasMask && !Array.isArray(value)) {
+      var shouldShowInputMaskAlways = inputMask.eventWhenPlaceholderVisible === "always";
+      if (shouldShowInputMaskAlways) maskWriteValue(inputMask, currentControl, value, 'focus');
+    }
     /**
      * Записать экземпляр контрола
      */
@@ -4273,8 +4315,8 @@ var FlakyInput = function FlakyInput(_ref) {
       controlIndex = _ref$controlIndex === void 0 ? null : _ref$controlIndex,
       _ref$formIndex = _ref.formIndex,
       formIndex = _ref$formIndex === void 0 ? null : _ref$formIndex,
-      _ref$inputMask = _ref.inputMask,
-      inputMask = _ref$inputMask === void 0 ? null : _ref$inputMask,
+      _ref$maskSetting = _ref.maskSetting,
+      maskSetting = _ref$maskSetting === void 0 ? null : _ref$maskSetting,
       _ref$togglePasswordVi = _ref.togglePasswordVisibility,
       togglePasswordVisibility = _ref$togglePasswordVi === void 0 ? function () {
     return console.log('password visibility switch is empty');
@@ -4286,11 +4328,12 @@ var FlakyInput = function FlakyInput(_ref) {
       inputClasses = elementClassesConcat(block(), 'input', {}, ''),
       labelClasses = elementClassesConcat(block(), 'label', {}, ''),
       errorClasses = elementClassesConcat(block(), 'error', {}, ''),
-      hasMask = inputMask && inputMask.eventWhenPlaceholderVisible !== 'write' && inputMask.eventWhenPlaceholderVisible,
+      hasMask = maskSetting && maskSetting.eventWhenPlaceholderVisible !== 'write' && maskSetting.eventWhenPlaceholderVisible,
       passwordClasses = elementClassesConcat(block(), 'password-switch', {}, ''),
       wrapperClickHandler = function wrapperClickHandler(e) {
     var target = e.target,
-        element = target.dataset.element,
+        _ref2 = target.dataset || {},
+        element = _ref2.element,
         $input = target.closest("[data-element=\"input-wrapper\"]").querySelector('input');
 
     if (element === 'mask-input') ; else {
@@ -4298,9 +4341,9 @@ var FlakyInput = function FlakyInput(_ref) {
     }
   },
       setCaretForMask = function setCaretForMask() {
-    var clearValue = inputMask.clearValue,
-        clearValueLength = clearValue ? inputMask.clearValue.length : 0,
-        symbolForSearch = clearValueLength > 0 ? clearValue[clearValueLength - 1] : inputMask.eventWhenPlaceholderVisible;
+    var clearValue = maskSetting.clearValue,
+        clearValueLength = clearValue ? maskSetting.clearValue.length : 0,
+        symbolForSearch = clearValueLength > 0 ? clearValue[clearValueLength - 1] : maskSetting.eventWhenPlaceholderVisible;
         clearValueLength > 0 ? +String(value).lastIndexOf(symbolForSearch) + 1 : +String(value).indexOf(symbolForSearch);
   },
       clickHandler = function clickHandler(e) {
@@ -4312,22 +4355,22 @@ var FlakyInput = function FlakyInput(_ref) {
     setValue(value, controlIndex, formIndex, e.type);
   },
       hoverHandler = function hoverHandler(e) {
-    if (inputMask && inputMask.eventWhenPlaceholderVisible === "hover") {
+    if (hasMask && maskSetting.eventWhenPlaceholderVisible === "hover") {
       setValue(value, controlIndex, formIndex, e.type);
     }
   },
       mouseLeaveHandler = function mouseLeaveHandler(e) {
-    if (inputMask && inputMask.eventWhenPlaceholderVisible === "hover") {
+    if (hasMask && maskSetting.eventWhenPlaceholderVisible === "hover") {
       setValue(value, controlIndex, formIndex, e.type);
     }
   },
       focusHandler = function focusHandler(e) {
-    if (inputMask && inputMask.eventWhenPlaceholderVisible !== "write") {
+    if (hasMask && maskSetting.eventWhenPlaceholderVisible !== "write") {
       setValue(value, controlIndex, formIndex, e.type);
     }
   },
       blurHandler = function blurHandler(e) {
-    if (inputMask && inputMask.eventWhenPlaceholderVisible !== "always" && inputMask.eventWhenPlaceholderVisible !== "write") {
+    if (hasMask && maskSetting.eventWhenPlaceholderVisible !== "always" && maskSetting.eventWhenPlaceholderVisible !== "write") {
       setValue(value, controlIndex, formIndex, e.type);
     }
   },
@@ -4411,7 +4454,7 @@ var useFlakyForm = function useFlakyForm(controls, customFormConfig) {
     commonError: ''
   },
       formValidatorsSetting = combineValidatorsSettingsLayers(DEFAULT_FORM_SETTINGS.formValidatorsSetting, customFormConfig.formValidatorsSetting),
-      _useImmer = useImmer({
+      _useState = useState({
     controls: controls,
     formParams: formParams,
     formSettings: _objectSpread(_objectSpread(_objectSpread({}, DEFAULT_FORM_SETTINGS), {}, {
@@ -4421,9 +4464,9 @@ var useFlakyForm = function useFlakyForm(controls, customFormConfig) {
     }),
     controlsExample: {}
   }),
-      _useImmer2 = _slicedToArray(_useImmer, 2),
-      flukyForm = _useImmer2[0],
-      setForm = _useImmer2[1];
+      _useState2 = _slicedToArray(_useState, 2),
+      flukyForm = _useState2[0],
+      setForm = _useState2[1];
 
   useEffect(function () {
     (function () {
@@ -4456,8 +4499,11 @@ var useFlakyForm = function useFlakyForm(controls, customFormConfig) {
 
               case 10:
                 apiResponse = _context.t0;
-                setForm(function (form) {
+                setForm(function (prevForm) {
+                  var form = _objectSpread({}, prevForm);
+
                   initFlukyForm(form, apiResponse, customFormConfig, formParams, setForm);
+                  return form;
                 });
 
               case 12:
