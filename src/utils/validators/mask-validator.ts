@@ -66,6 +66,10 @@ export const maskWriteValue:MaskWriteValue = (maskSetting, currentControl, write
      */
     currentControl.maskSetting.clearValue = clearValue
 
+    /**
+     * Записать значение плейсхолдера
+     */
+    currentControl.maskSetting.maskPlaceholder = placeholder
 
     /**
      * 1.Значение после обработки маской

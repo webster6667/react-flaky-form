@@ -460,7 +460,7 @@ interface FlakyInputProps extends BemComponent {
     };
     index?: null | number;
     formIndex?: null | number;
-    inputMask?: null | MaskSettingProps;
+    maskSetting?: null | MaskSettingProps;
     customMask?: any;
     [key: string]: any;
 }

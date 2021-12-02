@@ -29,9 +29,9 @@
   "peerDependencies": {
     "@types/react": "^17.0.1",
     "axios": "^0.21.1",
+    "element-closest-polyfill": "^1.0.4",
     "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "element-closest-polyfill": "^1.0.4"
+    "react-dom": "^17.0.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.3",
@@ -64,6 +64,7 @@
   "dependencies": {
     "@babel/runtime": "^7.14.0",
     "bem-components-connector": "^1.0.5",
+    "caret-positions": "^1.0.1",
     "debounce-wrapper": "^1.0.6",
     "get-array-sum": "^1.0.1",
     "message-layouts-replacer": "^1.1.3",

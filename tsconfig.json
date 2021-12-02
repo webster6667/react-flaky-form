@@ -51,7 +51,7 @@
   "include": [
     "src/**/*",
     "tests/**/*.ts",
-        "node_modules/",
+     "node_modules/"
   ],
   "exclude": [
 //    "node_modules/",

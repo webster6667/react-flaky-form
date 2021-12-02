@@ -1,6 +1,9 @@
-import React, {useEffect, useRef} from "react";
+import React, {useEffect, useRef, useState} from "react";
 
 import {blockClassesConcat, bemClassName, elementClassesConcat} from 'bem-components-connector'
+
+import {setFormElementCaretPosition} from 'caret-positions'
+
 import {CSSTransition, TransitionGroup} from 'react-transition-group'
 
 import {FlakyInputComponent} from "./types"
@@ -31,79 +34,76 @@ export const FlakyInput:FlakyInputComponent = ({
                           togglePasswordVisibility = () => console.log('password visibility switch is empty')
                       }) => {
 
-      let inputRef = useRef(null),
+      let inputRef = useRef<HTMLInputElement>(null),
+          [wasBackspaceClick, setWasBackspaceClick] = useState(false),
+          {current:$input} = inputRef,
 
           block = bemClassName('entry-field'),
           blockClasses = blockClassesConcat(block(), {}, className),
           inputClasses = elementClassesConcat(block(), 'input', {}, ''),
           labelClasses = elementClassesConcat(block(), 'label', {}, ''),
           errorClasses = elementClassesConcat(block(), 'error', {}, ''),
+          errorAnimatePrefix = block('error', {animate: true}),
 
-          hasMask = maskSetting && maskSetting.eventWhenPlaceholderVisible !== 'write' && maskSetting.eventWhenPlaceholderVisible,
+
+          {eventWhenPlaceholderVisible = null, maskPlaceholder, _maskWithPlaceholder} = maskSetting || {},
+          hasMaskWithPlaceholder = eventWhenPlaceholderVisible && eventWhenPlaceholderVisible !== 'write',
+          hasHoverMask = eventWhenPlaceholderVisible === 'hover',
+          hasMaskWithBlur = eventWhenPlaceholderVisible === 'hover' || eventWhenPlaceholderVisible === 'focus',
           passwordClasses = elementClassesConcat(block(), 'password-switch', {}, ''),
-          wrapperClickHandler = (e) => {
-          
-              let target = e.target,
-                  {element} = target.dataset || {},
-                  $input = target.closest(`[data-element="input-wrapper"]`).querySelector('input')
+          setCaretForMask = () => {
 
 
-              if (element === 'mask-input') {
+              if (maskPlaceholder) {
+                  const caretIndex = String(value).indexOf(maskPlaceholder),
+                        caretIndexForBackspace = String(_maskWithPlaceholder).lastIndexOf(maskPlaceholder, caretIndex),
+                        shouldPutCaretForBackspace = caretIndexForBackspace === -1 && wasBackspaceClick && _maskWithPlaceholder[caretIndexForBackspace - 2] === maskPlaceholder,
+                        shouldPutCaretForWrite = caretIndex != -1
 
-              } else {
-                  $input.focus()
+
+
+
+                  if (shouldPutCaretForBackspace) {
+                      setFormElementCaretPosition($input, caretIndexForBackspace - 3)
+                  } else if (shouldPutCaretForWrite) {
+                    setFormElementCaretPosition($input, caretIndex)
+                  }
+
               }
 
           },
-          setCaretForMask = () => {
-              let clearValue = maskSetting.clearValue,
-                  clearValueLength = clearValue ? maskSetting.clearValue.length : 0,
-                  symbolForSearch = clearValueLength > 0 ? clearValue[clearValueLength - 1] : maskSetting.eventWhenPlaceholderVisible,
-                  caretIndex = clearValueLength > 0 ? +String(value).lastIndexOf(symbolForSearch) + 1 : +String(value).indexOf(symbolForSearch)
-
-              if (~caretIndex) {
-                  // setCaret(inputRef.current, caretIndex, caretIndex)
-              }
-
+          wrapperClickHandler = (e) => {
+              if ($input) $input.focus()
           },
           clickHandler = (e) => {
+              if (hasMaskWithPlaceholder) setCaretForMask()
+          },
+          keyDownHandler = (e) => setWasBackspaceClick(() => e.key === 'Backspace'),
+          inputChangeHandler = (e) => {
+              const writeValue = $input.value
 
-              if (hasMask) {
+              setValue(writeValue, controlIndex, formIndex, e.type)
+              setCaretForMask()
+          },
+          hoverHandler = (e) => {
+              if (hasHoverMask) setValue(value, controlIndex, formIndex, e.type)
+          },
+          mouseLeaveHandler = (e) => {
+              if (hasHoverMask) setValue(value, controlIndex, formIndex, e.type)
+          },
+          focusHandler = (e) => {
+
+              if (hasMaskWithPlaceholder) {
+                  setValue(value, controlIndex, formIndex, e.type)
                   setCaretForMask()
               }
 
           },
-          writeInputChange = (e, value) => {
-              setValue(value, controlIndex, formIndex, e.type)
-          },
-          hoverHandler = (e) => {
-
-              if (hasMask && maskSetting.eventWhenPlaceholderVisible === "hover") {
-                  setValue(value, controlIndex, formIndex, e.type)
-              }
-
-          },
-          mouseLeaveHandler = (e) => {
-              if (hasMask && maskSetting.eventWhenPlaceholderVisible === "hover") {
-                  setValue(value, controlIndex, formIndex, e.type)
-              }
-          },
-          focusHandler = (e) => {
-
-              if (hasMask && maskSetting.eventWhenPlaceholderVisible !== "write") {
-                  setValue(value, controlIndex, formIndex, e.type)
-              }
-          },
           blurHandler = (e) => {
-
-              if (hasMask && maskSetting.eventWhenPlaceholderVisible !== "always" && maskSetting.eventWhenPlaceholderVisible !== "write") {
-                  setValue(value, controlIndex, formIndex, e.type)
-              }
-
+              if (hasMaskWithBlur) setValue(value, controlIndex, formIndex, e.type)
           },
           isInputNotEmpty = Boolean(value),
           isPasswordVisible = havePasswordVisibleSwitch && type === 'text',
-          errorAnimatePrefix = block('error', {animate: true}),
           concatInputName = `${inputName}${controlIndex !== null ? `[${controlIndex}]` : ''}`.trim()
 
     //Индекс для групповой формы
@@ -113,9 +113,7 @@ export const FlakyInput:FlakyInputComponent = ({
 
     useEffect(() => {
 
-        if (hasMask) {
-            // setCaretForMask()
-        }
+        if (hasMaskWithPlaceholder) setCaretForMask()
 
     }, [value])
 
@@ -155,7 +153,8 @@ export const FlakyInput:FlakyInputComponent = ({
             name={concatInputName}
             value={value || ''.trim()}
             className={inputClasses}
-            onChange={(e) => writeInputChange(e, e.target.value)}
+            onChange={inputChangeHandler}
+            onKeyDown={keyDownHandler}
             onMouseOver={hoverHandler}
             onMouseLeave={mouseLeaveHandler}
             onFocus={focusHandler}

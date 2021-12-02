@@ -2,6 +2,7 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
+require('element-closest-polyfill');
 var React = require('react');
 var axios = require('axios');
 var PropTypes = require('prop-types');
@@ -844,25 +845,6 @@ var _regeneratorRuntime = {
   values
 };
 
-if (typeof Element !== "undefined") {
-    if (!Element.prototype.matches) {
-        Element.prototype.matches = Element.prototype.msMatchesSelector || Element.prototype.webkitMatchesSelector;
-    }
-
-    if (!Element.prototype.closest) {
-        Element.prototype.closest = function (s) {
-            var el = this;
-
-            do {
-                if (el.matches(s)) return el;
-                el = el.parentElement || el.parentNode;
-            } while (el !== null && el.nodeType === 1);
-            
-            return null;
-        };
-    }
-}
-
 function ownKeys$d(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread$d(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$d(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$d(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -1475,6 +1457,11 @@ var maskWriteValue = function maskWriteValue(maskSetting, currentControl, writeV
 
   currentControl.maskSetting.clearValue = clearValue;
   /**
+   * Записать значение плейсхолдера
+   */
+
+  currentControl.maskSetting.maskPlaceholder = placeholder;
+  /**
    * 1.Значение после обработки маской
    * 2.Есть ли в маске ошибка
    * 3.Маска с натянутым плейсхолдером(+7(___)-___-__-__))
@@ -1525,7 +1512,7 @@ var maskWriteValue = function maskWriteValue(maskSetting, currentControl, writeV
   currentControl.value = valueAfterMask;
 };
 
-function r$1(r){return r&&r.__esModule&&Object.prototype.hasOwnProperty.call(r,"default")?r.default:r}var e$2={exports:{}};!function(r){function e(n){return "function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?(r.exports=e=function(r){return typeof r},r.exports.default=r.exports,r.exports.__esModule=!0):(r.exports=e=function(r){return r&&"function"==typeof Symbol&&r.constructor===Symbol&&r!==Symbol.prototype?"symbol":typeof r},r.exports.default=r.exports,r.exports.__esModule=!0),e(n)}r.exports=e,r.exports.default=r.exports,r.exports.__esModule=!0;}(e$2);var n=r$1(e$2.exports),t=function(r){var e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},t=e.limit,o=void 0===t?null:t,i="string"==typeof o?Number(o):o,u=!Array.isArray(r)&&!["string","number"].includes(n(r)),l="number"!=typeof i&&null!==i||null!==i&&isNaN(i),a=Array.isArray(r)?r.length:String(r).length,s="number"==typeof i&&a<i;if(l)throw new TypeError("limit value must be only number or number in string like '1'");if(u)throw new TypeError("written value must be only string, number or array");return s},o=function(r){var e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},t=e.limit,o=void 0===t?null:t,i="string"==typeof o?Number(o):o,u=!Array.isArray(r)&&!["string","number"].includes(n(r)),l="number"!=typeof i&&null!==i||null!==i&&isNaN(i),a=Array.isArray(r)?r.length:String(r).length,s="number"==typeof i&&a>i;if(l)throw new TypeError("limit value must be only number or number in string like '1'");if(u)throw new TypeError("written value must be only string, number or array");return s},i=function(r){var e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},n=e.limit,t=void 0===n?null:n,o="string"==typeof t?Number(t):t,i=isNaN(Number(r))||null===r,u="number"!=typeof o&&null!==o||null!==o&&isNaN(o),l="number"==typeof o&&Number(r)>o;if(u)throw new TypeError("limit value must be only number or number in string like '1'");if(i)throw new TypeError("written value can be only number");return l},u=function(r){var e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},n=e.limit,t=void 0===n?null:n,o="string"==typeof t?Number(t):t,i=isNaN(Number(r))||null===r,u="number"!=typeof o&&null!==o||null!==o&&isNaN(o),l="number"==typeof o&&Number(r)<o;if(u)throw new TypeError("limit value must be only number or number in string like '1'");if(i)throw new TypeError("written value can be only number");return l},l=function(r){var e=!Array.isArray(r)&&!["string","number"].includes(n(r)),t=0===(Array.isArray(r)?r.length:String(r).length);if(e)throw new TypeError("written value can be only string or number");return t},a=function(r){var e=!["string","number"].includes(n(r)),t=!/.+@.+\..+/i.test(String(r));if(e)throw new TypeError("written value can be only string or number");return t},s=function(r){var e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},t=!["string","number"].includes(n(r))||null===r;r=String(r);var o=e||{},i=o.shouldLockNegativeNumber,u=void 0!==i&&i,l=o.shouldLockFloatNumber,a=void 0!==l&&l,s=o.allowableSymbols,y=void 0===s?[]:s,m=o.customRegExp,b=void 0===m?null:m,p=o.isLiveValidator,c=void 0!==p&&p,f=y.includes("-")?y.join("").replace(/-/g,"\\-"):y.join(""),g="".concat(f,"1-9"),v=new RegExp("^[-]?([".concat(g,"]+)?[.]?([").concat(g,"]+)?$")),w=c?["-.",".",".-"]:["-.",".",".-","-"],d=w.includes(r),h=!0;if(r){var N=v;u&&(N=a?new RegExp("^[".concat(g,"]+$")):new RegExp("^([".concat(g,"]+)?[.]?([").concat(g,"]+)?$"))),a&&(N=u?new RegExp("^[".concat(g,"]+$")):new RegExp("^[-]?([".concat(g,"]+)?$"))),h=N.test(r),d&&(h=!1),b&&(h=b.test(r));}if(t)throw new TypeError("written value can be only number or string");return h},y=function(r,e){Object.keys(r).forEach((function(n){var t=e[n];t&&(r[n]=t);}));};
+function r$1(r){return r&&r.__esModule&&Object.prototype.hasOwnProperty.call(r,"default")?r.default:r}var e$2={exports:{}};!function(r){function e(n){return "function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?(r.exports=e=function(r){return typeof r},r.exports.default=r.exports,r.exports.__esModule=!0):(r.exports=e=function(r){return r&&"function"==typeof Symbol&&r.constructor===Symbol&&r!==Symbol.prototype?"symbol":typeof r},r.exports.default=r.exports,r.exports.__esModule=!0),e(n)}r.exports=e,r.exports.default=r.exports,r.exports.__esModule=!0;}(e$2);var n=r$1(e$2.exports),t$1=function(r){var e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},t=e.limit,o=void 0===t?null:t,i="string"==typeof o?Number(o):o,u=!Array.isArray(r)&&!["string","number"].includes(n(r)),l="number"!=typeof i&&null!==i||null!==i&&isNaN(i),a=Array.isArray(r)?r.length:String(r).length,s="number"==typeof i&&a<i;if(l)throw new TypeError("limit value must be only number or number in string like '1'");if(u)throw new TypeError("written value must be only string, number or array");return s},o=function(r){var e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},t=e.limit,o=void 0===t?null:t,i="string"==typeof o?Number(o):o,u=!Array.isArray(r)&&!["string","number"].includes(n(r)),l="number"!=typeof i&&null!==i||null!==i&&isNaN(i),a=Array.isArray(r)?r.length:String(r).length,s="number"==typeof i&&a>i;if(l)throw new TypeError("limit value must be only number or number in string like '1'");if(u)throw new TypeError("written value must be only string, number or array");return s},i=function(r){var e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},n=e.limit,t=void 0===n?null:n,o="string"==typeof t?Number(t):t,i=isNaN(Number(r))||null===r,u="number"!=typeof o&&null!==o||null!==o&&isNaN(o),l="number"==typeof o&&Number(r)>o;if(u)throw new TypeError("limit value must be only number or number in string like '1'");if(i)throw new TypeError("written value can be only number");return l},u=function(r){var e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},n=e.limit,t=void 0===n?null:n,o="string"==typeof t?Number(t):t,i=isNaN(Number(r))||null===r,u="number"!=typeof o&&null!==o||null!==o&&isNaN(o),l="number"==typeof o&&Number(r)<o;if(u)throw new TypeError("limit value must be only number or number in string like '1'");if(i)throw new TypeError("written value can be only number");return l},l=function(r){var e=!Array.isArray(r)&&!["string","number"].includes(n(r)),t=0===(Array.isArray(r)?r.length:String(r).length);if(e)throw new TypeError("written value can be only string or number");return t},a=function(r){var e=!["string","number"].includes(n(r)),t=!/.+@.+\..+/i.test(String(r));if(e)throw new TypeError("written value can be only string or number");return t},s=function(r){var e=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{},t=!["string","number"].includes(n(r))||null===r;r=String(r);var o=e||{},i=o.shouldLockNegativeNumber,u=void 0!==i&&i,l=o.shouldLockFloatNumber,a=void 0!==l&&l,s=o.allowableSymbols,y=void 0===s?[]:s,m=o.customRegExp,b=void 0===m?null:m,p=o.isLiveValidator,c=void 0!==p&&p,f=y.includes("-")?y.join("").replace(/-/g,"\\-"):y.join(""),g="".concat(f,"1-9"),v=new RegExp("^[-]?([".concat(g,"]+)?[.]?([").concat(g,"]+)?$")),w=c?["-.",".",".-"]:["-.",".",".-","-"],d=w.includes(r),h=!0;if(r){var N=v;u&&(N=a?new RegExp("^[".concat(g,"]+$")):new RegExp("^([".concat(g,"]+)?[.]?([").concat(g,"]+)?$"))),a&&(N=u?new RegExp("^[".concat(g,"]+$")):new RegExp("^[-]?([".concat(g,"]+)?$"))),h=N.test(r),d&&(h=!1),b&&(h=b.test(r));}if(t)throw new TypeError("written value can be only number or string");return h},y=function(r,e){Object.keys(r).forEach((function(n){var t=e[n];t&&(r[n]=t);}));};
 
 /**
  * @description
@@ -1624,7 +1611,7 @@ var validateWrittenData = function validateWrittenData(hooksData) {
        */
 
 
-      if (t(newValue, minLengthRules) && isLiveValidatorEnable(minLengthSetting)) {
+      if (t$1(newValue, minLengthRules) && isLiveValidatorEnable(minLengthSetting)) {
         y(errorData, _objectSpread$a(_objectSpread$a(_objectSpread$a({}, minLengthRules), minLengthSetting), {}, {
           hasError: hasError
         }));
@@ -1753,7 +1740,7 @@ var validateClickedData = function validateClickedData(hooksData) {
    */
 
 
-  if (minLengthRules && t(newValue, minLengthRules) && isLiveValidatorEnable(minLengthSetting)) {
+  if (minLengthRules && t$1(newValue, minLengthRules) && isLiveValidatorEnable(minLengthSetting)) {
     y(errorData, _objectSpread$9(_objectSpread$9(_objectSpread$9({}, minLengthRules), minLengthSetting), {}, {
       hasError: hasError
     }));
@@ -2232,7 +2219,7 @@ var defaultStaticValidator = function defaultStaticValidator(hooksData) {
        */
 
 
-      if (t(value, minLengthRules)) {
+      if (t$1(value, minLengthRules)) {
         StaticValidatorErrorHandler(errorData, _objectSpread$6(_objectSpread$6({}, minLengthRules), minLengthSetting));
       }
       /**
@@ -3180,6 +3167,8 @@ var elementClassesConcat = function elementClassesConcat(blockName, element, mod
       blockClasses = "".concat(blockBemClasses, " ").concat(additionalClasses).trim();
   return blockClasses;
 };
+
+var t=function(t,e){setTimeout((function(){t.selectionStart=e,t.selectionEnd=e;}),0);};
 
 function _objectWithoutPropertiesLoose(source, excluded) {
   if (source == null) return {};
@@ -4334,62 +4323,75 @@ var FlakyInput = function FlakyInput(_ref) {
   } : _ref$togglePasswordVi;
 
   var inputRef = React.useRef(null),
+      _useState = React.useState(false),
+      _useState2 = _slicedToArray(_useState, 2),
+      wasBackspaceClick = _useState2[0],
+      setWasBackspaceClick = _useState2[1],
+      $input = inputRef.current,
       block = bemClassName('entry-field'),
       blockClasses = blockClassesConcat(block(), {}, className),
       inputClasses = elementClassesConcat(block(), 'input', {}, ''),
       labelClasses = elementClassesConcat(block(), 'label', {}, ''),
       errorClasses = elementClassesConcat(block(), 'error', {}, ''),
-      hasMask = maskSetting && maskSetting.eventWhenPlaceholderVisible !== 'write' && maskSetting.eventWhenPlaceholderVisible,
-      passwordClasses = elementClassesConcat(block(), 'password-switch', {}, ''),
-      wrapperClickHandler = function wrapperClickHandler(e) {
-    var target = e.target,
-        _ref2 = target.dataset || {},
-        element = _ref2.element,
-        $input = target.closest("[data-element=\"input-wrapper\"]").querySelector('input');
-
-    if (element === 'mask-input') ; else {
-      $input.focus();
-    }
-  },
-      setCaretForMask = function setCaretForMask() {
-    var clearValue = maskSetting.clearValue,
-        clearValueLength = clearValue ? maskSetting.clearValue.length : 0,
-        symbolForSearch = clearValueLength > 0 ? clearValue[clearValueLength - 1] : maskSetting.eventWhenPlaceholderVisible;
-        clearValueLength > 0 ? +String(value).lastIndexOf(symbolForSearch) + 1 : +String(value).indexOf(symbolForSearch);
-  },
-      clickHandler = function clickHandler(e) {
-    if (hasMask) {
-      setCaretForMask();
-    }
-  },
-      writeInputChange = function writeInputChange(e, value) {
-    setValue(value, controlIndex, formIndex, e.type);
-  },
-      hoverHandler = function hoverHandler(e) {
-    if (hasMask && maskSetting.eventWhenPlaceholderVisible === "hover") {
-      setValue(value, controlIndex, formIndex, e.type);
-    }
-  },
-      mouseLeaveHandler = function mouseLeaveHandler(e) {
-    if (hasMask && maskSetting.eventWhenPlaceholderVisible === "hover") {
-      setValue(value, controlIndex, formIndex, e.type);
-    }
-  },
-      focusHandler = function focusHandler(e) {
-    if (hasMask && maskSetting.eventWhenPlaceholderVisible !== "write") {
-      setValue(value, controlIndex, formIndex, e.type);
-    }
-  },
-      blurHandler = function blurHandler(e) {
-    if (hasMask && maskSetting.eventWhenPlaceholderVisible !== "always" && maskSetting.eventWhenPlaceholderVisible !== "write") {
-      setValue(value, controlIndex, formIndex, e.type);
-    }
-  },
-      isInputNotEmpty = Boolean(value),
-      isPasswordVisible = havePasswordVisibleSwitch && type === 'text',
       errorAnimatePrefix = block('error', {
     animate: true
   }),
+      _ref2 = maskSetting || {},
+      _ref2$eventWhenPlaceh = _ref2.eventWhenPlaceholderVisible,
+      eventWhenPlaceholderVisible = _ref2$eventWhenPlaceh === void 0 ? null : _ref2$eventWhenPlaceh,
+      maskPlaceholder = _ref2.maskPlaceholder,
+      _maskWithPlaceholder = _ref2._maskWithPlaceholder,
+      hasMaskWithPlaceholder = eventWhenPlaceholderVisible && eventWhenPlaceholderVisible !== 'write',
+      hasHoverMask = eventWhenPlaceholderVisible === 'hover',
+      hasMaskWithBlur = eventWhenPlaceholderVisible === 'hover' || eventWhenPlaceholderVisible === 'focus',
+      passwordClasses = elementClassesConcat(block(), 'password-switch', {}, ''),
+      setCaretForMask = function setCaretForMask() {
+    if (maskPlaceholder) {
+      var caretIndex = String(value).indexOf(maskPlaceholder),
+          caretIndexForBackspace = String(_maskWithPlaceholder).lastIndexOf(maskPlaceholder, caretIndex),
+          shouldPutCaretForBackspace = caretIndexForBackspace === -1 && wasBackspaceClick && _maskWithPlaceholder[caretIndexForBackspace - 2] === maskPlaceholder,
+          shouldPutCaretForWrite = caretIndex != -1;
+
+      if (shouldPutCaretForBackspace) {
+        t($input, caretIndexForBackspace - 3);
+      } else if (shouldPutCaretForWrite) {
+        t($input, caretIndex);
+      }
+    }
+  },
+      wrapperClickHandler = function wrapperClickHandler(e) {
+    if ($input) $input.focus();
+  },
+      clickHandler = function clickHandler(e) {
+    if (hasMaskWithPlaceholder) setCaretForMask();
+  },
+      keyDownHandler = function keyDownHandler(e) {
+    return setWasBackspaceClick(function () {
+      return e.key === 'Backspace';
+    });
+  },
+      inputChangeHandler = function inputChangeHandler(e) {
+    var writeValue = $input.value;
+    setValue(writeValue, controlIndex, formIndex, e.type);
+    setCaretForMask();
+  },
+      hoverHandler = function hoverHandler(e) {
+    if (hasHoverMask) setValue(value, controlIndex, formIndex, e.type);
+  },
+      mouseLeaveHandler = function mouseLeaveHandler(e) {
+    if (hasHoverMask) setValue(value, controlIndex, formIndex, e.type);
+  },
+      focusHandler = function focusHandler(e) {
+    if (hasMaskWithPlaceholder) {
+      setValue(value, controlIndex, formIndex, e.type);
+      setCaretForMask();
+    }
+  },
+      blurHandler = function blurHandler(e) {
+    if (hasMaskWithBlur) setValue(value, controlIndex, formIndex, e.type);
+  },
+      isInputNotEmpty = Boolean(value),
+      isPasswordVisible = havePasswordVisibleSwitch && type === 'text',
       concatInputName = "".concat(inputName).concat(controlIndex !== null ? "[".concat(controlIndex, "]") : '').trim(); //Индекс для групповой формы
 
 
@@ -4398,11 +4400,12 @@ var FlakyInput = function FlakyInput(_ref) {
   }
 
   React.useEffect(function () {
+    if (hasMaskWithPlaceholder) setCaretForMask();
   }, [value]);
   type = type === 'number' || type === 'date' ? 'phone' : type;
   return /*#__PURE__*/React__default['default'].createElement("div", {
     onClick: function onClick(e) {
-      return wrapperClickHandler(e);
+      return wrapperClickHandler();
     },
     className: blockClasses,
     "data-element": "input-wrapper",
@@ -4423,9 +4426,8 @@ var FlakyInput = function FlakyInput(_ref) {
     name: concatInputName,
     value: value || ''.trim(),
     className: inputClasses,
-    onChange: function onChange(e) {
-      return writeInputChange(e, e.target.value);
-    },
+    onChange: inputChangeHandler,
+    onKeyDown: keyDownHandler,
     onMouseOver: hoverHandler,
     onMouseLeave: mouseLeaveHandler,
     onFocus: focusHandler,
