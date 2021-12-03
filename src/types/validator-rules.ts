@@ -60,10 +60,10 @@ export interface NumberValidatorRulesProps extends ValidatorRulesProps {
  * Список валидаторов
  */
 export interface ValidatorsRulesList {
-    minLength?: ValidatorRulesProps;
-    maxLength?: ValidatorRulesProps;
-    minValue?: ValidatorRulesProps;
-    maxValue?: ValidatorRulesProps;
+    minLength?: LimitingValidatorRulesProps;
+    maxLength?: LimitingValidatorRulesProps;
+    minValue?: LimitingValidatorRulesProps;
+    maxValue?: LimitingValidatorRulesProps;
     number?: NumberValidatorRulesProps;
     required?: ValidatorRulesProps;
     email?: ValidatorRulesProps;

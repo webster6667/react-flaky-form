@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 import { validateWrittenData } from '@validators/written-live-validator';
 import { validateClickedData } from '@validators/clicked-live-validator';
 
@@ -41,6 +43,7 @@ export const liveInputHandler: LiveInputHandler = (
       type,
       _hideErrorTimeoutId: hasControlHideErrorTimeout = null,
       _showErrorTimeoutId: showErrorTimeoutId,
+      liveSearch: hasLiveSearch
     } = currentControl,
     textControlTypes = ['phone', 'number', 'text', 'password', 'date'],
     isTextControl = textControlTypes.includes(type);
@@ -110,6 +113,53 @@ export const liveInputHandler: LiveInputHandler = (
    */
   if (isWriteInputEnable) {
     currentControl.value = writeToControlValue;
+
+    /**
+     * Живой ввод
+     */
+    if (hasLiveSearch) {
+
+      const {url, method = 'get', data = {}} = currentControl.liveSearch.request(hooksData)
+
+      if (url) {
+
+        currentControl.liveSearch.isLoading = true
+
+        axios({
+          method,
+          url,
+          data
+        }).then(requestResult => {
+
+          const {controlName} = hooksData
+
+          setForm((prevForm) => {
+            const form = {...prevForm},
+                  control = form.controls[controlName]
+
+            /**
+             * Выключить режим ожидания
+             */
+            control.liveSearch.isLoading = false
+
+            /**
+             * Результат живого запроса
+             */
+            const foundedData = control.liveSearch.response(hooksData, requestResult)
+
+            control.liveSearch.foundedData = foundedData || requestResult
+
+
+            return form
+          })
+
+        })
+
+      }
+
+
+    } 
+    
   }
 
   /**

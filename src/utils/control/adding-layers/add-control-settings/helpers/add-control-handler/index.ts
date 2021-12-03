@@ -28,7 +28,7 @@ export const addControlHandler: AddControlHandler = (
   //@todo: async/await хуки, добавить снаружи от setForm, и все сделать async
 
   setForm(prevForm => {
-    const form:FormProps = JSON.parse(JSON.stringify(prevForm));
+    const form = {...prevForm};
 
     /**
      * 1.Получить контрол на который будет повешен обработчик
@@ -42,7 +42,8 @@ export const addControlHandler: AddControlHandler = (
             form,
             selectedValue,
           };
-
+    
+    
     /**
      * Получить хуки контрола
      */

@@ -8,6 +8,7 @@ export const DEFAULT_FORM_SETTINGS: FormConfigProps = {
   formName: FORM_NAME,
   formValidatorsRules: {
     minLength: {
+      limit: 0,
       liveEnable: true,
       showLiveErrorAfterFirstSubmit: false,
       shouldLockNotValidWrite: false,
@@ -15,6 +16,7 @@ export const DEFAULT_FORM_SETTINGS: FormConfigProps = {
       hideErrorTimeout: null,
     },
     maxLength: {
+      limit: 100,
       liveEnable: true,
       showLiveErrorAfterFirstSubmit: false,
       shouldLockNotValidWrite: true,
@@ -22,6 +24,7 @@ export const DEFAULT_FORM_SETTINGS: FormConfigProps = {
       hideErrorTimeout: null,
     },
     minValue: {
+      limit: 0,
       liveEnable: true,
       showLiveErrorAfterFirstSubmit: false,
       shouldLockNotValidWrite: false,
@@ -29,6 +32,7 @@ export const DEFAULT_FORM_SETTINGS: FormConfigProps = {
       hideErrorTimeout: null,
     },
     maxValue: {
+      limit: 1000,
       liveEnable: true,
       showLiveErrorAfterFirstSubmit: false,
       shouldLockNotValidWrite: false,

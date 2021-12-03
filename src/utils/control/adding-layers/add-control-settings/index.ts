@@ -8,6 +8,8 @@ import { addControlHandler } from './helpers/add-control-handler';
 // import { isControlLockSubmit } from './../submit-locking/is-control-lock-submit';
 
 import { combineFormsWithControlsRulesLayers } from './helpers/combine-forms-with-controls-rules-layers';
+import {addValidatorRulesToControl} from './helpers/add-validator-rules-to-control'
+
 
 // import { maskWriteValue } from '@validators/mask-validator';
 
@@ -39,10 +41,12 @@ export const addControlSetting: AddControlSetting = (
      */
     addRequireControlFields(currentControlData);
 
+
     /**
      * Наложить все слои настроек валидатора для контрола
      */
-    combineFormsWithControlsRulesLayers(currentControl, form);
+    addValidatorRulesToControl(currentControl, form.formSettings.formValidatorsRules)
+    // combineFormsWithControlsRulesLayers(currentControl, form);
 
     /**
      * Обработчик входных данных

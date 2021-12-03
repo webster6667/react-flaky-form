@@ -58,10 +58,11 @@ export const validateWrittenData: LiveValidator = hooksData => {
    * Если новое значение подходит по типу
    */
   if (typeof newValue === 'string' || typeof newValue === 'number') {
-    const isInputNumberValid = isNumberValid(newValue, numberRules),
-      isInputNumberInvalid = !isInputNumberValid,
-      isWrittenValueNotEmpty = !isWrittenValueEmpty(newValue),
-      hasError = true;
+    const {dot = false, negative = false} = numberRules || {},
+          isInputNumberValid = isNumberValid(newValue, {shouldLockFloatNumber: !dot, shouldLockNegativeNumber: !negative}),
+          isInputNumberInvalid = !isInputNumberValid,
+          isWrittenValueNotEmpty = !isWrittenValueEmpty(newValue),
+          hasError = true;
 
     /**
      * @description
@@ -78,7 +79,6 @@ export const validateWrittenData: LiveValidator = hooksData => {
       ) {
         errorDataHandler(errorData, {
           ...minValueRules,
-          ...minValueRules,
           hasError,
         });
       }
@@ -93,7 +93,6 @@ export const validateWrittenData: LiveValidator = hooksData => {
       ) {
         errorDataHandler(errorData, {
           ...maxValueRules,
-          ...maxValueRules,
           hasError,
         });
       }
@@ -106,7 +105,6 @@ export const validateWrittenData: LiveValidator = hooksData => {
         isLiveValidatorEnable(minLengthRules)
       ) {
         errorDataHandler(errorData, {
-          ...minLengthRules,
           ...minLengthRules,
           hasError,
         });
@@ -121,7 +119,6 @@ export const validateWrittenData: LiveValidator = hooksData => {
       ) {
         errorDataHandler(errorData, {
           ...maxLengthRules,
-          ...maxLengthRules,
           hasError,
         });
       }
@@ -135,7 +132,6 @@ export const validateWrittenData: LiveValidator = hooksData => {
         isLiveValidatorEnable(emailRules)
       ) {
         errorDataHandler(errorData, {
-          ...emailRules,
           ...emailRules,
           hasError,
         });

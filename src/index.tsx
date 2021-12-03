@@ -32,7 +32,7 @@ const useFlakyForm: UseFlakyForm = (controls, customFormConfig = {}) => {
   useEffect(() => {
     (async function asyncFunction() {
       setForm(prevForm => {
-        const form = JSON.parse(JSON.stringify(prevForm));
+        const form = {...prevForm};
 
         initForm(form, customFormConfig, setForm);
 

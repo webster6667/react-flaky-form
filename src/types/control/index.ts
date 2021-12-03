@@ -24,12 +24,25 @@ export interface ControlProps {
     error?: string;
     hasError?: boolean;
     setValue?: (writeValue: string, eventType: typeof inputEvents) => void;
+    liveSearch?: {
+      isLoading?: boolean,
+      request(hookData: HookProps): {
+          url: string,
+          method?: 'get' | 'post',
+          data?: any
+      },
+      response?(hookData: HookProps, responseData: any):any,
+      foundedData?: any,
+      debounceTime?: number
+    },
     type: typeof inputTypes;
     controlName?: string;
     inputName?: string | null;
     validateRules?: ValidatorsRulesList;
     _hideErrorTimeoutId?: null | ReturnType<typeof setTimeout>;
     _showErrorTimeoutId?: null | ReturnType<typeof setTimeout>;
+    _liveSearchRequestTimeoutId?: null | ReturnType<typeof setTimeout>;
+
 
     options?: ClickControlOptionsProps[];
 
