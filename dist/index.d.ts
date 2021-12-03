@@ -1,39 +1,18 @@
-/// <reference types="react" />
-import React from "react";
 import { AxiosResponse } from "axios";
-declare let inputTypes: "phone" | "number" | "text" | "password" | "radio" | "checkbox" | "select" | "date";
-declare let eventWhenPlaceholderVisible: "always" | "hover" | "focus" | "write";
-interface ClickControlOptionsProps {
-    label?: string;
-    value?: string | number;
-    locked?: boolean;
-    checked?: boolean;
-}
 /**
- * @description
- * Параметры axios
+ *  Правила основных валидаторов
  */
-interface FormActions {
+interface ValidatorRulesProps {
     /**
-     * Куда отправлять запрос за инитом
+     * Сообщение при ошибке
      */
-    toInit?: string;
-    /**
-     * Куда отправлять даныне из формы
-     */
-    toSubmit?: string;
-}
-/**
- * @description
- * Параметры отдельного валидатора
- */
-interface ValidatorSettingProps {
+    message?: string;
     /**
      * Включена ли живая валижация контрола
      */
     liveEnable?: boolean;
     /**
-     * Начать ли живое отображение ошибок только после первой отправки формы
+     * Включить живой валидатор только после первой отправки формы
      */
     showLiveErrorAfterFirstSubmit?: boolean;
     /**
@@ -54,17 +33,184 @@ interface ValidatorSettingProps {
     hideErrorTimeout?: number | null;
 }
 /**
- * @description
- * Список настроек валидатора с внешней стороны(при обьявлении формы)
+ *  Правила числового валидатора
  */
-interface ValidatorsSettingList {
-    minLength?: ValidatorSettingProps | boolean;
-    maxLength?: ValidatorSettingProps | boolean;
-    minValue?: ValidatorSettingProps | boolean;
-    maxValue?: ValidatorSettingProps | boolean;
-    required?: ValidatorSettingProps | boolean;
-    number?: ValidatorSettingProps | boolean;
-    email?: ValidatorSettingProps | boolean;
+interface NumberValidatorRulesProps extends ValidatorRulesProps {
+    negative?: boolean;
+    dot?: boolean;
+}
+/**
+ * Список валидаторов
+ */
+interface ValidatorsRulesList {
+    minLength?: ValidatorRulesProps;
+    maxLength?: ValidatorRulesProps;
+    minValue?: ValidatorRulesProps;
+    maxValue?: ValidatorRulesProps;
+    number?: NumberValidatorRulesProps;
+    required?: ValidatorRulesProps;
+    email?: ValidatorRulesProps;
+}
+/**
+ * @description
+ * Объект формы, при инициализации
+ */
+interface FormConfigProps {
+    formName?: string;
+    formValidatorsRules?: ValidatorsRulesList;
+    action?: string;
+    //кастомный валидатор блокирующий кнопку отправления
+    customLockSubmitBtnValidator?: StaticValidator;
+    //Дополнительный валидатор к дефолтному валидатору блокировки кнопки
+    additionalLockSubmitBtnValidator?: StaticValidator;
+    //Живой валидатор для всех контролов
+    customLiveValidator?: LiveValidator;
+    //Дополнительный живой валидатор для всех контролов
+    additionalLiveValidator?: LiveValidator;
+    //Хуки до и после всплывшей ошибки живого валидатора
+    beforeLiveValidatorError?(hookData: HookProps): any;
+    afterLiveValidatorError?(hookData: HookProps): any;
+    //Хуки до и после всплывшей ошибки после отправки формы
+    beforeSubmitValidatorError?(hookData: HookProps): any;
+    afterSubmitValidatorError?(hookData: HookProps): any;
+    //Хуки до и после ввода для каждого контрола
+    beforeChange?(hookData: HookProps): any;
+    afterChange?(hookData: HookProps): any;
+    //Кастомный валидатор после отправки формы для каждого контрола
+    customSubmitValidator?: StaticValidator;
+    //Дополнительный валидатор перед отправкой для всех контролов
+    additionalSubmitValidator?: StaticValidator;
+    //Хуки до и после отправки для каждого контрола
+    beforeSubmitValidator?(hookData: HookProps): any;
+    afterSubmitValidator?(hookData: HookProps): any;
+    //Хуки после отправки формы
+    afterSuccessSubmit?(axiosResponse: AxiosResponse): any;
+    afterErrorSubmit?(axiosResponse: AxiosResponse): any;
+    afterSubmit?(axiosResponse: AxiosResponse): any;
+}
+/**
+ * @description
+ * Внутренние параметры состояния формы
+ */
+interface FormStateProps {
+    /**
+     * Все контролы про инициализированны, и готовы к работе
+     */
+    loaded: boolean;
+    /**
+     * Была попытка отправки
+     */
+    isFormTriedSubmit: boolean;
+    /**
+     * Блокировать ли кнопку
+     */
+    isSubmitBtnLocked?: boolean;
+    // /**
+    //  * Список ошибок со всех контролов для каждой формы
+    //  */
+    // errorList?: errorListProps[],
+    /**
+     * Общая ошибка для всей формы
+     */
+    commonError?: string;
+    errorTimeoutList?: {
+        [key: string]: ReturnType<typeof setTimeout>;
+    };
+}
+/**
+ * @description
+ * Главный объект формы
+ */
+interface FormProps<T = ControlsList> {
+    controls: T;
+    formState: FormStateProps;
+    formSettings?: FormConfigProps;
+}
+/**
+ * @description
+ * Опции кликабельных контролов(radio, check, select)
+ */
+interface ClickControlOptionsProps {
+    label?: string;
+    value?: string | number;
+    locked?: boolean;
+    checked?: boolean;
+}
+/**
+ * @description
+ * Пропсы контрола
+ */
+interface ControlProps {
+    value?: string | number | any[];
+    readonly?: boolean;
+    selectPlaceholder?: string | null;
+    label?: string;
+    error?: string;
+    hasError?: boolean;
+    setValue?: (writeValue: string, eventType: typeof inputEvents) => void;
+    type: typeof inputTypes;
+    controlName?: string;
+    inputName?: string | null;
+    validateRules?: ValidatorsRulesList;
+    _hideErrorTimeoutId?: null | ReturnType<typeof setTimeout>;
+    _showErrorTimeoutId?: null | ReturnType<typeof setTimeout>;
+    options?: ClickControlOptionsProps[];
+    //Живые валидаторы
+    customLiveValidator?: LiveValidator;
+    additionalLiveValidator?: LiveValidator;
+    //Хуки до и после всплывшей ошибки живого валидатора
+    beforeLiveValidatorError?(hookData: HookProps): any;
+    afterLiveValidatorError?(hookData: HookProps): any;
+    //Хуки до и после всплывшей ошибки после отправки формы
+    beforeSubmitValidatorError?(hookData: HookProps): any;
+    afterSubmitValidatorError?(hookData: HookProps): any;
+    //Хуки живых валидаторов
+    beforeChange?(hookData: HookProps): any;
+    afterChange?(hookData: HookProps): any;
+    //Валидаторы после отправки формы
+    customSubmitValidator?: StaticValidator;
+    additionalSubmitValidator?: StaticValidator;
+    //Хуки для валидаторов после отправки
+    beforeSubmitValidator?(hookData: HookProps): any;
+    afterSubmitValidator?(hookData: HookProps): any;
+    //Валидатор для блокировки кнопки
+    customLockSubmitBtnValidator?: StaticValidator;
+    additionalLockSubmitBtnValidator?: StaticValidator;
+}
+/**
+ * @description
+ * Список контролов
+ */
+interface ControlsList {
+    [propName: string]: ControlProps;
+}
+declare let inputTypes: "phone" | "number" | "text" | "password" | "radio" | "checkbox" | "select" | "date";
+declare let inputEvents: "change" | "mouseover" | "mouseleave" | "focus" | "blur" | null;
+/**
+ * @description
+ * Данные для хуков
+ */
+interface HookProps {
+    /**
+     * Данные текущего контрола
+     */
+    currentControl: ControlProps;
+    /**
+     * Имя формы контрола
+     */
+    controlName: string;
+    /**
+     * Значение которые пытались ввести
+     */
+    newValue?: string | number | any[];
+    /**
+     * Весь объект формы
+     */
+    form: FormProps;
+    /**
+     * Выбранное значение ?
+     */
+    selectedValue: number | string | null;
 }
 /**
  * @description
@@ -109,27 +255,10 @@ interface ValidatorErrorProps {
     hideErrorTimeout?: number | null;
     [key: string]: any;
 }
-//Правило срабатывание валидатора
-interface ValidatorRulesProps {
-    limit: number;
-    message: string;
-}
-//Параметры валидатора цифр
-interface NumberValidatorRulesProps {
-    negative?: boolean;
-    message?: string;
-    dot?: boolean;
-}
-//Список правил валидаторов для отдельного контрола
-interface ValidatorsRulesList {
-    minLength?: ValidatorRulesProps;
-    maxLength?: ValidatorRulesProps;
-    minValue?: ValidatorRulesProps;
-    maxValue?: ValidatorRulesProps;
-    number?: NumberValidatorRulesProps;
-    required?: Pick<ValidatorRulesProps, "message">;
-    email?: Pick<ValidatorRulesProps, "message">;
-}
+/**
+ * Валидатор контролов срабатывающий после отправки формы
+ */
+type StaticValidator = (hookData: HookProps) => ValidatorErrorProps;
 /**
  * @description
  * Типизация функции живого валидатора
@@ -140,345 +269,11 @@ type LiveValidator = (hookData: HookProps) => {
 };
 /**
  * @description
- * Типизация функции статического валидатора
+ * Типизация главного хука библиотеки
  */
-type StaticValidator = (hookData: HookProps) => ValidatorErrorProps;
-/**
- * @description
- * Объект формы, при инициализации
- */
-interface FormConfigProps {
-    formName?: string;
-    formValidatorsSetting?: ValidatorsSettingList;
-    action?: FormActions | string;
-    //кастомный валидатор блокирующий кнопку отправления
-    customLockSubmitBtnValidator?: StaticValidator;
-    //Дополнительный валидатор к дефолтному валидатору блокировки кнопки
-    additionalLockSubmitBtnValidator?: StaticValidator;
-    //Живой валидатор для всех контролов
-    customLiveValidator?: LiveValidator;
-    //Дополнительный живой валидатор для всех контролов
-    additionalLiveValidator?: LiveValidator;
-    //Хуки до и после всплывшей ошибки живого валидатора
-    beforeLiveValidatorError?(hookData: HookProps): any;
-    afterLiveValidatorError?(hookData: HookProps): any;
-    //Хуки до и после всплывшей ошибки после отправки формы
-    beforeSubmitValidatorError?(hookData: HookProps): any;
-    afterSubmitValidatorError?(hookData: HookProps): any;
-    //Хуки до и после ввода для каждого контрола
-    beforeChange?(hookData: HookProps): any;
-    afterChange?(hookData: HookProps): any;
-    //Кастомный валидатор после отправки формы для каждого контрола
-    customSubmitValidator?: StaticValidator;
-    //Дополнительный валидатор перед отправкой для всех контролов
-    additionalSubmitValidator?: StaticValidator;
-    //Хуки до и после отправки для каждого контрола
-    beforeSubmitValidator?(hookData: HookProps): any;
-    afterSubmitValidator?(hookData: HookProps): any;
-    //Хуки после отправки формы
-    afterSuccessSubmit?(axiosResponse: AxiosResponse): any;
-    afterErrorSubmit?(axiosResponse: AxiosResponse): any;
-    afterSubmit?(axiosResponse: AxiosResponse): any;
-}
-type errorListProps = {
-    [key: string]: string;
-} | {
-    [key: string]: string;
-}[];
-/**
- * @description
- * Внутренние параметры состояния формы
- */
-interface FormParamsProps {
-    /**
-     * Все контролы про инициализированны, и готовы к работе
-     */
-    loaded: boolean;
-    /**
-     * Была попытка отправки
-     */
-    isFormTriedSubmit: boolean;
-    /**
-     * Блокировать ли кнопку
-     */
-    isSubmitBtnLocked?: boolean;
-    /**
-     * Список ошибок со всех контролов для каждой формы
-     */
-    errorList?: errorListProps[];
-    /**
-     * Общая ошибка для всей формы
-     */
-    commonError?: string;
-    errorTimeoutList?: {
-        [key: string]: ReturnType<typeof setTimeout>;
-    };
-}
-/**
- * @description
- * Данные для хуков
- */
-interface HookProps {
-    /**
-     * Данные текущего контрола
-     */
-    currentControl: ControlProps;
-    /**
-     * Индекс контрола
-     */
-    controlIndex: number | null;
-    /**
-     * Имя формы контрола
-     */
-    controlName: string;
-    /**
-     * Индекс формы
-     */
-    formIndex: number | null;
-    /**
-     * Значение которые пытались ввести
-     */
-    newValue?: string | number | any[];
-    /**
-     * Весь объект формы
-     */
-    form: FormProps;
-    /**
-     * Выбранное значение ?
-     */
-    selectedValue: number | string | null;
-}
-/**
- * @description
- * Настройки маски
- */
-interface MaskSettingProps {
-    /**
-     * При каком событии отображать наложенную маску
-     */
-    eventWhenPlaceholderVisible?: typeof eventWhenPlaceholderVisible;
-    /**
-     * Шаблон маски:
-     * Для любого символа используется число `9`, для любого символа буква `A`.
-     * Например +7(999)-999-99-99 | AA-AAA
-     */
-    maskPattern: string;
-    /**
-     * Какой символ отображать вместо незаполненых
-     */
-    maskPlaceholder?: null | string;
-    /**
-     * Сообщение, при несовпадении с маской(выводится после отправления формы)
-     */
-    message?: string;
-    /**
-     * Чистое значение, без маски
-     */
-    clearValue?: string;
-    /**
-     * Маска с наложенным placeholder
-     */
-    _maskWithPlaceholder?: string;
-}
-/**
- * @description
- * Пропсы отдельного контрола
- */
-interface ControlProps {
-    value?: string | number | any[];
-    readonly?: boolean;
-    selectPlaceholder?: string | null;
-    isMultiple?: boolean;
-    shouldCloseAfterSelect?: boolean;
-    label?: string;
-    error?: string;
-    hasError?: boolean;
-    setValue?: object;
-    type: typeof inputTypes;
-    controlName?: string;
-    inputName?: string | null;
-    validateRules?: ValidatorsRulesList;
-    validatorsSetting?: ValidatorsSettingList;
-    maskSetting?: MaskSettingProps;
-    placeholder?: string | null;
-    _hideErrorTimeoutId?: null | ReturnType<typeof setTimeout>;
-    _showErrorTimeoutId?: null | ReturnType<typeof setTimeout>;
-    options?: ClickControlOptionsProps[];
-    //Живые валидаторы
-    customLiveValidator?: LiveValidator;
-    additionalLiveValidator?: LiveValidator;
-    //Хуки до и после всплывшей ошибки живого валидатора
-    beforeLiveValidatorError?(hookData: HookProps): any;
-    afterLiveValidatorError?(hookData: HookProps): any;
-    //Хуки до и после всплывшей ошибки после отправки формы
-    beforeSubmitValidatorError?(hookData: HookProps): any;
-    afterSubmitValidatorError?(hookData: HookProps): any;
-    //Хуки живых валидаторов
-    beforeChange?(hookData: HookProps): any;
-    afterChange?(hookData: HookProps): any;
-    //Валидаторы после отправки формы
-    customSubmitValidator?: StaticValidator;
-    additionalSubmitValidator?: StaticValidator;
-    //Хуки для валидаторов после отправки
-    beforeSubmitValidator?(hookData: HookProps): any;
-    afterSubmitValidator?(hookData: HookProps): any;
-    //Валидатор для блокировки кнопки
-    customLockSubmitBtnValidator?: StaticValidator;
-    additionalLockSubmitBtnValidator?: StaticValidator;
-    //Кастомная маска
-    customMask?(VMasker: any, hookData: HookProps): any;
-}
-/**
- * @description
- * Тип для контрола отдельной формы(мульти/сингл)
- */
-interface ControlsProps {
-    [propName: string]: ControlProps | ControlProps[];
-}
-/**
- * @description
- * Главный объект формы
- */
-interface FormProps<T = FormControls> {
-    controls: T;
-    formParams: FormParamsProps;
-    formSettings?: FormConfigProps;
-    controlsExample?: ControlsProps;
-}
-/**
- * Параметры компонента формы
- */
-type FlakyFormProps = {
-    className?: string;
-    children: any;
-    id?: string;
-    action?: string;
-    formState: FormProps;
-    setForm: SetFormProps;
-};
-/**
- * Компонент формы
- */
-type FlakyFormComponent = (flakyFormProps: FlakyFormProps) => React.ReactElement;
-/**
- * Список всех контролов включая мульти формы и мульти контролы
- */
-type FormControls = ControlsProps | ControlsProps[];
-/**
- * Тип функции на изменения состояния всей формы
- */
-type SetFormProps = (setFormFunc: (form: FormProps) => any) => any;
-/**
- * Хук инициализации
- */
-type UseFlakyForm = <T extends ControlsProps[] | ControlsProps>(controls: T extends ControlsProps[] ? ControlsProps[] : ControlsProps, customFormConfig: FormConfigProps) => [
-    FormProps<T extends ControlsProps[] ? ControlsProps[] : ControlsProps>,
-    SetFormProps
+type UseFlakyForm = (controls: ControlsList, customFormConfig?: FormConfigProps) => [
+    FormProps<typeof controls>,
+    any
 ];
-/**
- * Параметры компонента добавления формы
- */
-type AddFormExampleProps = {
-    setForm: SetFormProps;
-    value?: string;
-    children?: any;
-};
-/**
- * Компонент добавления формы
- */
-type AddFormExampleComponent = (addFormExampleProps: AddFormExampleProps) => void;
-/**
- * Параметры компонента удаления формы
- */
-type RemoveFormProps = {
-    setForm: SetFormProps;
-    formIndex: number | null;
-    value?: string;
-    children?: any;
-};
-/**
- * Компонент удаления формы
- */
-type RemoveFormComponent = (removeFormButtonProps: RemoveFormProps) => void;
-/**
- * Параметры компонента добавления экземпляра контрола
- */
-type AddControlProps = {
-    setForm: SetFormProps;
-    controlName: string;
-    formIndex?: null | number;
-};
-/**
- * Компонент добавления экземпляра контрола
- */
-type AddControlComponent = (AddControlProps: AddControlProps) => void;
-/**
- * Параметры компонента удаления экземпляра контрола
- */
-type RemoveControlProps = {
-    setForm: SetFormProps;
-    controlName: string;
-    controlIndex: null | number;
-    formIndex: null | number;
-};
-/**
- * Компонент удаления экземпляра контрола
- */
-type RemoveControlComponent = (AddControlProps: RemoveControlProps) => void;
-interface InputElementsClassNameProps {
-    input: string;
-    label: string;
-    error: string;
-}
-interface BemComponent {
-    className?: string;
-    children?: any;
-}
-interface FlakyInputProps extends BemComponent {
-    elementsClassName?: InputElementsClassNameProps;
-    type?: typeof inputTypes;
-    havePasswordVisibleSwitch?: boolean;
-    label?: string;
-    error?: string;
-    placeholder?: string | null;
-    hasError?: boolean;
-    inputName?: string | null;
-    value?: string | number | null | any[];
-    setValue?: any;
-    togglePasswordVisibility?: any;
-    labelProps?: {
-        [key: string]: string;
-    };
-    errorProps?: {
-        [key: string]: string;
-    };
-    inputProps?: {
-        [key: string]: string;
-    };
-    style?: {
-        [key: string]: string;
-    };
-    index?: null | number;
-    formIndex?: null | number;
-    inputMask?: null | MaskSettingProps;
-    customMask?: any;
-    [key: string]: any;
-}
-type FlakyInputComponent = (props: FlakyInputProps) => any;
-declare const FlakyInput: FlakyInputComponent;
-/**
- * @description
- * Хук инициализации формы
- *
- * @param {ControlsProps | ControlsProps[]} controls - массив контролы формы
- * @param {FormConfigProps} customFormConfig - объект с настройками поведения формы, передаваемый с наружи(хуки, тип валидации и тд)
- * @returns {[FormProps, any]} контролы с нужными настройками, функцию для изменения состояния формы
- *
- */
 declare const useFlakyForm: UseFlakyForm;
-declare const FlakyForm: FlakyFormComponent;
-declare const AddFormExample: AddFormExampleComponent;
-declare const RemoveForm: RemoveFormComponent;
-declare const AddControlExample: AddControlComponent;
-declare const RemoveControl: RemoveControlComponent;
-export { FlakyForm, FlakyInput, useFlakyForm, AddFormExample, RemoveForm, AddControlExample, RemoveControl };
+export { useFlakyForm };

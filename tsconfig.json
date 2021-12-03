@@ -25,16 +25,24 @@
     "esModuleInterop": true,
     "strictNullChecks": false,
     "paths": {
-      "@src/*": ["src/*"],
+
+      "@control-utils/*": ["src/utils/control/*"],
+      "@form-utils/*": ["src/utils/form/*"],
+
+
       "@UI/*": ["src/UI/*"],
       "@const": ["src/const"],
-      "@common-types": ["src/types.ts"],
       "@utils/*": ["src/utils/*"],
-      "@control-utils/*": ["src/utils/control-utils/*"],
+//      "@control-utils/*": ["src/utils/control-utils/*"],
       "@add-control-props-layers/*": ["src/utils/add-control-props-layers/*"],
-      "@control-handlers/*": ["src/utils/control-handlers/*"],
-      "@error-handlers/*": ["src/utils/error-handlers/*"],
-      "@validators/*": ["src/utils/validators/*"],
+      "@control-handlers/*": ["src/utils/control/data-handlers/*"],
+      "@error-handlers/*": ["src/utils/control/error-handlers/*"],
+      "@validators/*": ["src/utils/control/validators/*"],
+
+      "@common-types": ["src/types/index.ts"],
+      "@common-types/*": ["src/types/*"],
+      "@src/*": ["src/*"],
+
       "@mock-functions/*": ["tests/mock-functions/*"],
       "@tests/*": ["tests/*"]
     }
