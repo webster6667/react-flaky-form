@@ -885,9 +885,9 @@ var DEFAULT_FORM_SETTINGS = {
   }
 };
 
-function ownKeys$7(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys$8(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread$7(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$7(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$7(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread$8(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$8(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$8(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 /**
  * @description
@@ -900,12 +900,12 @@ function _objectSpread$7(target) { for (var i = 1; i < arguments.length; i++) { 
  *
  */
 var combineRulesLayers = function combineRulesLayers(bottomLayer, upperLayer) {
-  var combineLayer = _objectSpread$7({}, bottomLayer);
+  var combineLayer = _objectSpread$8({}, bottomLayer);
 
   Object.keys(combineLayer).forEach(function (validatorName) {
     var validator = bottomLayer[validatorName],
         newValidatorLayer = upperLayer ? upperLayer[validatorName] : {};
-    combineLayer[validatorName] = _objectSpread$7(_objectSpread$7({}, validator), newValidatorLayer);
+    combineLayer[validatorName] = _objectSpread$8(_objectSpread$8({}, validator), newValidatorLayer);
   });
   return combineLayer;
 };
@@ -1006,9 +1006,9 @@ var isLiveValidatorEnable = function isLiveValidatorEnable(controlValidatorsRule
   return controlValidatorsRules.liveEnable === true;
 };
 
-function ownKeys$6(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys$7(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread$6(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$6(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$6(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread$7(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$7(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$7(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 /**
  * @description
  * Живой валидатор введенных данных в интуп
@@ -1073,7 +1073,7 @@ var validateWrittenData = function validateWrittenData(hooksData) {
        * Live validator for less value limit
        */
       if (isInputNumberValid && u(newValue, minValueRules) && isLiveValidatorEnable(minValueRules)) {
-        y(errorData, _objectSpread$6(_objectSpread$6({}, minValueRules), {}, {
+        y(errorData, _objectSpread$7(_objectSpread$7({}, minValueRules), {}, {
           hasError: hasError
         }));
       }
@@ -1083,7 +1083,7 @@ var validateWrittenData = function validateWrittenData(hooksData) {
 
 
       if (isInputNumberValid && i(newValue, maxValueRules) && isLiveValidatorEnable(maxValueRules)) {
-        y(errorData, _objectSpread$6(_objectSpread$6({}, maxValueRules), {}, {
+        y(errorData, _objectSpread$7(_objectSpread$7({}, maxValueRules), {}, {
           hasError: hasError
         }));
       }
@@ -1093,7 +1093,7 @@ var validateWrittenData = function validateWrittenData(hooksData) {
 
 
       if (t(newValue, minLengthRules) && isLiveValidatorEnable(minLengthRules)) {
-        y(errorData, _objectSpread$6(_objectSpread$6({}, minLengthRules), {}, {
+        y(errorData, _objectSpread$7(_objectSpread$7({}, minLengthRules), {}, {
           hasError: hasError
         }));
       }
@@ -1103,7 +1103,7 @@ var validateWrittenData = function validateWrittenData(hooksData) {
 
 
       if (o(newValue, maxLengthRules) && isLiveValidatorEnable(maxLengthRules)) {
-        y(errorData, _objectSpread$6(_objectSpread$6({}, maxLengthRules), {}, {
+        y(errorData, _objectSpread$7(_objectSpread$7({}, maxLengthRules), {}, {
           hasError: hasError
         }));
       }
@@ -1113,7 +1113,7 @@ var validateWrittenData = function validateWrittenData(hooksData) {
 
 
       if (emailRules && a(newValue) && isLiveValidatorEnable(emailRules)) {
-        y(errorData, _objectSpread$6(_objectSpread$6({}, emailRules), {}, {
+        y(errorData, _objectSpread$7(_objectSpread$7({}, emailRules), {}, {
           hasError: hasError
         }));
       }
@@ -1124,7 +1124,7 @@ var validateWrittenData = function validateWrittenData(hooksData) {
 
 
     if (requiredRules && l(newValue) && isLiveValidatorEnable(requiredRules)) {
-      y(errorData, _objectSpread$6(_objectSpread$6(_objectSpread$6({}, requiredRules), requiredRules), {}, {
+      y(errorData, _objectSpread$7(_objectSpread$7(_objectSpread$7({}, requiredRules), requiredRules), {}, {
         hasError: hasError
       }));
     }
@@ -1134,7 +1134,7 @@ var validateWrittenData = function validateWrittenData(hooksData) {
 
 
     if (numberRules && isInputNumberInvalid) {
-      y(errorData, _objectSpread$6(_objectSpread$6(_objectSpread$6({}, numberRules), numberRules), {}, {
+      y(errorData, _objectSpread$7(_objectSpread$7(_objectSpread$7({}, numberRules), numberRules), {}, {
         hasError: hasError
       }));
     }
@@ -1147,9 +1147,9 @@ var validateWrittenData = function validateWrittenData(hooksData) {
 
 function getArraySum(e){var n=arguments.length>1&&void 0!==arguments[1]&&arguments[1],r=e.reduce((function(e,r){return n&&isNaN(+r)?+e:+e+ +r}),0);return r}
 
-function ownKeys$5(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys$6(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread$5(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$5(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$5(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread$6(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$6(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$6(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 /**
  * @description
  * Живой валидатор кликабельных инпутов
@@ -1186,7 +1186,7 @@ var validateClickedData = function validateClickedData(hooksData) {
    */
 
   if (requiredRules && l(newValue) && isLiveValidatorEnable(requiredRules)) {
-    y(errorData, _objectSpread$5(_objectSpread$5(_objectSpread$5({}, requiredRules), requiredRules), {}, {
+    y(errorData, _objectSpread$6(_objectSpread$6(_objectSpread$6({}, requiredRules), requiredRules), {}, {
       hasError: hasError
     }));
   }
@@ -1196,7 +1196,7 @@ var validateClickedData = function validateClickedData(hooksData) {
 
 
   if (minValueRules && shouldValidateArraySumValue && u(newValueArraySum, minValueRules) && isLiveValidatorEnable(minValueRules)) {
-    y(errorData, _objectSpread$5(_objectSpread$5(_objectSpread$5({}, minValueRules), minValueRules), {}, {
+    y(errorData, _objectSpread$6(_objectSpread$6(_objectSpread$6({}, minValueRules), minValueRules), {}, {
       hasError: hasError
     }));
   }
@@ -1206,7 +1206,7 @@ var validateClickedData = function validateClickedData(hooksData) {
 
 
   if (maxValueRules && shouldValidateArraySumValue && i(newValueArraySum, maxValueRules) && isLiveValidatorEnable(maxValueRules)) {
-    y(errorData, _objectSpread$5(_objectSpread$5(_objectSpread$5({}, maxValueRules), maxValueRules), {}, {
+    y(errorData, _objectSpread$6(_objectSpread$6(_objectSpread$6({}, maxValueRules), maxValueRules), {}, {
       hasError: hasError
     }));
   }
@@ -1216,7 +1216,7 @@ var validateClickedData = function validateClickedData(hooksData) {
 
 
   if (minLengthRules && t(newValue, minLengthRules) && isLiveValidatorEnable(minLengthRules)) {
-    y(errorData, _objectSpread$5(_objectSpread$5(_objectSpread$5({}, minLengthRules), minLengthRules), {}, {
+    y(errorData, _objectSpread$6(_objectSpread$6(_objectSpread$6({}, minLengthRules), minLengthRules), {}, {
       hasError: hasError
     }));
   }
@@ -1226,7 +1226,7 @@ var validateClickedData = function validateClickedData(hooksData) {
 
 
   if (maxLengthRules && o(newValue, maxLengthRules) && isLiveValidatorEnable(maxLengthRules)) {
-    y(errorData, _objectSpread$5(_objectSpread$5(_objectSpread$5({}, maxLengthRules), maxLengthRules), {}, {
+    y(errorData, _objectSpread$6(_objectSpread$6(_objectSpread$6({}, maxLengthRules), maxLengthRules), {}, {
       hasError: hasError
     }));
   }
@@ -1377,9 +1377,9 @@ var defaultLiveErrorHandler = function defaultLiveErrorHandler(errorDataForContr
   }
 };
 
-function ownKeys$4(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+function ownKeys$5(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread$4(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$4(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$4(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+function _objectSpread$5(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$5(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$5(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 /**
  * @description
  * Функция которая выбирает обработчик ошибки, и обрабатывает его вместе с дебаунсом
@@ -1402,7 +1402,8 @@ var liveValidatorShowErrorHandler = function liveValidatorShowErrorHandler(error
   var shouldUseDebounce = Boolean(ms),
       errorHandler = shouldUseDebounce ? function () {
     return setForm(function (prevForm) {
-      form = _objectSpread$4({}, prevForm);
+      var form = _objectSpread$5({}, prevForm);
+
       defaultLiveErrorHandler(errorDataForControl, hooksData, form, setForm);
       return form;
     });
@@ -1476,9 +1477,101 @@ var setLiveValidatorResult = function setLiveValidatorResult(validator, hookProp
   if (errorData) controlOutputData.errorDataForControl = errorData;
 };
 
+function ownKeys$4(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread$4(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$4(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$4(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+/**
+ * @description
+ * Обработчик запроса для живого инпута
+ *
+ * @param {ControlProps} currentControl - Контрол в который ввели данные и происходит обработка
+ * @param {HookProps} hooksData - Данные для хуков
+ * @param {SetForm} setForm - Функция изменяющая главный объект формы
+ *
+ * @returns {void}
+ */
+
+var requestHandler = function requestHandler(currentControl, hooksData, setForm) {
+  var request = currentControl.liveSearch.request;
+
+  var _request = request(hooksData),
+      url = _request.url,
+      _request$method = _request.method,
+      method = _request$method === void 0 ? 'get' : _request$method,
+      _request$data = _request.data,
+      data = _request$data === void 0 ? {} : _request$data;
+
+  if (url) {
+    currentControl.liveSearch.isLoading = true;
+    axios__default['default']({
+      method: method,
+      url: url,
+      data: data
+    }).then(function (requestResult) {
+      var controlName = hooksData.controlName;
+      setForm(function (prevForm) {
+        var form = _objectSpread$4({}, prevForm),
+            control = form.controls[controlName];
+        /**
+         * Выключить режим ожидания
+         */
+
+
+        control.liveSearch.isLoading = false;
+        /**
+         * Результат живого запроса
+         */
+
+        var foundedData = control.liveSearch.response(hooksData, requestResult);
+        control.liveSearch.foundedData = foundedData || requestResult;
+        return form;
+      });
+    });
+  }
+};
+
 function ownKeys$3(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread$3(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys$3(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys$3(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+/**
+ * @description
+ * Обработчик инпута с живым поиском
+ *
+ * @param {ControlProps} currentControl - Контрол в который ввели данные и происходит обработка
+ * @param {HookProps} hooksData - Данные для хуков
+ * @param {SetForm} setForm - Функция изменяющая главный объект формы
+ *
+ * @returns {void}
+ */
+
+var liveSearchHandler = function liveSearchHandler(currentControl, hooksData, setForm) {
+  var liveSearch = currentControl.liveSearch,
+      prevLiveSearchRequestTimeoutId = currentControl._liveSearchRequestTimeoutId,
+      _liveSearch$debounceT = liveSearch.debounceTime,
+      debounceTime = _liveSearch$debounceT === void 0 ? 0 : _liveSearch$debounceT,
+      requestHandlerWrapper = debounceTime ? function () {
+    return setForm(function (prevForm) {
+      var form = _objectSpread$3({}, prevForm);
+
+      requestHandler(currentControl, hooksData, setForm);
+      return form;
+    });
+  } : function () {
+    requestHandler(currentControl, hooksData, setForm);
+  };
+  /**
+   *  Если вызов с таймаутом
+   *  Отчистить старый таймаут, назначить новый
+   */
+
+  if (debounceTime) {
+    prevLiveSearchRequestTimeoutId && clearTimeout(prevLiveSearchRequestTimeoutId);
+    currentControl._liveSearchRequestTimeoutId = debounce(requestHandlerWrapper, debounceTime)();
+  } else {
+    requestHandlerWrapper();
+  }
+};
+
 /**
  * @description
  * Обработчик всех видов входных данных при вводе
@@ -1572,42 +1665,7 @@ var liveInputHandler = function liveInputHandler(currentControl, form, hooksData
      * Живой ввод
      */
 
-    if (hasLiveSearch) {
-      var _currentControl$liveS = currentControl.liveSearch.request(hooksData),
-          url = _currentControl$liveS.url,
-          _currentControl$liveS2 = _currentControl$liveS.method,
-          method = _currentControl$liveS2 === void 0 ? 'get' : _currentControl$liveS2,
-          _currentControl$liveS3 = _currentControl$liveS.data,
-          data = _currentControl$liveS3 === void 0 ? {} : _currentControl$liveS3;
-
-      if (url) {
-        currentControl.liveSearch.isLoading = true;
-        axios__default['default']({
-          method: method,
-          url: url,
-          data: data
-        }).then(function (requestResult) {
-          var controlName = hooksData.controlName;
-          setForm(function (prevForm) {
-            var form = _objectSpread$3({}, prevForm),
-                control = form.controls[controlName];
-            /**
-             * Выключить режим ожидания
-             */
-
-
-            control.liveSearch.isLoading = false;
-            /**
-             * Результат живого запроса
-             */
-
-            var foundedData = control.liveSearch.response(hooksData, requestResult);
-            control.liveSearch.foundedData = foundedData || requestResult;
-            return form;
-          });
-        });
-      }
-    }
+    if (hasLiveSearch) liveSearchHandler(currentControl, hooksData, setForm);
   }
   /**
    * Выключить флаг наличия ошибки у контрола

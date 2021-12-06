@@ -40,7 +40,7 @@ export const liveValidatorShowErrorHandler: LiveValidatorShowErrorHandler = (
     errorHandler = shouldUseDebounce
       ? () =>
           setForm(prevForm => {
-            form = { ...prevForm };
+            const form = { ...prevForm };
             defaultLiveErrorHandler(
               errorDataForControl,
               hooksData,
