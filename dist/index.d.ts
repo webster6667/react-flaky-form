@@ -156,7 +156,8 @@ interface ControlProps {
     label?: string;
     error?: string;
     hasError?: boolean;
-    setValue?: (writeValue: string, eventType: typeof inputEvents) => void;
+    hasErrorLockingSubmitBtn?: boolean;
+    setValue?: (writeValue: string | number | any[], eventType: typeof inputEvents) => void;
     liveSearch?: {
         isLoading?: boolean;
         request(hookData: HookProps): {
@@ -231,7 +232,7 @@ interface HookProps {
     /**
      * Выбранное значение ?
      */
-    selectedValue: number | string | null;
+    selectedValue?: number | string | null;
 }
 /**
  * @description
@@ -242,6 +243,10 @@ interface ValidatorErrorProps {
      * Была ли ошибка в контроле
      */
     hasError: boolean;
+    /**
+     * Была ли ошибка в контроле блокирующая кнопку отправления
+     */
+    hasErrorLockingSubmitBtn?: boolean;
     /**
      * Блокировать ли ввод значения не прошедшее валидацию
      */

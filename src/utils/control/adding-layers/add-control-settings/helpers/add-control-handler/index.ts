@@ -1,9 +1,11 @@
 import { liveInputHandler } from '@control-handlers/live-input-handler';
-// import { shouldLockSubmitBtnByForm } from '@control-handlers/submit-btn-lock-handler';
+// import { shouldLockingSubmitBtn } from '@control-handlers/should-locking-submit-btn';
 
-import { HookProps, inputEvents, SetForm, FormProps } from '@common-types';
+import {HookProps, inputEvents, SetForm, FormProps, CurrentControlData} from '@common-types';
 
 import { AddControlHandler } from './types';
+import {controlsCycle} from "@control-utils/controls-cycle";
+import {addControlSetting} from "@control-utils/adding-layers/add-control-settings";
 
 /**
  * @description
@@ -66,7 +68,7 @@ export const addControlHandler: AddControlHandler = (
      * Функция изменения значения(валидация, запись ошибок, запись значения, блокировка записи)
      */
     liveInputHandler(currentControl, form, hookData, eventType, setForm);
-
+    
     /**
      * @description
      * Хук срабатывающий после изменения значения инпута
@@ -76,11 +78,27 @@ export const addControlHandler: AddControlHandler = (
       afterChange(hookData);
     }
 
+
+    
     /**
      * После каждого ввода проверять по всем контролам формы(так как текущий контрол может влиять на другие)
      * Блокировать ли кнопку отправки
      */
-    // form.formState.isSubmitBtnLocked = shouldLockSubmitBtnByForm(form);
+    let shouldLockSubmitBtn = false,
+        formControls = form.controls
+
+      /**
+       * Перебор контролов
+       */
+      Object.keys(formControls).forEach(controlName => {
+          const control = formControls[controlName];
+
+
+          if (control.hasErrorLockingSubmitBtn) shouldLockSubmitBtn = true;
+      });
+
+    form.formState.isSubmitBtnLocked = shouldLockSubmitBtn;
+
 
     return form;
   });

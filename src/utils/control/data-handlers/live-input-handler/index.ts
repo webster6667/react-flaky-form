@@ -84,6 +84,7 @@ export const liveInputHandler: LiveInputHandler = (
     errorDataForControl: null,
     hasAnyError: false,
     isWriteInputEnable: true,
+    hasAnyLockingSubmitBtnError: false
   };
 
   /**
@@ -99,6 +100,7 @@ export const liveInputHandler: LiveInputHandler = (
   const {
     errorDataForControl,
     hasAnyError,
+    hasAnyLockingSubmitBtnError,
     writeToControlValue,
     isWriteInputEnable,
   } = controlOutputData;
@@ -114,6 +116,7 @@ export const liveInputHandler: LiveInputHandler = (
    * Записать новое значение, если инпут нигде не был заблокирован
    */
   if (isWriteInputEnable) {
+
     currentControl.value = writeToControlValue;
 
     /**
@@ -134,6 +137,13 @@ export const liveInputHandler: LiveInputHandler = (
      */
     if (hasControlHideErrorTimeout) currentControl._hideErrorTimeoutId && clearTimeout(currentControl._hideErrorTimeoutId);
   }
+
+  /**
+   * Обработать флаг блокирует ли контрол кнопку отправления
+   */
+  currentControl.hasErrorLockingSubmitBtn = hasAnyLockingSubmitBtnError;
+  
+
 
   /**
    * Отобразить ошибки в живом времени, только после первой попытки отправки формы

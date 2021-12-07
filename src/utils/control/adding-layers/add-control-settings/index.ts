@@ -1,6 +1,7 @@
 import { FormProps, SetForm, CurrentControlData } from '@common-types';
 import { AddControlSetting } from './types';
 
+import {shouldLockingSubmitBtn} from '@control-handlers/should-locking-submit-btn'
 import { addRequireControlFields } from './helpers/add-required-control-fields';
 
 import { addControlHandler } from './helpers/add-control-handler';
@@ -63,12 +64,27 @@ export const addControlSetting: AddControlSetting = (
         eventType,
         selectedValue,
       );
+    
 
-    // console.log('блок', isControlLockSubmit(currentControlData, form));
-
+     
+    
     /**
      * Проверить при инициализации контрола, блокировать ли кнопку
      */
+    const shouldLockSubmitBtn = shouldLockingSubmitBtn(currentControlData, form)
+
+    console.log(shouldLockSubmitBtn, controlName);
+    
+    currentControl.hasErrorLockingSubmitBtn = shouldLockSubmitBtn
+
+    /**
+     * Заблокировать кнопку если хоть один контрол блокирует
+     */
+    if (form.formState.isSubmitBtnLocked === false && shouldLockSubmitBtn) {
+      form.formState.isSubmitBtnLocked = true
+    }
+
+
     // form.formState.isSubmitBtnLocked = isControlLockSubmit(
     //   currentControlData,
     //   form,

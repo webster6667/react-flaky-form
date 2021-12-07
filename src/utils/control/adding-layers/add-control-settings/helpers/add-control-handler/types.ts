@@ -1,7 +1,7 @@
 import { inputEvents, SetForm } from '@common-types';
 
 export type AddControlHandler = (
-  newValue: string | number,
+  newValue: string | number | any[],
   controlName: string,
   setForm: SetForm,
   eventType: typeof inputEvents,

@@ -22,7 +22,7 @@ export const setLiveValidatorResult: SetLiveValidatorResult = (
   controlOutputData,
 ) => {
   const { errorData = null, modifiedValueToWrite = null } = validator(hookProps),
-    { shouldLockNotValidWrite = false, hasError = false } = errorData || {};
+    { shouldLockNotValidWrite = false, hasError = false, hasErrorLockingSubmitBtn = false } = errorData || {};
   
   if (shouldLockNotValidWrite) controlOutputData.isWriteInputEnable = false;
 
@@ -30,6 +30,11 @@ export const setLiveValidatorResult: SetLiveValidatorResult = (
    * Отметить флаг что в контроле была хоть одна ошибка
    */
   if (hasError) controlOutputData.hasAnyError = true;
+
+  /**
+   * Отметить флаг что в контроле была хоть одна ошибка
+   */
+  if (hasErrorLockingSubmitBtn) controlOutputData.hasAnyLockingSubmitBtnError = true
 
   /**
    * Если в валидаторе модифицировали вводимое значение, и вернули, записать в объект вывода

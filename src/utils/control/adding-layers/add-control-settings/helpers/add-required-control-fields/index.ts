@@ -11,10 +11,12 @@ import { AddRequireControlFields } from './types';
  */
 export const addRequireControlFields: AddRequireControlFields = singleControlData => {
   const { currentControl: control, controlName, formName } = singleControlData,
-    isSelectInput = control.type === 'select';
+        isSelectInput = control.type === 'select';
 
   control.error = '';
   control.hasError = false;
+  control.hasErrorLockingSubmitBtn = false;
+
 
   control.controlName = controlName;
   control.inputName = `${formName}[${controlName}]`;

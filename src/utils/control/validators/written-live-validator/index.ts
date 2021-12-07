@@ -45,6 +45,7 @@ export const validateWrittenData: LiveValidator = hooksData => {
     } = controlValidatorsRules,
     errorData: ValidatorErrorProps = {
       hasError: false,
+      hasErrorLockingSubmitBtn: false,
       shouldLockNotValidWrite: false,
       message: null,
       limit: null,
@@ -52,6 +53,7 @@ export const validateWrittenData: LiveValidator = hooksData => {
       hideErrorTimeout: null,
       showErrorTimeout: null,
     };
+
 
   /**
    * @description
@@ -77,8 +79,11 @@ export const validateWrittenData: LiveValidator = hooksData => {
         isLessThanLimit(newValue, minValueRules) &&
         isLiveValidatorEnable(minValueRules)
       ) {
+        const hasErrorLockingSubmitBtn = minValueRules.shouldLockSubmitBtnWhenControlInvalid
+
         errorDataHandler(errorData, {
           ...minValueRules,
+          hasErrorLockingSubmitBtn,
           hasError,
         });
       }
@@ -91,8 +96,11 @@ export const validateWrittenData: LiveValidator = hooksData => {
         isGreaterThanLimit(newValue, maxValueRules) &&
         isLiveValidatorEnable(maxValueRules)
       ) {
+        const hasErrorLockingSubmitBtn = maxValueRules.shouldLockSubmitBtnWhenControlInvalid
+
         errorDataHandler(errorData, {
           ...maxValueRules,
+          hasErrorLockingSubmitBtn,
           hasError,
         });
       }
@@ -104,8 +112,11 @@ export const validateWrittenData: LiveValidator = hooksData => {
         isShorterThanLimit(newValue, minLengthRules) &&
         isLiveValidatorEnable(minLengthRules)
       ) {
+        const hasErrorLockingSubmitBtn = minLengthRules.shouldLockSubmitBtnWhenControlInvalid
+
         errorDataHandler(errorData, {
           ...minLengthRules,
+          hasErrorLockingSubmitBtn,
           hasError,
         });
       }
@@ -117,8 +128,11 @@ export const validateWrittenData: LiveValidator = hooksData => {
         isLongerThanLimit(newValue, maxLengthRules) &&
         isLiveValidatorEnable(maxLengthRules)
       ) {
+        const hasErrorLockingSubmitBtn = maxLengthRules.shouldLockSubmitBtnWhenControlInvalid
+
         errorDataHandler(errorData, {
           ...maxLengthRules,
+          hasErrorLockingSubmitBtn,
           hasError,
         });
       }
@@ -131,8 +145,11 @@ export const validateWrittenData: LiveValidator = hooksData => {
         isMailInvalid(newValue) &&
         isLiveValidatorEnable(emailRules)
       ) {
+        const hasErrorLockingSubmitBtn = emailRules.shouldLockSubmitBtnWhenControlInvalid
+
         errorDataHandler(errorData, {
           ...emailRules,
+          hasErrorLockingSubmitBtn,
           hasError,
         });
       }
@@ -146,9 +163,11 @@ export const validateWrittenData: LiveValidator = hooksData => {
       isWrittenValueEmpty(newValue) &&
       isLiveValidatorEnable(requiredRules)
     ) {
+      const hasErrorLockingSubmitBtn = requiredRules.shouldLockSubmitBtnWhenControlInvalid
+
       errorDataHandler(errorData, {
         ...requiredRules,
-        ...requiredRules,
+        hasErrorLockingSubmitBtn,
         hasError,
       });
     }
@@ -157,13 +176,16 @@ export const validateWrittenData: LiveValidator = hooksData => {
      * Live validator for valid number
      */
     if (numberRules && isInputNumberInvalid) {
+      const hasErrorLockingSubmitBtn = numberRules.shouldLockSubmitBtnWhenControlInvalid
+
       errorDataHandler(errorData, {
         ...numberRules,
-        ...numberRules,
+        hasErrorLockingSubmitBtn,
         hasError,
       });
     }
   }
+
 
   return { errorData };
 };

@@ -51,7 +51,7 @@ export interface HookProps {
   /**
    * Выбранное значение ?
    */
-  selectedValue: number | string | null;
+  selectedValue?: number | string | null;
 }
 
 /**
@@ -63,6 +63,11 @@ interface ValidatorErrorProps {
    * Была ли ошибка в контроле
    */
   hasError: boolean;
+
+  /**
+   * Была ли ошибка в контроле блокирующая кнопку отправления
+   */
+  hasErrorLockingSubmitBtn?: boolean,
 
   /**
    * Блокировать ли ввод значения не прошедшее валидацию

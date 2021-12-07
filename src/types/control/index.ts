@@ -23,7 +23,8 @@ export interface ControlProps {
     label?: string;
     error?: string;
     hasError?: boolean;
-    setValue?: (writeValue: string, eventType: typeof inputEvents) => void;
+    hasErrorLockingSubmitBtn?: boolean,
+    setValue?: (writeValue: string | number | any[], eventType: typeof inputEvents) => void;
     liveSearch?: {
       isLoading?: boolean,
       request(hookData: HookProps): {
@@ -122,6 +123,11 @@ export interface ControlOutputDataProps<T = string | number | any[]> {
      * Была ли ошибка хоть в одном из валидаторов
      */
     hasAnyError: boolean;
+
+    /**
+     * Была ли ошибка хоть в одном из валидаторов блокирующая кнопку отправления
+     */
+    hasAnyLockingSubmitBtnError?: boolean;
 
     /**
      * Открыт ли инпут для записи данных из контрола

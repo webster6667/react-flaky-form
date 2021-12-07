@@ -35,6 +35,7 @@ export const validateClickedData: LiveValidator = hooksData => {
     } = controlValidatorsRules,
     errorData: ValidatorErrorProps = {
       hasError: false,
+      hasErrorLockingSubmitBtn: false,
       shouldLockNotValidWrite: false,
       message: null,
       limit: null,
@@ -54,10 +55,12 @@ export const validateClickedData: LiveValidator = hooksData => {
     isWrittenValueEmpty(newValue) &&
     isLiveValidatorEnable(requiredRules)
   ) {
+    const hasErrorLockingSubmitBtn = requiredRules.shouldLockSubmitBtnWhenControlInvalid
+
     errorDataHandler(errorData, {
       ...requiredRules,
-      ...requiredRules,
       hasError,
+      hasErrorLockingSubmitBtn
     });
   }
 
@@ -70,10 +73,13 @@ export const validateClickedData: LiveValidator = hooksData => {
     isLessThanLimit(newValueArraySum, minValueRules) &&
     isLiveValidatorEnable(minValueRules)
   ) {
+
+    const hasErrorLockingSubmitBtn = minValueRules.shouldLockSubmitBtnWhenControlInvalid
+
     errorDataHandler(errorData, {
       ...minValueRules,
-      ...minValueRules,
       hasError,
+      hasErrorLockingSubmitBtn
     });
   }
 
@@ -86,10 +92,13 @@ export const validateClickedData: LiveValidator = hooksData => {
     isGreaterThanLimit(newValueArraySum, maxValueRules) &&
     isLiveValidatorEnable(maxValueRules)
   ) {
+    const hasErrorLockingSubmitBtn = maxValueRules.shouldLockSubmitBtnWhenControlInvalid
+
+
     errorDataHandler(errorData, {
       ...maxValueRules,
-      ...maxValueRules,
       hasError,
+      hasErrorLockingSubmitBtn
     });
   }
 
@@ -101,10 +110,12 @@ export const validateClickedData: LiveValidator = hooksData => {
     isShorterThanLimit(newValue, minLengthRules) &&
     isLiveValidatorEnable(minLengthRules)
   ) {
+    const hasErrorLockingSubmitBtn = minLengthRules.shouldLockSubmitBtnWhenControlInvalid
+
     errorDataHandler(errorData, {
       ...minLengthRules,
-      ...minLengthRules,
       hasError,
+      hasErrorLockingSubmitBtn
     });
   }
 
@@ -116,10 +127,13 @@ export const validateClickedData: LiveValidator = hooksData => {
     isLongerThanLimit(newValue, maxLengthRules) &&
     isLiveValidatorEnable(maxLengthRules)
   ) {
+    const hasErrorLockingSubmitBtn = maxLengthRules.shouldLockSubmitBtnWhenControlInvalid
+
+
     errorDataHandler(errorData, {
       ...maxLengthRules,
-      ...maxLengthRules,
       hasError,
+      hasErrorLockingSubmitBtn
     });
   }
 
