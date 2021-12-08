@@ -21,7 +21,7 @@ export const setLiveValidatorResult: SetLiveValidatorResult = (
   hookProps,
   controlOutputData,
 ) => {
-  const { errorData = null, modifiedValueToWrite = null } = validator(hookProps),
+  const { errorData = null, modifiedValueToWrite = null } = validator(hookProps, controlOutputData.errorDataForControl),
     { shouldLockNotValidWrite = false, hasError = false, hasErrorLockingSubmitBtn = false } = errorData || {};
   
   if (shouldLockNotValidWrite) controlOutputData.isWriteInputEnable = false;

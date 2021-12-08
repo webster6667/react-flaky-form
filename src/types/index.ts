@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 import {ValidatorRulesProps, ValidatorsRulesList, LimitingValidatorRulesProps, NumberValidatorRulesProps} from './validator-rules'
 import {FormConfigProps} from './form/form-settings'
 import {FormStateProps} from './form/form-state'
-import {FormProps, SetForm} from './form'
+import {FormProps, SetForm, FlakyFormI} from './form'
 import {ControlsList, ControlProps, CurrentControlData, ControlOutputDataProps} from './control'
 
 let inputTypes:
@@ -121,7 +121,7 @@ type StaticValidator = (hookData: HookProps) => ValidatorErrorProps;
  * @description
  * Типизация функции живого валидатора
  */
-type LiveValidator = (hookData: HookProps) => {
+type LiveValidator = (hookData: HookProps, errorData?: ValidatorErrorProps) => {
   modifiedValueToWrite?: string | number | null;
   errorData: ValidatorErrorProps;
 };
@@ -136,8 +136,10 @@ type UseFlakyForm = (
 ) => [FormProps<typeof controls>, any];
 
 
+
 export {
   UseFlakyForm,
+  FlakyFormI,
   FormProps,
   SetForm,
   LiveValidator,

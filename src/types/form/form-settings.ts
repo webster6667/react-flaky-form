@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 import { ValidatorsRulesList } from '@common-types/validator-rules'
 
-import {HookProps, LiveValidator, StaticValidator} from "@src/types/index";
+import {HookProps, LiveValidator, StaticValidator, FormProps} from "@common-types";
 
 /**
  * @description
@@ -48,8 +48,12 @@ export interface FormConfigProps {
     beforeSubmitValidator?(hookData: HookProps): any;
     afterSubmitValidator?(hookData: HookProps): any;
 
+    beforeRequest?(form): {
+        body: unknown
+    };
+
     //Хуки после отправки формы
     afterSuccessSubmit?(axiosResponse: AxiosResponse): any;
     afterErrorSubmit?(axiosResponse: AxiosResponse): any;
-    afterSubmit?(axiosResponse: AxiosResponse): any;
+    afterSubmit?(axiosResponse: AxiosResponse, form: FormProps): any;
 }

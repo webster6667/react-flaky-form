@@ -92,10 +92,10 @@ export const liveInputHandler: LiveInputHandler = (
    */
   if (hasLiveValidator) setLiveValidatorResult(liveValidator, hooksData, controlOutputData);
 
-  // /**
-  //  * Записать результаты дополнительного живого валидатора в объект вывода
-  //  */
-  // if (hasAdditionalLiveValidator) setLiveValidatorResult(additionalLiveValidator, hooksData, controlOutputData);
+  /**
+   * Записать результаты дополнительного живого валидатора в объект вывода
+   */
+  if (hasAdditionalLiveValidator) setLiveValidatorResult(additionalLiveValidator, hooksData, controlOutputData);
 
   const {
     errorDataForControl,

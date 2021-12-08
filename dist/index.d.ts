@@ -1,4 +1,6 @@
+/// <reference types="react" />
 import { AxiosResponse } from "axios";
+import React from "react";
 /**
  *  Правила основных валидаторов
  */
@@ -92,10 +94,13 @@ interface FormConfigProps {
     //Хуки до и после отправки для каждого контрола
     beforeSubmitValidator?(hookData: HookProps): any;
     afterSubmitValidator?(hookData: HookProps): any;
+    beforeRequest?(form: any): {
+        body: unknown;
+    };
     //Хуки после отправки формы
     afterSuccessSubmit?(axiosResponse: AxiosResponse): any;
     afterErrorSubmit?(axiosResponse: AxiosResponse): any;
-    afterSubmit?(axiosResponse: AxiosResponse): any;
+    afterSubmit?(axiosResponse: AxiosResponse, form: FormProps): any;
 }
 /**
  * @description
@@ -135,6 +140,19 @@ interface FormProps<T = ControlsList> {
     formState: FormStateProps;
     formSettings?: FormConfigProps;
 }
+type SetForm = (setFormFunc: (form: FormProps) => any) => any;
+/**
+ * Параметры компонента формы
+ */
+type FlakyFormProps = {
+    className?: string;
+    children: any;
+    id?: string;
+    action?: string;
+    formState: FormProps;
+    setForm: SetForm;
+};
+type FlakyFormI = (flakyFormProps: FlakyFormProps) => React.ReactElement;
 /**
  * @description
  * Опции кликабельных контролов(radio, check, select)
@@ -289,7 +307,7 @@ type StaticValidator = (hookData: HookProps) => ValidatorErrorProps;
  * @description
  * Типизация функции живого валидатора
  */
-type LiveValidator = (hookData: HookProps) => {
+type LiveValidator = (hookData: HookProps, errorData?: ValidatorErrorProps) => {
     modifiedValueToWrite?: string | number | null;
     errorData: ValidatorErrorProps;
 };
@@ -302,4 +320,5 @@ type UseFlakyForm = (controls: ControlsList, customFormConfig?: FormConfigProps)
     any
 ];
 declare const useFlakyForm: UseFlakyForm;
-export { useFlakyForm };
+declare const FlakyForm: FlakyFormI;
+export { useFlakyForm, FlakyForm };

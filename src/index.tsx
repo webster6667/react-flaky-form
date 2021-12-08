@@ -5,8 +5,10 @@ import { DEFAULT_FORM_SETTINGS, FORM_NAME } from '@const';
 import { combineRulesLayers } from '@control-utils/adding-layers/combine-rules-layers';
 
 import { initForm } from '@form-utils/init';
+import { submitFlakyFormHandler } from '@form-utils/submit';
 
-import { UseFlakyForm } from '@common-types';
+
+import {FlakyFormI, UseFlakyForm} from '@common-types';
 
 const useFlakyForm: UseFlakyForm = (controls, customFormConfig = {}) => {
   const formState = {
@@ -44,4 +46,33 @@ const useFlakyForm: UseFlakyForm = (controls, customFormConfig = {}) => {
   return [flukyForm, setForm];
 };
 
-export { useFlakyForm };
+const FlakyForm:FlakyFormI = ({
+                                        children,
+                                        className = 'form',
+                                        id = null,
+                                        action = null,
+                                        formState,
+                                        setForm
+                                      }) => {
+
+  const {loaded} = formState.formState,
+      {formName: currentFormName} = formState.formSettings,
+      submitHandler = (e) => {
+        e.preventDefault()
+        submitFlakyFormHandler(setForm)
+      }
+
+  return (<form
+      id={id || String(currentFormName)}
+      className={className}
+      onSubmit={submitHandler}
+  >
+    {children}
+      <input data-element={'hidden-submit-trigger'}
+             type={'submit'}
+             style={{opacity: 0, width: 0, height: 0, position: 'absolute', zIndex: -1}}
+      />
+  </form>)
+}
+
+export { useFlakyForm, FlakyForm };
