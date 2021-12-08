@@ -13,6 +13,7 @@ import {
   LiveValidator,
   ValidatorErrorProps,
   HookProps,
+  ValidatorsRulesListInsideValidator
 } from '@common-types';
 
 import { isLiveValidatorEnable } from '@validators/helpers/is-live-validator-enable';
@@ -33,7 +34,7 @@ export const validateWrittenData: LiveValidator = hooksData => {
    * 3.Получить настройки валидаторов
    */
   const { currentControl, newValue } = hooksData,
-    controlValidatorsRules = currentControl.validateRules || {},
+    controlValidatorsRules = currentControl.validateRules as ValidatorsRulesListInsideValidator || {},
     {
       minValue: minValueRules,
       maxValue: maxValueRules,
@@ -60,12 +61,17 @@ export const validateWrittenData: LiveValidator = hooksData => {
    * Если новое значение подходит по типу
    */
   if (typeof newValue === 'string' || typeof newValue === 'number') {
+    
+    
+    
     const {dot = false, negative = false} = numberRules || {},
-          isInputNumberValid = isNumberValid(newValue, {shouldLockFloatNumber: !dot, shouldLockNegativeNumber: !negative}),
+          isInputNumberValid = isNumberValid(newValue, {shouldLockFloatNumber: true, shouldLockNegativeNumber: false}),
           isInputNumberInvalid = !isInputNumberValid,
           isWrittenValueNotEmpty = !isWrittenValueEmpty(newValue),
           hasError = true;
 
+    console.log(isInputNumberValid);
+    
     /**
      * @description
      * Enable live validators only for filled input

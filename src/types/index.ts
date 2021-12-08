@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import {ValidatorRulesProps, ValidatorsRulesList, LimitingValidatorRulesProps, NumberValidatorRulesProps} from './validator-rules'
+import {ValidatorRulesProps, ValidatorsRulesListInsideValidator, ValidatorsRulesList, LimitingValidatorRulesProps, NumberValidatorRulesProps} from './validator-rules'
 import {FormConfigProps} from './form/form-settings'
 import {FormStateProps} from './form/form-state'
 import {FormProps, SetForm, FlakyFormI} from './form'
@@ -155,6 +155,7 @@ export {
   inputEvents,
   ValidatorRulesProps,
   ValidatorsRulesList,
+  ValidatorsRulesListInsideValidator,
   LimitingValidatorRulesProps,
   NumberValidatorRulesProps
 }

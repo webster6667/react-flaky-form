@@ -11,7 +11,8 @@ import { isLiveValidatorEnable } from './../helpers/is-live-validator-enable';
 
 import {
   LiveValidator,
-  ValidatorErrorProps
+  ValidatorErrorProps,
+  ValidatorsRulesListInsideValidator
 } from '@common-types';
 
 /**
@@ -25,7 +26,7 @@ import {
  */
 export const validateClickedData: LiveValidator = hooksData => {
   const { currentControl, newValue } = hooksData,
-    controlValidatorsRules = currentControl.validateRules || {},
+    controlValidatorsRules = currentControl.validateRules as ValidatorsRulesListInsideValidator || {},
     {
       required: requiredRules,
       minValue: minValueRules,

@@ -54,13 +54,13 @@ interface NumberValidatorRulesProps extends ValidatorRulesProps {
  * Список валидаторов
  */
 interface ValidatorsRulesList {
-    minLength?: LimitingValidatorRulesProps;
-    maxLength?: LimitingValidatorRulesProps;
-    minValue?: LimitingValidatorRulesProps;
-    maxValue?: LimitingValidatorRulesProps;
-    number?: NumberValidatorRulesProps;
-    required?: ValidatorRulesProps;
-    email?: ValidatorRulesProps;
+    minLength?: LimitingValidatorRulesProps | true;
+    maxLength?: LimitingValidatorRulesProps | true;
+    minValue?: LimitingValidatorRulesProps | true;
+    maxValue?: LimitingValidatorRulesProps | true;
+    number?: NumberValidatorRulesProps | true;
+    required?: ValidatorRulesProps | true;
+    email?: ValidatorRulesProps | true;
 }
 /**
  * @description
