@@ -27,11 +27,8 @@ export const submitFlakyFormHandler:SubmitFlakyFormHandler = async (setForm) => 
                 // initAction = action
                 // action ? typeof action === 'object' && action.toSubmit ? action.toSubmit : String(action) : null
 
-            let body
+            const {body = null} = typeof beforeRequest === "function" ? beforeRequest(form) : {}
 
-            if(typeof beforeRequest === "function") {
-                body = beforeRequest(form)
-            }
 
             if (action) {
                 axios.post(action, body).then((data) => {
