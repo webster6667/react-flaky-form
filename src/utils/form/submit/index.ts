@@ -22,11 +22,16 @@ export const submitFlakyFormHandler:SubmitFlakyFormHandler = async (setForm) => 
 
         // if (isAllControlsValid) {}
 
-            const {action = null, beforeRequest} = form.formSettings
+            const {action = null, beforeRequest, afterSubmit} = form.formSettings
+
                 // initAction = action
                 // action ? typeof action === 'object' && action.toSubmit ? action.toSubmit : String(action) : null
 
-            const {body} = beforeRequest(form)
+            let body
+
+            if(typeof beforeRequest === "function") {
+                body = beforeRequest(form)
+            }
 
             if (action) {
                 axios.post(action, body).then((data) => {
@@ -56,7 +61,7 @@ export const submitFlakyFormHandler:SubmitFlakyFormHandler = async (setForm) => 
                                   {afterSubmit = null} = form.formSettings
 
                             if (typeof afterSubmit === "function") {
-                                afterSubmit(data, form)
+                                afterSubmit(form, data)
                             }
 
                             return form
@@ -72,7 +77,7 @@ export const submitFlakyFormHandler:SubmitFlakyFormHandler = async (setForm) => 
                             {afterSubmit = null} = form.formSettings
 
                         if (typeof afterSubmit === "function") {
-                            afterSubmit(data, form)
+                            afterSubmit(form, data)
                         }
 
                         return form
@@ -94,6 +99,12 @@ export const submitFlakyFormHandler:SubmitFlakyFormHandler = async (setForm) => 
                     // }
 
                 })
+            } else {
+
+                if (typeof afterSubmit === "function") {
+                    afterSubmit(form)
+                }
+
             }
 
             return form

@@ -73,7 +73,6 @@ export const addControlSetting: AddControlSetting = (
      */
     const shouldLockSubmitBtn = shouldLockingSubmitBtn(currentControlData, form)
 
-    console.log(shouldLockSubmitBtn, controlName);
     
     currentControl.hasErrorLockingSubmitBtn = shouldLockSubmitBtn
 

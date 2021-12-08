@@ -69,8 +69,6 @@ export const validateWrittenData: LiveValidator = hooksData => {
           isInputNumberInvalid = !isInputNumberValid,
           isWrittenValueNotEmpty = !isWrittenValueEmpty(newValue),
           hasError = true;
-
-    console.log(isInputNumberValid);
     
     /**
      * @description

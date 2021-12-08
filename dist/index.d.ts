@@ -100,7 +100,7 @@ interface FormConfigProps {
     //Хуки после отправки формы
     afterSuccessSubmit?(axiosResponse: AxiosResponse): any;
     afterErrorSubmit?(axiosResponse: AxiosResponse): any;
-    afterSubmit?(axiosResponse: AxiosResponse, form: FormProps): any;
+    afterSubmit?(form: FormProps, axiosResponse?: AxiosResponse): any;
 }
 /**
  * @description
