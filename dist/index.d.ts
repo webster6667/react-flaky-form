@@ -317,8 +317,13 @@ type LiveValidator = (hookData: HookProps, errorData?: ValidatorErrorProps) => {
  */
 type UseFlakyForm = (controls: ControlsList, customFormConfig?: FormConfigProps) => [
     FormProps<typeof controls>,
-    any
+    SetForm
 ];
+type ControlsToFormData = (controls: ControlsList) => FormData;
+/**
+ * Переводит контролы в formData
+ */
+declare const controlsToFormData: ControlsToFormData;
 declare const useFlakyForm: UseFlakyForm;
 declare const FlakyForm: FlakyFormI;
-export { useFlakyForm, FlakyForm };
+export { useFlakyForm, FlakyForm, controlsToFormData };

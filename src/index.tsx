@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 
 import { DEFAULT_FORM_SETTINGS, FORM_NAME } from '@const';
 import { combineRulesLayers } from '@control-utils/adding-layers/combine-rules-layers';
@@ -7,6 +6,7 @@ import { combineRulesLayers } from '@control-utils/adding-layers/combine-rules-l
 import { initForm } from '@form-utils/init';
 import { submitFlakyFormHandler } from '@form-utils/submit';
 
+import {controlsToFormData} from './utils/helpers/controls-to-form-data'
 
 import {FlakyFormI, UseFlakyForm} from '@common-types';
 
@@ -75,4 +75,4 @@ const FlakyForm:FlakyFormI = ({
   </form>)
 }
 
-export { useFlakyForm, FlakyForm };
+export { useFlakyForm, FlakyForm, controlsToFormData };

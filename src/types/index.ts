@@ -133,7 +133,7 @@ type LiveValidator = (hookData: HookProps, errorData?: ValidatorErrorProps) => {
 type UseFlakyForm = (
   controls: ControlsList,
   customFormConfig?: FormConfigProps,
-) => [FormProps<typeof controls>, any];
+) => [FormProps<typeof controls>, SetForm];
 
 
 
