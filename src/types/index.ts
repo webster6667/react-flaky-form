@@ -135,13 +135,14 @@ type UseFlakyForm = (
   customFormConfig?: FormConfigProps,
 ) => [FormProps<typeof controls>, SetForm];
 
-
+type SubmitRequestFn = (...props: any) => Promise<any>
 
 export {
   UseFlakyForm,
   FlakyFormI,
   FormProps,
   SetForm,
+  SubmitRequestFn,
   LiveValidator,
   StaticValidator,
   ValidatorErrorProps,

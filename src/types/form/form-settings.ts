@@ -44,16 +44,12 @@ export interface FormConfigProps {
     //Дополнительный валидатор перед отправкой для всех контролов
     additionalSubmitValidator?: StaticValidator;
 
-    //Хуки до и после отправки для каждого контрола
-    beforeSubmitValidator?(hookData: HookProps): any;
-    afterSubmitValidator?(hookData: HookProps): any;
-
-    beforeRequest?(form): {
-        body: unknown
-    };
-
-    //Хуки после отправки формы
-    afterSuccessSubmit?(axiosResponse: AxiosResponse): any;
-    afterErrorSubmit?(axiosResponse: AxiosResponse): any;
-    afterSubmit?(form: FormProps, axiosResponse?: AxiosResponse): any;
+    // //Хуки до и после отправки для каждого контрола
+    // beforeSubmitValidator?(hookData: HookProps): any;
+    // afterSubmitValidator?(hookData: HookProps): any;
+    //
+    // //Хуки после отправки формы
+    // afterSuccessSubmit?(axiosResponse: AxiosResponse): any;
+    // afterErrorSubmit?(axiosResponse: AxiosResponse): any;
+    // afterSubmit?(form: FormProps, axiosResponse?: AxiosResponse): any;
 }

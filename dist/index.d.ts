@@ -1,5 +1,4 @@
 /// <reference types="react" />
-import { AxiosResponse } from "axios";
 import React from "react";
 /**
  *  Правила основных валидаторов
@@ -91,16 +90,6 @@ interface FormConfigProps {
     customSubmitValidator?: StaticValidator;
     //Дополнительный валидатор перед отправкой для всех контролов
     additionalSubmitValidator?: StaticValidator;
-    //Хуки до и после отправки для каждого контрола
-    beforeSubmitValidator?(hookData: HookProps): any;
-    afterSubmitValidator?(hookData: HookProps): any;
-    beforeRequest?(form: any): {
-        body: unknown;
-    };
-    //Хуки после отправки формы
-    afterSuccessSubmit?(axiosResponse: AxiosResponse): any;
-    afterErrorSubmit?(axiosResponse: AxiosResponse): any;
-    afterSubmit?(form: FormProps, axiosResponse?: AxiosResponse): any;
 }
 /**
  * @description
@@ -148,9 +137,12 @@ type FlakyFormProps = {
     className?: string;
     children: any;
     id?: string;
-    action?: string;
-    formState: FormProps;
-    setForm: SetForm;
+    formStateProps: [
+        FormProps,
+        SetForm
+    ];
+    submitRequestFn?: SubmitRequestFn;
+    submitHandler?: (form: FormProps) => any;
 };
 type FlakyFormI = (flakyFormProps: FlakyFormProps) => React.ReactElement;
 /**
@@ -319,6 +311,7 @@ type UseFlakyForm = (controls: ControlsList, customFormConfig?: FormConfigProps)
     FormProps<typeof controls>,
     SetForm
 ];
+type SubmitRequestFn = (...props: any) => Promise<any>;
 type ControlsToFormData = (controls: ControlsList) => FormData;
 /**
  * Переводит контролы в formData

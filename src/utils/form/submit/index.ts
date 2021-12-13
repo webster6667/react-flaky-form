@@ -7,11 +7,12 @@ import {SubmitFlakyFormHandler} from "./types"
  * Функция обрабатывающая отправку формы на сервер
  *
  * @param {SetForm} setForm - Функция обрабрабатывающая глобальный объект формы
+ * @param {any} requestFn - Функция делающая запрос на сервер если все фалидации фронта прошли успешно
  */
-export const submitFlakyFormHandler:SubmitFlakyFormHandler = async (setForm) => {
+export const submitFlakyFormHandler:SubmitFlakyFormHandler = async (setForm, submitHandler, submitRequestFn) => {
 
-    setForm( (prevForm) => {
-        const form = {...prevForm}
+    setForm( async (form) => {
+        // const form = {...prevForm}
         // form.formState.errorList = []
         form.formState.isFormTriedSubmit = true
 
@@ -22,89 +23,75 @@ export const submitFlakyFormHandler:SubmitFlakyFormHandler = async (setForm) => 
 
         // if (isAllControlsValid) {}
 
-            const {action = null, beforeRequest, afterSubmit} = form.formSettings
+            // const {action = null, beforeRequest, afterSubmit} = form.formSettings
 
                 // initAction = action
                 // action ? typeof action === 'object' && action.toSubmit ? action.toSubmit : String(action) : null
 
-            const {body = null} = typeof beforeRequest === "function" ? beforeRequest(form) : {}
+            // const {body = null} = typeof beforeRequest === "function" ? beforeRequest(form) : {}
 
 
-            if (action) {
-                axios.post(action, body).then((data) => {
-                    const {status} = data
+            // if (action) {
+            //     axios.post(action, body).then((data) => {
+            //
+            //         /**
+            //          * Хук после любой отправки
+            //          */
+            //          setForm((form) => {
+            //              const {afterSubmit = null} = form.formSettings
+            //
+            //              if (typeof afterSubmit === "function") {
+            //                  afterSubmit(form, data)
+            //              }
+            //
+            //              return form
+            //
+            //          })
+            //
+            //
+            //     }).catch((data) => {
+            //         const {status} = data
+            //
+            //         /**
+            //          * Хук после любой отправки
+            //          */
+            //         setForm((form) => {
+            //             const {afterSubmit = null} = form.formSettings
+            //
+            //             if (typeof afterSubmit === "function") {
+            //                 afterSubmit(form, data)
+            //             }
+            //
+            //
+            //         })
+            //
+            //     })
+            // } else
 
-                    // /**
-                    //  * Хук успешной отправки
-                    //  */
-                    // if (status === 200 && typeof afterSuccessSubmit === "function") {
-                    //     afterSuccessSubmit(data)
-                    // }
-                    //
-                    // /**
-                    //  * Хук не успешной отправки
-                    //  */
-                    // if (status === 500 && typeof afterErrorSubmit === "function") {
-                    //     afterErrorSubmit(data)
-                    // }
+            if (submitRequestFn && typeof submitRequestFn === "function") {
 
-                    /**
-                     * Хук после любой отправки
-                     */
+                 const data = await submitRequestFn()
 
+                /**
+                 * Хук после любой отправки
+                 */
+                setForm((form) => {
 
-                        setForm((prevForm) => {
-                            const form = {...prevForm},
-                                  {afterSubmit = null} = form.formSettings
+                    if (typeof submitHandler === "function") {
+                        submitHandler(form, data)
+                    }
 
-                            if (typeof afterSubmit === "function") {
-                                afterSubmit(form, data)
-                            }
-
-                            return form
-
-                        })
-
-
-                }).catch((data) => {
-                    const {status} = data
-
-                    setForm((prevForm) => {
-                        const form = {...prevForm},
-                            {afterSubmit = null} = form.formSettings
-
-                        if (typeof afterSubmit === "function") {
-                            afterSubmit(form, data)
-                        }
-
-                        return form
-
-                    })
-
-                    // /**
-                    //  * Хук не успешной отправки
-                    //  */
-                    // if (status === 500 && typeof afterErrorSubmit === "function") {
-                    //     afterErrorSubmit(data)
-                    // }
-
-                    // /**
-                    //  * Хук после любой отправки
-                    //  */
-                    // if (typeof afterSubmit === "function") {
-                    //     afterSubmit(data)
-                    // }
 
                 })
+
             } else {
 
-                if (typeof afterSubmit === "function") {
-                    afterSubmit(form)
+                if (typeof submitHandler === "function") {
+                    submitHandler(form)
                 }
 
             }
 
-            return form
     })
 
 }

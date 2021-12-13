@@ -8,7 +8,7 @@ import { submitFlakyFormHandler } from '@form-utils/submit';
 
 import {controlsToFormData} from './utils/helpers/controls-to-form-data'
 
-import {FlakyFormI, UseFlakyForm} from '@common-types';
+import {FlakyFormI, UseFlakyForm, SetForm} from '@common-types';
 
 const useFlakyForm: UseFlakyForm = (controls, customFormConfig = {}) => {
   const formState = {
@@ -29,7 +29,18 @@ const useFlakyForm: UseFlakyForm = (controls, customFormConfig = {}) => {
         ...customFormConfig,
         formValidatorsRules,
       },
-    });
+    }),
+    setFormWrapper:SetForm = (setFormHandlerFn) => {
+
+          setForm(prevForm => {
+              const form = {...prevForm}
+
+              setFormHandlerFn(form)
+
+              return form
+          })
+
+      }
 
   useEffect(() => {
     (async function asyncFunction() {
@@ -43,29 +54,33 @@ const useFlakyForm: UseFlakyForm = (controls, customFormConfig = {}) => {
     })();
   }, []);
 
-  return [flukyForm, setForm];
+
+
+        return [flukyForm, setFormWrapper];
 };
 
 const FlakyForm:FlakyFormI = ({
                                         children,
                                         className = 'form',
                                         id = null,
-                                        action = null,
-                                        formState,
-                                        setForm
+                                        formStateProps,
+                                        submitRequestFn,
+                                        submitHandler
+
                                       }) => {
 
-  const {loaded} = formState.formState,
+  const [formState, setForm] = formStateProps,
+      {loaded} = formState.formState,
       {formName: currentFormName} = formState.formSettings,
-      submitHandler = (e) => {
+      submitHandlerWrapper = (e) => {
         e.preventDefault()
-        submitFlakyFormHandler(setForm)
+        submitFlakyFormHandler(setForm, submitHandler, submitRequestFn)
       }
 
   return (<form
       id={id || String(currentFormName)}
       className={className}
-      onSubmit={submitHandler}
+      onSubmit={submitHandlerWrapper}
   >
     {children}
       <input data-element={'hidden-submit-trigger'}

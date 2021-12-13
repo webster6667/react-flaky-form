@@ -1,6 +1,6 @@
 import React from "react";
 
-import {ControlsList, FormConfigProps, FormStateProps} from "@common-types";
+import {ControlsList, FormConfigProps, FormStateProps, SubmitRequestFn} from "@common-types";
 
 /**
  * @description
@@ -21,9 +21,9 @@ type FlakyFormProps = {
     className?: string,
     children: any,
     id?: string,
-    action?: string,
-    formState: FormProps,
-    setForm: SetForm
+    formStateProps: [FormProps, SetForm],
+    submitRequestFn?: SubmitRequestFn,
+    submitHandler?: (form: FormProps) => any
 }
 
 

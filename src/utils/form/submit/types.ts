@@ -1,3 +1,5 @@
-import {FormProps, SetForm} from "@common-types";
+import {SubmitRequestFn, SetForm, FormProps} from "@common-types";
 
-export type SubmitFlakyFormHandler = (setForm:SetForm) => void
+type SubmitHandler = (form:FormProps, responseData?) => void
+
+export type SubmitFlakyFormHandler = (setForm:SetForm, submitHandler?: SubmitHandler, submitRequestFn?:SubmitRequestFn) => void
