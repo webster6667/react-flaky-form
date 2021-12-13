@@ -317,6 +317,13 @@ type ControlsToFormData = (controls: ControlsList) => FormData;
  * Переводит контролы в formData
  */
 declare const controlsToFormData: ControlsToFormData;
+type ControlsToKeyValue = (controls: ControlsList) => {
+    [key: string]: any;
+};
+/**
+ * Переводит контролы в formData
+ */
+declare const controlsToKeyValue: ControlsToKeyValue;
 declare const useFlakyForm: UseFlakyForm;
 declare const FlakyForm: FlakyFormI;
 /**
@@ -328,4 +335,4 @@ type SubmitHandler<T> = (formProps: FormProps, submitRequestFnResult: SubmitRequ
 /**
  * Вынести в типы
  */
-export { useFlakyForm, FlakyForm, controlsToFormData, SubmitHandler };
+export { useFlakyForm, FlakyForm, controlsToFormData, controlsToKeyValue, SubmitHandler };

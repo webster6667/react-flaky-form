@@ -7,6 +7,8 @@ import { initForm } from '@form-utils/init';
 import { submitFlakyFormHandler } from '@form-utils/submit';
 
 import {controlsToFormData} from './utils/helpers/controls-to-form-data'
+import {controlsToKeyValue} from './utils/helpers/controls-to-key-value'
+
 
 import {FlakyFormI, UseFlakyForm, SetForm, FormProps} from '@common-types';
 
@@ -108,4 +110,4 @@ type SubmitHandler<T> = (formProps: FormProps, submitRequestFnResult: SubmitRequ
  * Вынести в типы
  */
 
-export { useFlakyForm, FlakyForm, controlsToFormData, SubmitHandler};
+export { useFlakyForm, FlakyForm, controlsToFormData, controlsToKeyValue, SubmitHandler};
