@@ -142,7 +142,7 @@ type FlakyFormProps = {
         SetForm
     ];
     submitRequestFn?: SubmitRequestFn;
-    submitHandler?: (form: FormProps) => any;
+    submitHandler?: (form: FormProps) => void;
 };
 type FlakyFormI = (flakyFormProps: FlakyFormProps) => React.ReactElement;
 /**
@@ -319,4 +319,13 @@ type ControlsToFormData = (controls: ControlsList) => FormData;
 declare const controlsToFormData: ControlsToFormData;
 declare const useFlakyForm: UseFlakyForm;
 declare const FlakyForm: FlakyFormI;
-export { useFlakyForm, FlakyForm, controlsToFormData };
+/**
+ * Вынести в типы
+ */
+type AsyncReturnType<T extends (...args: any) => any> = T extends (...args: any) => Promise<infer U> ? U : T extends (...args: any) => infer U ? U : any;
+type SubmitRequestFnResult<T> = AsyncReturnType<() => T>;
+type SubmitHandler<T> = (formProps: FormProps, submitRequestFnResult: SubmitRequestFnResult<T>) => void;
+/**
+ * Вынести в типы
+ */
+export { useFlakyForm, FlakyForm, controlsToFormData, SubmitHandler };

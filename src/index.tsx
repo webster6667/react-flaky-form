@@ -8,7 +8,7 @@ import { submitFlakyFormHandler } from '@form-utils/submit';
 
 import {controlsToFormData} from './utils/helpers/controls-to-form-data'
 
-import {FlakyFormI, UseFlakyForm, SetForm} from '@common-types';
+import {FlakyFormI, UseFlakyForm, SetForm, FormProps} from '@common-types';
 
 const useFlakyForm: UseFlakyForm = (controls, customFormConfig = {}) => {
   const formState = {
@@ -90,4 +90,22 @@ const FlakyForm:FlakyFormI = ({
   </form>)
 }
 
-export { useFlakyForm, FlakyForm, controlsToFormData };
+/**
+ * Вынести в типы
+ */
+
+type AsyncReturnType<T extends (...args: any) => any> = T extends (...args: any) => Promise<infer U>
+    ? U
+    : T extends (...args: any) => infer U
+        ? U
+        : any
+
+type SubmitRequestFnResult<T> = AsyncReturnType<() => T>
+
+type SubmitHandler<T> = (formProps: FormProps, submitRequestFnResult: SubmitRequestFnResult<T>) => void
+
+/**
+ * Вынести в типы
+ */
+
+export { useFlakyForm, FlakyForm, controlsToFormData, SubmitHandler};

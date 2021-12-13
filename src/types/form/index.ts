@@ -23,7 +23,7 @@ type FlakyFormProps = {
     id?: string,
     formStateProps: [FormProps, SetForm],
     submitRequestFn?: SubmitRequestFn,
-    submitHandler?: (form: FormProps) => any
+    submitHandler?: (form: FormProps) => void
 }
 
 
