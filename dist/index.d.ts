@@ -142,7 +142,7 @@ type FlakyFormProps = {
         SetForm
     ];
     submitRequestFn?: SubmitRequestFn;
-    submitHandler?: (form: FormProps) => void;
+    submitHandler?: (form: FormProps, requestResult?: any) => void;
 };
 type FlakyFormI = (flakyFormProps: FlakyFormProps) => React.ReactElement;
 /**
